@@ -8,7 +8,6 @@
   <link rel="icon" href="assets/ct_logo_email_600_white.png" />
   <meta name="theme-color" content="#0f172a">
 
-  <!-- Open Graph / Twitter -->
   <meta property="og:title" content="Caravans Tasmania — New & Highclere Caravans in Launceston">
   <meta property="og:description" content="Sales, servicing and upgrades with local support in Youngtown, TAS. Call (03) 6343 7287.">
   <meta property="og:type" content="website">
@@ -18,7 +17,6 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-  /* make dark logos “white” on dark footer */
   .logo-white { filter: brightness(0) invert(1); }
 </style>
   <style>
@@ -30,7 +28,6 @@
   </style>
 </head>
 <body class="bg-white text-slate-800">
-  <!-- Top Bar -->
   <div class="w-full bg-slate-900 text-white text-sm">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
       <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
@@ -40,7 +37,6 @@
     </div>
   </div>
 
-  <!-- Header / Nav -->
 <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -49,7 +45,6 @@
      alt="Caravans Tasmania"
      class="h-12 md:h-14 w-auto object-contain" />
         </a>
-        <!-- Desktop Nav -->
         <nav class="hidden md:flex items-center space-x-6">
           <a href="#home">Home</a>
 
@@ -58,7 +53,6 @@
               Our Caravans
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
             </button>
-            <!-- Mega dropdown -->
             <div class="dropdown-menu absolute left-0 mt-3 w-[760px] bg-white border border-slate-200 shadow-xl rounded-xl p-6 hidden">
               <div class="grid grid-cols-3 gap-6 text-sm">
                 <div>
@@ -95,14 +89,12 @@
           <a href="#contact">Contact</a>
         </nav>
 
-        <!-- Mobile menu button -->
         <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu" aria-expanded="false">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Nav -->
     <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
       <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
         <a href="#home" class="py-2">Home</a>
@@ -143,7 +135,7 @@
     </div>
   </header>
 
-  <!-- Hero / Home -->
+  <!-- Hero Images -->
   <section id="home" class="relative">
     <div class="relative h-[52vh] md:h-[68vh]">
       <!-- Cross-fade image stack -->
@@ -153,10 +145,8 @@
         <img loading="lazy" decoding="async" src="assets/WhatsApp-Image-2024-11-14-at-3.30.35-PM-scaled.jpeg" alt="Highclere display" class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700" />
       </div>
 
-      <!-- Soft overlay for text legibility -->
       <div class="absolute inset-0 bg-black/40"></div>
 
-      <!-- Text content -->
       <div class="relative z-10 h-full">
         <div class="max-w-7xl mx-auto h-full px-4 flex items-center">
           <div class="text-white drop-shadow">
@@ -174,7 +164,6 @@
     </div>
   </section>
 
-  <!-- Services -->
   <section id="services" class="py-16">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
       <!-- Intro copy -->
@@ -189,7 +178,6 @@
         <p class="text-slate-600 mt-3 italic">Happy motoring!</p>
       </div>
 
-      <!-- Services list -->
       <div class="md:col-span-2">
         <h3 class="font-semibold mb-4 uppercase text-xs tracking-wider text-slate-500">
           We conduct all manner of caravan servicing, repairs &amp; upgrades
@@ -233,7 +221,6 @@
     </div>
   </section>
 
-  <!-- About -->
   <section id="about" class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
       <div>
@@ -265,7 +252,6 @@
     </div>
   </section>
 
-  <!-- Stock teaser -->
   <section class="py-16">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-semibold mb-6">In-stock caravans</h2>
@@ -276,7 +262,6 @@
     </div>
   </section>
 
-  <!-- Contact (YOUR EXACT SECTION, UNCHANGED) -->
   <section id="contact" class="py-16">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-start">
       <!-- Left: details + map -->
@@ -306,7 +291,6 @@
         </a>
       </div>
 
-      <!-- Right: working form (FormSubmit) -->
       <form
         id="contactForm"
         action="https://formsubmit.co/ajax/reception@caravanstas.com.au"
@@ -319,17 +303,14 @@
           Thanks — we’ve received your message. We’ll get back to you shortly.
         </div>
 
-        <!-- spam + settings -->
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_captcha" value="True">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_subject" value="Website enquiry — Caravans Tasmania">
         <input type="hidden" name="_autoresponse" value="Thanks for contacting Caravans Tasmania. We’ll get back to you as soon as we can.">
-        <!-- used for non-AJAX parts flow -->
         <input type="hidden" id="_nextUrl" name="_next" value="index.html?sent=1#contact">
 
         <div class="grid gap-4">
-          <!-- Enquiry type -->
           <fieldset class="grid gap-2">
             <legend class="text-sm text-slate-600">Enquiry type</legend>
             <div class="flex flex-wrap items-center gap-4">
@@ -383,7 +364,6 @@
                    class="mt-1 w-full border rounded-lg px-3 py-2" />
           </div>
 
-          <!-- STOCK ENQUIRY ONLY -->
           <div id="stockFields" class="hidden grid gap-4">
             <div>
               <label class="text-sm text-slate-600" for="stock_model">Model you’re enquiring about *</label>
@@ -394,7 +374,6 @@
             </div>
           </div>
 
-          <!-- SPARE PARTS ONLY (balanced two-column layout) -->
           <div id="partsFields" class="hidden grid gap-4 sm:grid-cols-2">
             <div class="sm:col-span-2">
               <label class="text-sm text-slate-600" for="part_needed">Part needed *</label>
@@ -423,7 +402,6 @@
                      class="mt-1 w-full border rounded-lg px-3 py-2" />
             </div>
 
-            <!-- FILES (must be name='attachment') -->
             <div class="sm:col-span-2">
               <label class="text-sm text-slate-600" for="photos">Photo (optional, Please Choose a photo )</label>
               <input name="attachment" id="photos" type="file" accept="image/*"
@@ -448,7 +426,6 @@
   </section>
 
 <footer class="bg-slate-900 text-slate-200 mt-10">
-  <!-- Dealer strip -->
   <div class="border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between gap-6 flex-wrap">
       <p class="text-sm text-slate-300">Proud dealers of New Age &amp; Highclere</p>
@@ -464,8 +441,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Main footer -->
   <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
     <div>
       <h4 class="font-semibold">Caravans Tasmania</h4>
@@ -507,9 +482,7 @@
 </footer>
 
 
-  <!-- Scripts (kept lean; includes YOUR original form scripts) -->
   <script>
-    // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Cross-fade hero (respects reduced motion)
@@ -544,7 +517,6 @@
     mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleNav(false); });
 
-    // Show success if redirected back with ?sent=1
     (function () {
       if (new URLSearchParams(location.search).get('sent') === '1') {
         document.getElementById('form-success')?.classList.remove('hidden');
@@ -552,7 +524,6 @@
       }
     })();
 
-    // Stock teaser (first 3)
     fetch('assets/stock.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(payload => {
@@ -584,7 +555,6 @@
   </script>
 
   <script>
-    // Enquiry routing + conditional fields + AJAX submit (non-AJAX for parts so files send)
     (function () {
       const form = document.getElementById('contactForm');
       const btn = document.getElementById('sendBtn');
@@ -618,7 +588,6 @@
           if (nextInput) nextInput.disabled = true;              // _next unused in AJAX mode
         }
 
-        // Toggle field groups + requirements
         partsFields.classList.toggle('hidden', !isParts);
         stockFields.classList.toggle('hidden', !isStock);
         if (partNeeded) partNeeded.toggleAttribute('required', isParts);
@@ -635,7 +604,6 @@
         const isParts = chosen?.value === 'parts';
 
         if (isParts) {
-          // Normal submit (multipart) so files are sent; let the browser post + redirect
           btn.disabled = true;
           btn.textContent = 'Sending…';
           return;
@@ -655,7 +623,7 @@
 
           if (res.ok) {
             form.reset();
-            syncMode(); // reset UI/requirements
+            syncMode(); 
             success?.classList.remove('hidden');
           } else {
             alert('Sorry, something went wrong sending your message. Please call (03) 6343 7287 or email reception@caravanstas.com.au');
