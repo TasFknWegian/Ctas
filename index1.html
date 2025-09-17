@@ -21,10 +21,11 @@
     html { scroll-behavior: smooth; }
     [id] { scroll-margin-top: 96px; }
     .nav-backdrop { backdrop-filter: saturate(180%) blur(8px); -webkit-backdrop-filter: saturate(180%) blur(8px); }
+    .dropdown:hover .dropdown-menu { display: block; }
+    .dropdown:focus-within .dropdown-menu { display: block; }
   </style>
 </head>
 <body class="bg-white text-slate-800">
-
   <!-- Top Bar -->
   <div class="w-full bg-slate-900 text-white text-sm">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
@@ -35,7 +36,7 @@
     </div>
   </div>
 
-  <!-- Header -->
+  <!-- Header / Nav -->
   <header class="sticky top-0 z-40 bg-white/80 nav-backdrop border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -43,23 +44,92 @@
           <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania logo" class="h-10 w-auto object-contain"/>
           <span class="sr-only">Caravans Tasmania</span>
         </a>
+        <!-- Desktop Nav -->
         <nav class="hidden md:flex items-center space-x-6">
           <a href="#home">Home</a>
+
+          <div class="relative dropdown">
+            <button class="inline-flex items-center gap-1">
+              Our Caravans
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+            </button>
+            <!-- Mega dropdown -->
+            <div class="dropdown-menu absolute left-0 mt-3 w-[760px] bg-white border border-slate-200 shadow-xl rounded-xl p-6 hidden">
+              <div class="grid grid-cols-3 gap-6 text-sm">
+                <div>
+                  <h4 class="font-semibold mb-2">New Age Caravans</h4>
+                  <ul class="space-y-1">
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/escape-my25-5/" target="_blank" rel="noopener noreferrer">Escape</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/expedition/" target="_blank" rel="noopener noreferrer">Expedition</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/embark/" target="_blank" rel="noopener noreferrer">Manta Ray</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/desert-rose/" target="_blank" rel="noopener noreferrer">Desert Rose</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/oz-classic/" target="_blank" rel="noopener noreferrer">Oz Classic</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-2">Highclere Caravans</h4>
+                  <ul class="space-y-1">
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-hauss-176-ft/" target="_blank" rel="noopener noreferrer">Little Hauss 17'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-cote-186/" target="_blank" rel="noopener noreferrer">Little Cote 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-palace-186-ft/" target="_blank" rel="noopener noreferrer">Little Palace 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-villa-186-ft/" target="_blank" rel="noopener noreferrer">Little Villa 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/classic-196-ft/" target="_blank" rel="noopener noreferrer">Classic 19'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/royal/" target="_blank" rel="noopener noreferrer">Royal 22FT</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/arundel/" target="_blank" rel="noopener noreferrer">ARUNDEL 22'6&quot;-FT</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/oasis-216-ft/" target="_blank" rel="noopener noreferrer">OASIS 21'6&quot;-FT</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <a href="stock.html">Stock</a>
           <a href="#services">Services</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </nav>
+
+        <!-- Mobile menu button -->
         <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu" aria-expanded="false">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
+
+    <!-- Mobile Nav -->
     <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
       <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
         <a href="#home" class="py-2">Home</a>
+        <details>
+          <summary class="cursor-pointer py-2">Our Caravans</summary>
+          <div class="pl-4 text-sm space-y-3 mt-2">
+            <div>
+              <p class="font-semibold">New Age Caravans</p>
+              <ul class="pl-3 mt-1 space-y-1">
+                <li><a href="https://newagecaravans.com.au/caravans/escape-my25-5/" target="_blank" rel="noopener noreferrer">Escape</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/expedition/" target="_blank" rel="noopener noreferrer">Expedition</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/embark/" target="_blank" rel="noopener noreferrer">Manta Ray</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/desert-rose/" target="_blank" rel="noopener noreferrer">Desert Rose</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/oz-classic/" target="_blank" rel="noopener noreferrer">Oz Classic</a></li>
+              </ul>
+            </div>
+            <div>
+              <p class="font-semibold">Highclere Caravans</p>
+              <ul class="pl-3 mt-1 space-y-1">
+                <li><a href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-hauss-176-ft/" target="_blank" rel="noopener noreferrer">Little Hauss 17'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-cote-186/" target="_blank" rel="noopener noreferrer">Little Cote 18'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-palace-186-ft/" target="_blank" rel="noopener noreferrer">Little Palace 18'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-villa-186-ft/" target="_blank" rel="noopener noreferrer">Little Villa 18'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/classic-196-ft/" target="_blank" rel="noopener noreferrer">Classic 19'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/royal/" target="_blank" rel="noopener noreferrer">Royal 22FT</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/arundel/" target="_blank" rel="noopener noreferrer">ARUNDEL 22'6&quot;-FT</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/oasis-216-ft/" target="_blank" rel="noopener noreferrer">OASIS 21'6&quot;-FT</a></li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a href="stock.html" class="py-2">Stock</a>
         <a href="#services" class="py-2">Services</a>
         <a href="#about" class="py-2">About</a>
@@ -68,15 +138,20 @@
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero / Home -->
   <section id="home" class="relative">
     <div class="relative h-[52vh] md:h-[68vh]">
+      <!-- Cross-fade image stack -->
       <div id="homeFade" class="absolute inset-0">
         <img src="assets/BigRed_Gallery23.jpg" fetchpriority="high" decoding="async" alt="Caravan exterior on the road" class="absolute inset-0 h-full w-full object-cover opacity-100 transition-opacity duration-700" />
         <img loading="lazy" decoding="async" src="assets/IMG_0139.jpeg" alt="Caravan interior" class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700" />
         <img loading="lazy" decoding="async" src="assets/WhatsApp-Image-2024-11-14-at-3.30.35-PM-scaled.jpeg" alt="Highclere display" class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700" />
       </div>
+
+      <!-- Soft overlay for text legibility -->
       <div class="absolute inset-0 bg-black/40"></div>
+
+      <!-- Text content -->
       <div class="relative z-10 h-full">
         <div class="max-w-7xl mx-auto h-full px-4 flex items-center">
           <div class="text-white drop-shadow">
@@ -96,32 +171,58 @@
 
   <!-- Services -->
   <section id="services" class="py-16">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl font-semibold mb-8">Services</h2>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h3 class="font-medium">General servicing</h3>
-          <p class="text-sm text-slate-600 mt-1">Brakes, bearings, 12V/240V, plumbing, chassis and more.</p>
-        </div>
-        <div class="rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h3 class="font-medium">Suspension repairs</h3>
-          <p class="text-sm text-slate-600 mt-1">Leaf springs, roller-rocker, shocks & bushes, wheel alignment.</p>
-        </div>
-        <div class="rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h3 class="font-medium">Warranty claims</h3>
-          <p class="text-sm text-slate-600 mt-1">Support for New Age, Highclere, and major component suppliers.</p>
-        </div>
-        <div class="rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h3 class="font-medium">Spare parts</h3>
-          <p class="text-sm text-slate-600 mt-1">Genuine and quality aftermarket caravan parts & accessories.</p>
-        </div>
-        <div class="rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h3 class="font-medium">Off-grid upgrades</h3>
-          <p class="text-sm text-slate-600 mt-1">Solar, lithium batteries, and power management solutions.</p>
-        </div>
-        <div class="rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h3 class="font-medium">Insurance work</h3>
-          <p class="text-sm text-slate-600 mt-1">Assessments, insurance claims and caravan repairs.</p>
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+      <!-- Intro copy -->
+      <div>
+        <h2 class="text-3xl font-semibold">Services</h2>
+        <p class="text-slate-600 mt-3">
+          When it comes to keeping your caravan in tip-top shape, a service at the Caravans Tasmania Service Department
+          delivers the assurance and peace of mind you’re looking for. We cater for all caravan brands, and our professionally
+          trained service team has a wealth of knowledge and experience.
+        </p>
+        <p class="text-slate-600 mt-3">Trust your dream in safe hands at our service centre based in Launceston, Tasmania.</p>
+        <p class="text-slate-600 mt-3 italic">Happy motoring!</p>
+      </div>
+
+      <!-- Services list -->
+      <div class="md:col-span-2">
+        <h3 class="font-semibold mb-4 uppercase text-xs tracking-wider text-slate-500">
+          We conduct all manner of caravan servicing, repairs &amp; upgrades
+        </h3>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">General servicing of all caravan brands</p>
+            <p class="text-sm text-slate-600">Brakes &amp; bearings, 12V/240V, plumbing, chassis and more.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Suspension repairs &amp; upgrades</p>
+            <p class="text-sm text-slate-600">Leaf &amp; roller-rocker, shocks &amp; bushes, alignments.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Warranty claims</p>
+            <p class="text-sm text-slate-600">Support for our brands and major component suppliers.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Supply of parts</p>
+            <p class="text-sm text-slate-600">Genuine and quality aftermarket components.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Custom accessory fitting service</p>
+            <p class="text-sm text-slate-600">Diesel &amp; gas heaters, AFK/CRR awnings and more.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Off-grid setups</p>
+            <p class="text-sm text-slate-600">Solar, lithium systems and battery management.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Awnings</p>
+            <p class="text-sm text-slate-600">Carefree, Dometic &amp; Aussie Traveller — supply, install, repair.</p>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-4">
+            <p class="font-medium">Insurance work</p>
+            <p class="text-sm text-slate-600">Assessments, claims and repairs.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -133,22 +234,33 @@
       <div>
         <h2 class="text-3xl font-semibold">About Us</h2>
         <p class="mt-4 text-slate-600">
-          For over 10 years we’ve helped Tasmanians choose, maintain and enjoy their caravans. From first vans to long-haul tourers, we focus on practical advice, solid workmanship and aftercare that lasts.
+          We’ve spent <strong>over 10 years</strong> helping Tasmanians choose, maintain and enjoy their caravans. From first vans to long-haul tourers, we focus on practical advice, solid workmanship and support that lasts well beyond delivery.
         </p>
-        <ul class="mt-6 space-y-2 text-slate-700">
-          <li>✔ Local, independent and family owned</li>
-          <li>✔ Specialists in New Age & Highclere caravans</li>
+        <p class="mt-4 text-slate-600">
+          We’re <strong>customer-satisfaction driven</strong> — clear communication, fair quoting and quality work we stand behind.
+        </p>
+
+        <ul class="mt-6 space-y-3 text-slate-700">
+          <li>✔ 10+ years in the caravan industry</li>
           <li>✔ All-brand servicing & repairs</li>
-          <li>✔ Transparent quotes and communication</li>
+          <li>✔ Specialists in New Age & Highclere models</li>
+          <li>✔ Transparent quotes & timely updates</li>
+          <li>✔ Local & independent</li>
         </ul>
+
+        <div class="mt-6 flex gap-3">
+          <a href="#contact" class="px-4 py-2 rounded-lg bg-slate-900 text-white">Book a service</a>
+          <a href="stock.html" class="px-4 py-2 rounded-lg border border-slate-300">View stock</a>
+        </div>
       </div>
-      <div>
-        <img loading="lazy" decoding="async" class="rounded-xl shadow" src="assets/PXL_20250602_032514027.jpg" alt="Caravan workshop">
-      </div>
+
+      <img loading="lazy" decoding="async" class="rounded-xl shadow"
+           src="assets/PXL_20250602_032514027.jpg"
+           alt="Workshop" />
     </div>
   </section>
 
-  <!-- Stock Teaser -->
+  <!-- Stock teaser -->
   <section class="py-16">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-semibold mb-6">In-stock caravans</h2>
@@ -159,12 +271,174 @@
     </div>
   </section>
 
-  <!-- Contact -->
+  <!-- Contact (YOUR EXACT SECTION, UNCHANGED) -->
   <section id="contact" class="py-16">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl font-semibold">Contact</h2>
-      <p class="text-slate-600 mt-2">Sales & service enquiries welcome. Call or use our contact form.</p>
-      <!-- You already have a working form block; paste it here -->
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-start">
+      <!-- Left: details + map -->
+      <div>
+        <h2 class="text-3xl font-semibold">Contact</h2>
+        <p class="text-slate-600 mt-2">Sales & service enquiries welcome. Use the form or call the showroom.</p>
+        <ul class="mt-4 text-slate-700 text-sm space-y-1">
+          <li><strong>Phone:</strong> <a class="underline" href="tel:+61363437287">(03) 6343 7287</a></li>
+          <li><strong>Email:</strong> <a class="underline" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a></li>
+          <li><strong>Address:</strong> 389 Hobart Road, Youngtown TAS 7249</li>
+          <li><strong>Hours:</strong> Mon–Fri 8:30–5:00, Sat 8:00–12:00</li>
+        </ul>
+
+        <div class="mt-6 rounded-xl overflow-hidden border border-slate-200">
+          <iframe
+            title="Caravans Tasmania on Google Maps"
+            class="w-full h-64 md:h-80"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=389%20Hobart%20Road,%20Youngtown%20TAS%207249&output=embed">
+          </iframe>
+        </div>
+        <a class="mt-3 inline-block px-4 py-2 rounded-lg bg-slate-900 text-white"
+           target="_blank" rel="noopener"
+           href="https://maps.google.com/?q=389%20Hobart%20Road,%20Youngtown%20TAS%207249">
+          Get directions
+        </a>
+      </div>
+
+      <!-- Right: working form (FormSubmit) -->
+      <form
+        id="contactForm"
+        action="https://formsubmit.co/ajax/reception@caravanstas.com.au"
+        method="POST"
+        accept-charset="UTF-8"
+        enctype="multipart/form-data"
+        class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm"
+      >
+        <div id="form-success" class="hidden mb-4 rounded-lg bg-green-50 text-green-800 border border-green-200 px-3 py-2 text-sm">
+          Thanks — we’ve received your message. We’ll get back to you shortly.
+        </div>
+
+        <!-- spam + settings -->
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_subject" value="Website enquiry — Caravans Tasmania">
+        <input type="hidden" name="_autoresponse" value="Thanks for contacting Caravans Tasmania. We’ll get back to you as soon as we can.">
+        <!-- used for non-AJAX parts flow -->
+        <input type="hidden" id="_nextUrl" name="_next" value="index.html?sent=1#contact">
+
+        <div class="grid gap-4">
+          <!-- Enquiry type -->
+          <fieldset class="grid gap-2">
+            <legend class="text-sm text-slate-600">Enquiry type</legend>
+            <div class="flex flex-wrap items-center gap-4">
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="radio" name="enquiry_type" value="general"
+                       data-email="reception@caravanstas.com.au"
+                       data-subject="Website enquiry — Caravans Tasmania"
+                       checked class="accent-slate-900">
+                <span>General / Servicing</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="radio" name="enquiry_type" value="parts"
+                       data-email="spareparts@caravanstas.com.au"
+                       data-subject="Spare parts enquiry — Caravans Tasmania"
+                       class="accent-slate-900">
+                <span>Spare parts</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="radio" name="enquiry_type" value="stock"
+                       data-email="l.stingle@caravanstas.com.au"
+                       data-subject="Caravan stock enquiry — Caravans Tasmania"
+                       class="accent-slate-900">
+                <span>Caravan stock enquiry</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div>
+            <label class="text-sm text-slate-600" for="cname">Name *</label>
+            <input name="name" id="cname" class="mt-1 w-full border rounded-lg px-3 py-2" required />
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-600" for="cemail">Email *</label>
+            <input name="email" id="cemail" type="email" class="mt-1 w-full border rounded-lg px-3 py-2" required />
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-600" for="cphone">Contact number</label>
+            <input name="phone" id="cphone" type="tel" inputmode="tel" autocomplete="tel"
+                   pattern="^[0-9+\s()\-]{6,}$"
+                   placeholder="e.g. (03) 6343 7287 or 0400 000 000"
+                   class="mt-1 w-full border rounded-lg px-3 py-2" />
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-600" for="cpostcode">Postcode</label>
+            <input name="postcode" id="cpostcode" type="text" inputmode="numeric"
+                   pattern="^\d{4}$" maxlength="4" placeholder="e.g. 7249"
+                   title="Please enter a 4-digit Australian postcode"
+                   class="mt-1 w-full border rounded-lg px-3 py-2" />
+          </div>
+
+          <!-- STOCK ENQUIRY ONLY -->
+          <div id="stockFields" class="hidden grid gap-4">
+            <div>
+              <label class="text-sm text-slate-600" for="stock_model">Model you’re enquiring about *</label>
+              <input name="enquired_model" id="stock_model" type="text"
+                     placeholder="e.g. New Age Manta Ray 19'6, Highclere Classic 19'6, Road Owl 21"
+                     class="mt-1 w-full border rounded-lg px-3 py-2" />
+              <p class="text-xs text-slate-500 mt-1">If you have a stock link or reference, paste it here too.</p>
+            </div>
+          </div>
+
+          <!-- SPARE PARTS ONLY (balanced two-column layout) -->
+          <div id="partsFields" class="hidden grid gap-4 sm:grid-cols-2">
+            <div class="sm:col-span-2">
+              <label class="text-sm text-slate-600" for="part_needed">Part needed *</label>
+              <input name="part_needed" id="part_needed" type="text"
+                     placeholder="e.g. Carefree awning arm LH, 12V water pump, 6-leaf roller rocker pack"
+                     class="mt-1 w-full border rounded-lg px-3 py-2" />
+            </div>
+
+            <div>
+              <label class="text-sm text-slate-600" for="part_number">Part number (if known)</label>
+              <input name="part_number" id="part_number" type="text"
+                     placeholder="e.g. Dometic 3310423.209"
+                     class="mt-1 w-full border rounded-lg px-3 py-2" />
+            </div>
+            <div>
+              <label class="text-sm text-slate-600" for="vin">Chassis number</label>
+              <input name="vin" id="vin" type="text"
+                     placeholder="e.g. NA3424…"
+                     class="mt-1 w-full border rounded-lg px-3 py-2" />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="text-sm text-slate-600" for="component_brand">Appliance/Component brand &amp; model</label>
+              <input name="component_brand" id="component_brand" type="text"
+                     placeholder="e.g. Thetford N3185 fridge, Truma Aventa A/C"
+                     class="mt-1 w-full border rounded-lg px-3 py-2" />
+            </div>
+
+            <!-- FILES (must be name='attachment') -->
+            <div class="sm:col-span-2">
+              <label class="text-sm text-slate-600" for="photos">Photo (optional, Please Choose a photo )</label>
+              <input name="attachment" id="photos" type="file" accept="image/*"
+                     class="mt-1 w-full border rounded-lg px-3 py-2" />
+              <p class="text-xs text-slate-500 mt-1">Picture of the part or label help us identify the right replacement.</p>
+            </div>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="text-sm text-slate-600" for="cmsg">Message *</label>
+            <textarea name="message" id="cmsg" class="mt-1 w-full border rounded-lg px-3 py-2" rows="4" required></textarea>
+          </div>
+
+          <div class="sm:col-span-2">
+            <button id="sendBtn" class="w-full bg-slate-900 text-white px-4 py-3 rounded-lg" type="submit">
+              Send
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -173,54 +447,49 @@
     <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
       <div>
         <h4 class="font-semibold">Caravans Tasmania</h4>
-        <p class="text-sm text-slate-400 mt-2">389 Hobart Road, Youngtown TAS 7249</p>
+        <p class="text-sm text-slate-400 mt-2">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
         <p class="mt-2 text-sm">Phone: <a class="underline" href="tel:+61363437287">(03) 6343 7287</a><br/>Email: <a class="underline" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a></p>
+      </div>
+      <div>
+        <h5 class="font-semibold">Category Models</h5>
+        <ul class="mt-2 space-y-1 text-sm text-slate-300">
+          <li><a href="#" class="hover:underline">Family Caravans</a></li>
+          <li><a href="#" class="hover:underline">Off-Road Caravans</a></li>
+          <li><a href="#" class="hover:underline">Couples Vans</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold">Visit Us</h5>
+        <p class="text-sm text-slate-400 mt-2">Drop in to view stock or discuss repairs and accessories.</p>
       </div>
       <div>
         <h5 class="font-semibold">Hours</h5>
         <p class="text-sm text-slate-400 mt-2">Mon–Fri 8:30–5:00<br/>Sat 8:00–12:00</p>
       </div>
-      <div class="md:col-span-2">
-        <h5 class="font-semibold">Proud dealers of</h5>
-        <div class="flex gap-6 mt-3">
-          <img src="assets/newage_logo.png" alt="New Age Caravans" class="h-8 object-contain">
-          <img src="assets/highclere_logo.png" alt="Highclere Caravans" class="h-8 object-contain">
-        </div>
-      </div>
     </div>
     <div class="border-t border-slate-700">
       <div class="max-w-7xl mx-auto px-4 py-6 text-sm flex items-center justify-between">
         <p>© <span id="year"></span> Caravans Tasmania. All rights reserved.</p>
-        <div class="space-x-4">
-          <a href="stock.html" class="hover:underline">Stock</a>
-          <a href="#contact" class="hover:underline">Contact</a>
-        </div>
+        <div class="space-x-4"></div>
       </div>
     </div>
   </footer>
 
+  <!-- Scripts (kept lean; includes YOUR original form scripts) -->
   <script>
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Mobile nav
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileNav = document.getElementById('mobileNav');
-    function toggleNav(open) {
-      const isOpen = open ?? mobileNav.classList.contains('hidden');
-      mobileNav.classList.toggle('hidden', !isOpen);
-      menuBtn?.setAttribute('aria-expanded', String(isOpen));
-    }
-    menuBtn?.addEventListener('click', () => toggleNav());
-    mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleNav(false); });
-
-    // Cross-fade hero images
+    // Cross-fade hero (respects reduced motion)
     (function () {
       const root = document.getElementById('homeFade');
       if (!root) return;
       const imgs = Array.from(root.querySelectorAll('img'));
       if (imgs.length < 2) return;
+
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
       let i = 0;
       setInterval(() => {
         imgs[i].classList.replace('opacity-100', 'opacity-0');
@@ -229,7 +498,29 @@
       }, 5000);
     })();
 
-    // Stock teaser (load first 3)
+    // Mobile nav
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function toggleNav(open) {
+      const isOpen = open ?? mobileNav.classList.contains('hidden');
+      mobileNav.classList.toggle('hidden', !isOpen);
+      menuBtn?.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    menuBtn?.addEventListener('click', () => toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleNav(false); });
+
+    // Show success if redirected back with ?sent=1
+    (function () {
+      if (new URLSearchParams(location.search).get('sent') === '1') {
+        document.getElementById('form-success')?.classList.remove('hidden');
+        if (!location.hash) location.hash = '#contact';
+      }
+    })();
+
+    // Stock teaser (first 3)
     fetch('assets/stock.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(payload => {
@@ -237,20 +528,114 @@
         const first3 = arr.slice(0, 3);
         const DIRECTUS_ASSET_BASE = 'https://admin.caravanstasmania.com.au/assets/';
         const fileUrl = id => id ? `${DIRECTUS_ASSET_BASE}${id}?width=800&fit=cover` : 'assets/placeholder.jpg';
-        const currency = n => !n ? 'POA' : Number(n).toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
-        document.getElementById('stockPreview').innerHTML = first3.map(it => `
+        const currency = n => (n===null||n===undefined||n==='') ? 'POA'
+          : (typeof n==='number'?n:parseFloat(n)).toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+        const el = document.getElementById('stockPreview');
+        if (!el) return;
+        el.innerHTML = first3.map(it => `
           <a href="caravan.html?id=${encodeURIComponent(it.id)}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block">
             <div class="relative">
-              <img src="${fileUrl(it.thumbnail)}" alt="${it.title || ''}" class="w-full h-48 object-cover" loading="lazy" decoding="async">
+              <img src="${fileUrl(it._firstPhotoId || it.thumbnail)}" alt="${it.title || ''}" class="w-full h-48 object-cover" loading="lazy" decoding="async">
+              <div class="absolute top-2 left-2 flex gap-2">
+                ${it.category?`<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category === 'new' ? 'New' : 'Used'}</span>`:''}
+                ${it.sold?`<span class="inline-block text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>`:''}
+              </div>
             </div>
             <div class="p-5">
               <h3 class="font-semibold">${it.title || '(Untitled)'}</h3>
-              <p class="mt-1 text-sm text-slate-600">${it.length || ''} ${it.sleeps ? '• ' + it.sleeps + ' berth' : ''}</p>
+              <p class="mt-1 text-sm text-slate-600">${[it.length, it.sleeps?`${it.sleeps} berth`:'' , it.axleConfiguration].filter(Boolean).join(' • ')}</p>
               <p class="mt-2 font-semibold">${currency(it.price)}</p>
             </div>
           </a>
         `).join('');
       });
+  </script>
+
+  <script>
+    // Enquiry routing + conditional fields + AJAX submit (non-AJAX for parts so files send)
+    (function () {
+      const form = document.getElementById('contactForm');
+      const btn = document.getElementById('sendBtn');
+      const success = document.getElementById('form-success');
+
+      const radios = Array.from(document.querySelectorAll('input[name="enquiry_type"]'));
+      const partsFields = document.getElementById('partsFields');
+      const stockFields = document.getElementById('stockFields');
+      const partNeeded = document.getElementById('part_needed');
+      const stockModel = document.getElementById('stock_model');
+      const subjectInput = form?.querySelector('input[name="_subject"]');
+      const nextInput = document.getElementById('_nextUrl');
+
+      function syncMode() {
+        const chosen = radios.find(r => r.checked);
+        if (!chosen) return;
+
+        const isParts = chosen.value === 'parts';
+        const isStock = chosen.value === 'stock';
+
+        // Subject
+        if (subjectInput) subjectInput.value = chosen.dataset.subject || 'Website enquiry — Caravans Tasmania';
+
+        // Route: parts uses NON-AJAX (so attachments work), others use AJAX JSON endpoint
+        const email = chosen.dataset.email;
+        if (isParts) {
+          form.action = `https://formsubmit.co/${email}`;        // no /ajax
+          if (nextInput) nextInput.disabled = false;             // allow redirect back
+        } else {
+          form.action = `https://formsubmit.co/ajax/${email}`;   // stay on page
+          if (nextInput) nextInput.disabled = true;              // _next unused in AJAX mode
+        }
+
+        // Toggle field groups + requirements
+        partsFields.classList.toggle('hidden', !isParts);
+        stockFields.classList.toggle('hidden', !isStock);
+        if (partNeeded) partNeeded.toggleAttribute('required', isParts);
+        if (stockModel) stockModel.toggleAttribute('required', isStock);
+      }
+
+      radios.forEach(r => r.addEventListener('change', syncMode));
+      syncMode();
+
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        const chosen = radios.find(r => r.checked);
+        const isParts = chosen?.value === 'parts';
+
+        if (isParts) {
+          // Normal submit (multipart) so files are sent; let the browser post + redirect
+          btn.disabled = true;
+          btn.textContent = 'Sending…';
+          return;
+        }
+
+        // AJAX path (general + stock)
+        e.preventDefault();
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (res.ok) {
+            form.reset();
+            syncMode(); // reset UI/requirements
+            success?.classList.remove('hidden');
+          } else {
+            alert('Sorry, something went wrong sending your message. Please call (03) 6343 7287 or email reception@caravanstas.com.au');
+          }
+        } catch (err) {
+            alert('Network error. Please try again or contact us directly.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Send';
+        }
+      });
+    })();
   </script>
 </body>
 </html>
