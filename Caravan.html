@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caravan — Caravans Tasmania</title>
+  <meta name="description" content="View caravan details, photos and specifications."/>
+  <link rel="icon" href="assets/ct_logo_email_600_white.png"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>.nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}</style>
+</head>
+<body class="bg-white text-slate-800">
+  <!-- Top bar -->
+  <div class="w-full bg-slate-900 text-white text-sm">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+      <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
+      <div class="space-x-4 hidden sm:block">
+        <a href="https://www.facebook.com/caravanstasmania/" target="_blank" rel="noopener" class="hover:underline">Facebook</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/80 nav-backdrop border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html#home" class="flex items-center space-x-3">
+          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-10 w-auto object-contain"/>
+          <span class="sr-only">Caravans Tasmania</span>
+        </a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html#home">Home</a>
+          <a href="stock.html">Stock</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
+        <a href="index.html#home" class="py-2">Home</a>
+        <a href="stock.html" class="py-2">Stock</a>
+        <a href="index.html#services" class="py-2">Services</a>
+        <a href="index.html#about" class="py-2">About</a>
+        <a href="index.html#contact" class="py-2">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="py-10">
+    <div class="max-w-7xl mx-auto px-4">
+      <a href="stock.html" class="text-sm underline">← Back to stock</a>
+
+      <div id="van" class="mt-4 grid lg:grid-cols-2 gap-8">
+        <!-- Gallery -->
+        <section>
+          <div class="relative rounded-xl overflow-hidden border border-slate-200">
+            <img id="mainImg" src="assets/placeholder.jpg" alt="" class="w-full h-80 object-cover">
+          </div>
+          <div id="thumbs" class="mt-3 grid grid-cols-5 sm:grid-cols-6 gap-2"></div>
+        </section>
+
+        <!-- Details -->
+        <section>
+          <div class="flex items-start gap-3">
+            <h1 id="title" class="text-2xl font-semibold">Loading…</h1>
+            <span id="soldTag" class="hidden text-xs px-2 py-1 rounded bg-red-600 text-white mt-1">Sold</span>
+          </div>
+          <p id="meta" class="mt-1 text-slate-600"></p>
+          <p id="price" class="mt-2 text-xl font-semibold"></p>
+
+          <div class="mt-4 flex gap-3">
+            <a id="enquire" href="#" class="px-4 py-2 rounded-lg bg-slate-900 text-white">Enquire</a>
+            <a href="index.html#contact" class="px-4 py-2 rounded-lg border">Visit showroom</a>
+          </div>
+
+          <div id="desc" class="prose prose-slate max-w-none mt-6"></div>
+
+          <div class="mt-8 grid md:grid-cols-2 gap-6">
+            <div>
+              <h2 class="font-semibold">Specifications</h2>
+              <dl id="specs" class="mt-2 text-sm grid grid-cols-2 gap-y-1"></dl>
+            </div>
+            <div>
+              <h2 class="font-semibold">Features</h2>
+              <ul id="features" class="mt-2 text-sm list-disc list-inside space-y-1"></ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-200 mt-10">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
+      <div>
+        <h4 class="font-semibold">Caravans Tasmania</h4>
+        <p class="text-sm text-slate-400 mt-2">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
+        <p class="mt-2 text-sm">Phone: <a class="underline" href="tel:+61363437287">(03) 6343 7287</a><br/>Email: <a class="underline" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a></p>
+      </div>
+      <div>
+        <h5 class="font-semibold">Hours</h5>
+        <p class="text-sm text-slate-400 mt-2">Mon–Fri 8:30–5:00<br/>Sat 8:00–12:00</p>
+      </div>
+      <div class="md:col-span-2">
+        <h5 class="font-semibold">Ready to view?</h5>
+        <p class="text-sm text-slate-300 mt-2">Drop in or contact us to organise a time.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-700">
+      <div class="max-w-7xl mx-auto px-4 py-6 text-sm flex items-center justify-between">
+        <p>© <span id="year"></span> Caravans Tasmania. All rights reserved.</p>
+        <div class="space-x-4">
+          <a href="stock.html" class="hover:underline">Stock</a>
+          <a href="index.html#contact" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile nav
+    const menuBtn=document.getElementById('menuBtn'), mobileNav=document.getElementById('mobileNav');
+    function toggleNav(open){ const isOpen=open??mobileNav.classList.contains('hidden'); mobileNav.classList.toggle('hidden',!isOpen); menuBtn?.setAttribute('aria-expanded',String(isOpen)); }
+    menuBtn?.addEventListener('click',()=>toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') toggleNav(false) });
+
+    // ---------- CONFIG ----------
+    const API = 'https://admin.caravanstasmania.com.au';
+    const COLLECTION = 'Caravans';
+    const PRESET_XL = 'xl';
+
+    // Helpers
+    const id = new URLSearchParams(location.search).get('id') || '';
+    const currency = n => {
+      if (n === null || n === undefined || n === '') return 'POA';
+      const num = typeof n === 'number' ? n : parseFloat(n);
+      if (isNaN(num)) return 'POA';
+      return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+    };
+    const fileUrl = (fid, preset = PRESET_XL) => fid ? (preset ? `${API}/assets/${fid}?key=${preset}` : `${API}/assets/${fid}?width=1600&fit=cover`) : 'assets/placeholder.jpg';
+
+    // Elements
+    const main = document.getElementById('mainImg');
+    const thumbs = document.getElementById('thumbs');
+    const titleEl = document.getElementById('title');
+    const metaEl = document.getElementById('meta');
+    const priceEl = document.getElementById('price');
+    const descEl = document.getElementById('desc');
+    const specsEl = document.getElementById('specs');
+    const featuresEl = document.getElementById('features');
+    const enquireEl = document.getElementById('enquire');
+    const soldTag = document.getElementById('soldTag');
+
+    // Fetch item with expanded images relation
+    const fields = [
+      'id','title','price','category','type','registered','sleeps','weight','length','suspension','axleConfiguration','sold','thumbnail','date_created',
+      'description',
+      'images.directus_files_id.id','images.id'
+    ].join(',');
+
+    fetch(`${API}/items/${COLLECTION}/${encodeURIComponent(id)}?fields=${encodeURIComponent(fields)}`)
+      .then(r=>r.json())
+      .then(({data:it})=>{
+        if(!it){ titleEl.textContent='Not found'; return; }
+
+        // SEO-ish
+        document.title = `${it.title || 'Caravan'} — Caravans Tasmania`;
+        const md = document.querySelector('meta[name="description"]');
+        if (md) md.setAttribute('content', `${it.title || ''} — ${[it.length,it.sleeps?it.sleeps+' berth':'',it.axleConfiguration].filter(Boolean).join(' • ')}.`);
+
+        // Header/meta
+        titleEl.textContent = it.title || '(Untitled)';
+        metaEl.textContent = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
+        priceEl.textContent = currency(it.price);
+        if (it.sold) soldTag.classList.remove('hidden');
+
+        // Description (HTML from Directus)
+        descEl.innerHTML = it.description || '';
+
+        // Gallery (prefer 'images', fallback to 'thumbnail')
+        const ids = Array.isArray(it.images) ? it.images.map(p => p?.directus_files_id?.id || p?.id).filter(Boolean) : [];
+        if (!ids.length && it.thumbnail) ids.push(it.thumbnail);
+        const images = (ids.length ? ids : [null]).map(fid => fileUrl(fid));
+        main.src = images[0]; main.alt = it.title || '';
+        thumbs.innerHTML = images.map((src,i)=>`
+          <button class="border rounded-lg overflow-hidden ${i===0?'ring-2 ring-slate-900':''}" data-i="${i}">
+            <img src="${src}" alt="" class="w-full h-16 object-cover">
+          </button>`).join('');
+        thumbs.querySelectorAll('button').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            const i=+btn.dataset.i;
+            main.src=images[i];
+            thumbs.querySelectorAll('button').forEach(b=>b.classList.remove('ring-2','ring-slate-900'));
+            btn.classList.add('ring-2','ring-slate-900');
+          });
+        });
+
+        // Specs (from your fields)
+        const specMap = {
+          "Category": it.category === 'new' ? 'New' : (it.category || ''),
+          "Type": it.type,
+          "Registered": it.registered ? 'Yes' : 'No',
+          "Sleeps": it.sleeps,
+          "Weight (kg)": it.weight,
+          "Length": it.length,
+          "Suspension": it.suspension,
+          "Axle Configuration": it.axleConfiguration
+        };
+        specsEl.innerHTML = Object.entries(specMap)
+          .filter(([_,v])=>v!==undefined && v!==null && String(v).trim()!=='')
+          .map(([k,v])=> `<dt class="text-slate-500">${k}</dt><dd class="text-slate-800">${v}</dd>`).join('');
+
+        // Features (none as separate field in your schema; could parse list items from description if you want later)
+        featuresEl.innerHTML = '';
+        // Enquiry link
+        const mail = `mailto:reception@caravanstas.com.au?subject=${encodeURIComponent('Enquiry: ' + (it.title || id))}`;
+        enquireEl.setAttribute('href', mail);
+      })
+      .catch(err=>{
+        console.error('Directus item load failed:', err);
+        titleEl.textContent = 'Not found';
+      });
+  </script>
+</body>
+</html>
