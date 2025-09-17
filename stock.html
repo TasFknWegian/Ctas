@@ -13,7 +13,6 @@
   </style>
 </head>
 <body class="bg-white text-slate-800">
-  <!-- Top Bar -->
   <div class="w-full bg-slate-900 text-white text-sm">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
       <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
@@ -23,7 +22,6 @@
     </div>
   </div>
 
-  <!-- Header -->
  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -56,7 +54,6 @@
     </div>
   </header>
 
-  <!-- Page header -->
   <section class="py-10 bg-slate-50 border-b">
     <div class="max-w-7xl mx-auto px-4">
       <h1 class="text-3xl font-semibold">In-stock caravans</h1>
@@ -64,7 +61,6 @@
     </div>
   </section>
 
-  <!-- Filters -->
   <section class="py-6">
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid gap-3 md:grid-cols-6">
@@ -89,7 +85,6 @@
     </div>
   </section>
 
-  <!-- Grid -->
   <main class="py-8">
     <div class="max-w-7xl mx-auto px-4">
       <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -125,9 +120,7 @@
     </div>
   </footer>
 
-  <!-- Single, clean script -->
   <script>
-    // ---------- BASIC UI ----------
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
@@ -140,13 +133,11 @@
     mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
     document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleNav(false); });
 
-    // ---------- STOCK LOADER ----------
-    const API = 'https://admin.caravanstasmania.com.au'; // for Directus file IDs if present
 
-    // Build URL if value is a Directus file id
+    const API = 'https://admin.caravanstasmania.com.au';
+
     const directusFileUrl = (id) => id ? `${API}/assets/${id}?width=800&fit=cover` : null;
 
-    // Use either a local path (string) or a Directus id; otherwise placeholder
     function thumbSrc(item) {
       const local = item.thumbnail && (typeof item.thumbnail === 'string') && (item.thumbnail.includes('/') || item.thumbnail.includes('.'));
       if (local) {
@@ -233,7 +224,6 @@
       emptyEl.classList.toggle('hidden', filtered.length > 0);
     }
 
-    // Load JSON (must live at /assets/stock.json on Vercel; path is case-sensitive)
     (function loadStock(){
       const JSON_URL = '/assets/stock.json';
       console.log('[Stock] fetching', JSON_URL);
@@ -251,7 +241,6 @@
             return;
           }
 
-          // normalise rows
           const items = raw.map(it => {
             // try to discover a first Directus file id if images is relational
             let firstId = null;
@@ -259,7 +248,6 @@
               const first = it.images[0];
               firstId = first?.directus_files_id?.id || first?.id || null;
             }
-            // plain-text description for searching
             const tmp = document.createElement('div');
             tmp.innerHTML = it.description || '';
             const descText = tmp.textContent || tmp.innerText || '';
@@ -284,5 +272,6 @@
   </script>
 </body>
 </html>
+
 
 
