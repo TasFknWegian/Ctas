@@ -12,46 +12,6 @@
     .nav-backdrop { backdrop-filter: saturate(180%) blur(8px); -webkit-backdrop-filter: saturate(180%) blur(8px); }
   </style>
 </head>
-<script>
-(async ()=>{
-  const API = 'https://admin.caravanstasmania.com.au';
-  const url = API + '/items/Caravans?fields=id,title,thumbnail,images.directus_files_id.id&limit=1';
-
-  const banner = msg => {
-    let el = document.getElementById('directus-debug');
-    if (!el) {
-      el = document.createElement('div');
-      el.id = 'directus-debug';
-      el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#fee;color:#900;padding:8px 12px;font:12px/1.4 system-ui;z-index:9999;border-top:1px solid #f99';
-      document.body.appendChild(el);
-    }
-    el.textContent = msg;
-  };
-
-  try {
-    // 1) Can we reach the API host at all?
-    const health = await fetch(API + '/server/health', {mode:'cors'}).catch(e=>e);
-    if (!(health && health.ok)) {
-      return banner('Cannot reach Directus health endpoint from this page. Likely CORS or network. Try adding this page origin to CORS and serve over http:// (not file://).');
-    }
-
-    // 2) Can we read your Caravans?
-    const r = await fetch(url, {mode:'cors', cache:'no-store'}).catch(e=>e);
-    if (!(r && r.ok)) {
-      const txt = (r && r.text) ? await r.text() : (r && r.message) || 'unknown error';
-      return banner(`Directus fetch failed: HTTP ${(r && r.status) || ''} ${(r && r.statusText) || ''} — ${String(txt).slice(0,200)}`);
-    }
-
-    const js = await r.json();
-    console.log('Caravans sample:', js);
-    banner('Directus OK — data received. If cards still don’t render, check your JS paths/field names.');
-  } catch (e) {
-    console.error(e);
-    banner('Network/CORS error talking to Directus. Add your site origin to CORS and serve via http://');
-  }
-})();
-</script>
-
 <body class="bg-white text-slate-800">
   <!-- Top Bar -->
   <div class="w-full bg-slate-900 text-white text-sm">
@@ -163,56 +123,77 @@
     </div>
   </footer>
 
+  <!-- Single, clean script -->
   <script>
-    // ---------- CONFIG ----------
-    const API = 'https://admin.caravanstasmania.com.au';
-    const COLLECTION = 'Caravans';        // Capital C (confirmed)
-    const PRESET_THUMB = 'thumb';         // Use Directus image preset if you've created it; else fallback width
-
-    // ---------- COMMON ----------
+    // ---------- BASIC UI ----------
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
-    function toggleNav(open){ const isOpen=open??mobileNav.classList.contains('hidden'); mobileNav.classList.toggle('hidden',!isOpen); menuBtn?.setAttribute('aria-expanded',String(isOpen)); }
-    menuBtn?.addEventListener('click',()=>toggleNav());
-    mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
-    document.addEventListener('keydown',e=>{ if(e.key==='Escape') toggleNav(false) });
+    function toggleNav(open){
+      const isOpen = open ?? mobileNav.classList.contains('hidden');
+      mobileNav.classList.toggle('hidden', !isOpen);
+      menuBtn?.setAttribute('aria-expanded', String(isOpen));
+    }
+    menuBtn?.addEventListener('click', () => toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleNav(false); });
 
-    // ---------- UI ----------
-    const qEl = document.getElementById('q'),
-          catEl = document.getElementById('category'),
-          soldEl = document.getElementById('sold'),
-          sortEl = document.getElementById('sort');
-    const grid = document.getElementById('grid'),
-          countEl = document.getElementById('count'),
-          emptyEl = document.getElementById('empty');
+    // ---------- STOCK LOADER ----------
+    const API = 'https://admin.caravanstasmania.com.au'; // for Directus file IDs if present
+
+    // Build URL if value is a Directus file id
+    const directusFileUrl = (id) => id ? `${API}/assets/${id}?width=800&fit=cover` : null;
+
+    // Use either a local path (string) or a Directus id; otherwise placeholder
+    function thumbSrc(item) {
+      const local = item.thumbnail && (typeof item.thumbnail === 'string') && (item.thumbnail.includes('/') || item.thumbnail.includes('.'));
+      if (local) {
+        return ensureLeadingSlash(item.thumbnail);
+      }
+      if (item._firstFileId) {
+        return directusFileUrl(item._firstFileId);
+      }
+      return 'assets/placeholder.jpg';
+    }
+
+    function ensureLeadingSlash(path) {
+      if (!path) return path;
+      if (/^https?:\/\//i.test(path)) return path;
+      return path.startsWith('/') ? path : '/' + path;
+    }
 
     const currency = n => {
       if (n === null || n === undefined || n === '') return 'POA';
       const num = typeof n === 'number' ? n : parseFloat(n);
       if (isNaN(num)) return 'POA';
-      return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+      return num.toLocaleString('en-AU', { style:'currency', currency:'AUD', maximumFractionDigits:0 });
     };
 
-    function fileUrl(id, preset = PRESET_THUMB){
-      if (!id) return 'assets/placeholder.jpg';
-      return preset ? `${API}/assets/${id}?key=${preset}` : `${API}/assets/${id}?width=800&fit=cover`;
-    }
+    const qEl    = document.getElementById('q');
+    const catEl  = document.getElementById('category');
+    const soldEl = document.getElementById('sold');
+    const sortEl = document.getElementById('sort');
+    const grid   = document.getElementById('grid');
+    const countEl= document.getElementById('count');
+    const emptyEl= document.getElementById('empty');
 
     function matches(it){
-      const q = (qEl.value||'').toLowerCase().trim();
-      if (catEl.value && (it.category||'') !== catEl.value) return false;
+      const q = (qEl.value || '').toLowerCase().trim();
+      if (catEl.value && (it.category || '') !== catEl.value) return false;
       if (soldEl.value) {
         const s = it.sold ? 'sold' : 'available';
         if (s !== soldEl.value) return false;
       }
       if (q){
-        const desc = (it.description_text || '').toLowerCase();
-        const hay = [it.title, it.length, it.suspension, it.axleConfiguration, it.type, it.category, it.id, desc, (it.sleeps ?? '')].join(' ').toLowerCase();
+        const hay = [
+          it.title, it.length, it.suspension, it.axleConfiguration, it.type, it.category, it.id,
+          it.description_text, (it.sleeps ?? '')
+        ].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     }
+
     function sortList(list){
       switch (sortEl.value){
         case 'price-asc':  return list.slice().sort((a,b)=>(parseFloat(a.price)||1e12)-(parseFloat(b.price)||1e12));
@@ -222,13 +203,13 @@
     }
 
     function cardHTML(it){
-      const href='caravan.html?id='+encodeURIComponent(it.id);
-      const thumb = fileUrl(it.thumbnail || it._firstPhotoId);
-      const metaBits = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
+      const href = 'caravan.html?id=' + encodeURIComponent(it.id);
+      const img  = thumbSrc(it);
+      const meta = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
       return `
         <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block">
           <div class="relative">
-            <img src="${thumb}" alt="${it.title || ''}" class="w-full h-48 object-cover">
+            <img src="${img}" alt="${it.title || ''}" class="w-full h-48 object-cover">
             <div class="absolute top-2 left-2 flex gap-2">
               ${it.category?`<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category === 'new' ? 'New' : 'Used'}</span>`:''}
               ${it.sold?`<span class="inline-block text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>`:''}
@@ -236,7 +217,7 @@
           </div>
           <div class="p-5">
             <h3 class="font-semibold">${it.title || '(Untitled)'}</h3>
-            <p class="mt-1 text-sm text-slate-600">${metaBits}</p>
+            <p class="mt-1 text-sm text-slate-600">${meta}</p>
             <p class="mt-2 font-semibold">${currency(it.price)}</p>
           </div>
         </a>
@@ -247,110 +228,57 @@
       const filtered = sortList(list.filter(matches));
       grid.innerHTML = filtered.map(cardHTML).join('');
       countEl.textContent = filtered.length;
-      emptyEl.classList.toggle('hidden', filtered.length>0);
+      emptyEl.classList.toggle('hidden', filtered.length > 0);
     }
 
-    // ---------- FETCH ----------
-<script>
-  // Build image URL for Directus files (works fine in <img> without CORS)
-  const fileUrl = (id) => id ? `https://admin.caravanstasmania.com.au/assets/${id}?width=800&fit=cover` : 'assets/placeholder.jpg';
+    // Load JSON (must live at /assets/stock.json on Vercel; path is case-sensitive)
+    (function loadStock(){
+      const JSON_URL = '/assets/stock.json';
+      console.log('[Stock] fetching', JSON_URL);
 
-  const fieldsUsed = ['id','title','price','category','type','registered','sleeps','weight','length','suspension','axleConfiguration','sold','thumbnail','date_created','images','description'];
-
-  fetch('/assets/stock.json', { cache:'no-store' })
-    .then(r => r.json())
-    .then(data => {
-      const items = (data?.data || data || []).map(it => {
-        const photos = Array.isArray(it.images) ? it.images : [];
-        const firstId = photos[0]?.directus_files_id?.id || photos[0]?.id || it.thumbnail || null;
-        const tmp = document.createElement('div'); tmp.innerHTML = it.description || '';
-        const descText = tmp.textContent || tmp.innerText || '';
-        return { ...it, _firstPhotoId:firstId, description_text: descText };
-      });
-
-      window.__STOCK = items;
-
-      // Reuse your existing helpers (card render, filters, etc.)
-      (function initFilters(){
-        const qEl = document.getElementById('q');
-        const catEl = document.getElementById('category');
-        const soldEl = document.getElementById('sold');
-        const sortEl = document.getElementById('sort');
-        const grid = document.getElementById('grid');
-        const countEl = document.getElementById('count');
-        const emptyEl = document.getElementById('empty');
-
-        const currency = n => {
-          if (n === null || n === undefined || n === '') return 'POA';
-          const num = typeof n === 'number' ? n : parseFloat(n);
-          if (isNaN(num)) return 'POA';
-          return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
-        };
-
-        function matches(it){
-          const q = (qEl.value||'').toLowerCase().trim();
-          if (catEl.value && (it.category||'') !== catEl.value) return false;
-          if (soldEl.value) {
-            const s = it.sold ? 'sold' : 'available';
-            if (s !== soldEl.value) return false;
+      fetch(JSON_URL, { cache: 'no-store' })
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
+          return r.json();
+        })
+        .then(data => {
+          const raw = (data && Array.isArray(data.data)) ? data.data : (Array.isArray(data) ? data : []);
+          if (!raw.length) {
+            emptyEl.classList.remove('hidden');
+            emptyEl.textContent = 'No caravans found in assets/stock.json.';
+            return;
           }
-          if (q){
-            const hay = [
-              it.title, it.length, it.suspension, it.axleConfiguration, it.type, it.category, it.id, it.description_text, (it.sleeps ?? '')
-            ].join(' ').toLowerCase();
-            if (!hay.includes(q)) return false;
-          }
-          return true;
-        }
-        function sortList(list){
-          switch (sortEl.value){
-            case 'price-asc':  return list.slice().sort((a,b)=>(parseFloat(a.price)||1e12)-(parseFloat(b.price)||1e12));
-            case 'price-desc': return list.slice().sort((a,b)=>(parseFloat(b.price)||-1)-(parseFloat(a.price)||-1));
-            default:           return list.slice().sort((a,b)=> new Date(b.date_created||0) - new Date(a.date_created||0));
-          }
-        }
-        function cardHTML(it){
-          const href='caravan.html?id='+encodeURIComponent(it.id);
-          const thumb = fileUrl(it._firstPhotoId);
-          const metaBits = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
-          return `
-            <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block">
-              <div class="relative">
-                <img src="${thumb}" alt="${it.title || ''}" class="w-full h-48 object-cover">
-                <div class="absolute top-2 left-2 flex gap-2">
-                  ${it.category?`<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category === 'new' ? 'New' : 'Used'}</span>`:''}
-                  ${it.sold?`<span class="inline-block text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>`:''}
-                </div>
-              </div>
-              <div class="p-5">
-                <h3 class="font-semibold">${it.title || '(Untitled)'}</h3>
-                <p class="mt-1 text-sm text-slate-600">${metaBits}</p>
-                <p class="mt-2 font-semibold">${currency(it.price)}</p>
-              </div>
-            </a>
-          `;
-        }
-        function render(list){
-          const filtered = sortList(list.filter(matches));
-          grid.innerHTML = filtered.map(cardHTML).join('');
-          countEl.textContent = filtered.length;
-          emptyEl.classList.toggle('hidden', filtered.length>0);
-        }
 
-        render(items);
-        qEl.addEventListener('input', ()=>render(items));
-        catEl.addEventListener('change', ()=>render(items));
-        soldEl.addEventListener('change', ()=>render(items));
-        sortEl.addEventListener('change', ()=>render(items));
-      })();
-    })
-    .catch(err => {
-      console.error(err);
-      const emptyEl = document.getElementById('empty');
-      emptyEl.classList.remove('hidden');
-      emptyEl.textContent = 'No stock file found (/assets/stock.json).';
-    });
-</script>
+          // normalise rows
+          const items = raw.map(it => {
+            // try to discover a first Directus file id if images is relational
+            let firstId = null;
+            if (Array.isArray(it.images) && it.images.length) {
+              const first = it.images[0];
+              firstId = first?.directus_files_id?.id || first?.id || null;
+            }
+            // plain-text description for searching
+            const tmp = document.createElement('div');
+            tmp.innerHTML = it.description || '';
+            const descText = tmp.textContent || tmp.innerText || '';
+
+            return { ...it, _firstFileId: firstId, description_text: descText };
+          });
+
+          window.__STOCK = items; // handy for debugging
+          render(items);
+
+          qEl.addEventListener('input',   () => render(items));
+          catEl.addEventListener('change',() => render(items));
+          soldEl.addEventListener('change',() => render(items));
+          sortEl.addEventListener('change',() => render(items));
+        })
+        .catch(err => {
+          console.error('[Stock] load failed:', err);
+          emptyEl.classList.remove('hidden');
+          emptyEl.textContent = 'Could not load /assets/stock.json (check path & file casing).';
+        });
+    })();
+  </script>
 </body>
 </html>
-
