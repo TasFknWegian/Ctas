@@ -257,7 +257,7 @@
 
   const fieldsUsed = ['id','title','price','category','type','registered','sleeps','weight','length','suspension','axleConfiguration','sold','thumbnail','date_created','images','description'];
 
-  fetch('assets/stock.json', { cache:'no-store' })
+  fetch('/assets/stock.json', { cache:'no-store' })
     .then(r => r.json())
     .then(data => {
       const items = (data?.data || data || []).map(it => {
@@ -348,8 +348,9 @@
       console.error(err);
       const emptyEl = document.getElementById('empty');
       emptyEl.classList.remove('hidden');
-      emptyEl.textContent = 'No stock file found (assets/stock.json).';
+      emptyEl.textContent = 'No stock file found (/assets/stock.json).';
     });
 </script>
 </body>
 </html>
+
