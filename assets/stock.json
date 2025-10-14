@@ -1,6 +1,6 @@
 <script>
   // 1) Paste your published CSV URL here:
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/XXXX/pub?output=csv';
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPtHlwJq_gTjl71aIzldiDbkZ6diF0akBbKqiuGq3gwxatmuiE0n3Nv_x8E57LPz-rG0hIyb4_SjXm/pub?output=csv';
 
   // 2) Minimal CSV parser (handles quotes & commas well enough for feeds)
   function parseCSV(text) {
