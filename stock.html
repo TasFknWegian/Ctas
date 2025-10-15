@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stock — Caravans Tasmania</title>
   <meta name="description" content="In-stock caravans in Youngtown, Launceston. View New Age and Highclere models."/>
@@ -9,7 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html { scroll-behavior: smooth; }
-    .nav-backdrop { backdrop-filter: saturate(180%) blur(8px); -webkit-backdrop-filter: saturate(180%) blur(8px); }
+    .nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}
   </style>
 </head>
 <body class="bg-white text-slate-800">
@@ -22,14 +22,11 @@
     </div>
   </div>
 
- <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <a href="index.html#home" class="flex items-center space-x-3">
-<img src="assets/ct_logo_email_600_white.png"
-     alt="Caravans Tasmania"
-     class="h-12 md:h-14 w-auto object-contain" />
-
+          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain"/>
         </a>
         <nav class="hidden md:flex items-center space-x-6">
           <a href="index.html#home">Home</a>
@@ -92,7 +89,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-slate-900 text-slate-200 mt-10">
     <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
       <div>
@@ -124,154 +120,154 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
-    function toggleNav(open){
-      const isOpen = open ?? mobileNav.classList.contains('hidden');
-      mobileNav.classList.toggle('hidden', !isOpen);
-      menuBtn?.setAttribute('aria-expanded', String(isOpen));
+    function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
+    menuBtn?.addEventListener('click',()=>toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
+
+    const qEl=document.getElementById('q');
+    const catEl=document.getElementById('category');
+    const soldEl=document.getElementById('sold');
+    const sortEl=document.getElementById('sort');
+    const grid=document.getElementById('grid');
+    const countEl=document.getElementById('count');
+    const emptyEl=document.getElementById('empty');
+
+    const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vSPtHlwJq_gTjl71aIzldiDbkZ6diF0akBbKqiuGq3gwxatmuiE0n3Nv_x8E57LPz-rG0hIyb4_SjXm/pub?output=csv';
+
+    function parseCSV(text){
+      const rows=[];let i=0,field='',row=[],inQuotes=false;
+      while(i<text.length){
+        const c=text[i],n=text[i+1];
+        if(inQuotes){
+          if(c=='"'&&n=='"'){field+='"';i+=2;continue;}
+          if(c=='"'){inQuotes=false;i++;continue;}
+          field+=c;i++;continue;
+        }else{
+          if(c=='"'){inQuotes=true;i++;continue;}
+          if(c==','){row.push(field);field='';i++;continue;}
+          if(c=='\n'||c=='\r'){if(field.length||row.length){row.push(field);rows.push(row);}field='';row=[];i++;if(c=='\r'&&n=='\n')i++;continue;}
+          field+=c;i++;
+        }
+      }
+      if(field.length||row.length){row.push(field);rows.push(row);}
+      return rows;
     }
-    menuBtn?.addEventListener('click', () => toggleNav());
-    mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleNav(false); });
 
+    function mapRowsToItems(rows){
+      const [header,...data]=rows;
+      if(!header) return [];
+      const idx=Object.fromEntries(header.map((h,i)=>[h.trim(),i]));
+      const get=(r,name)=>(r[idx[name]]||'').trim();
+      return data
+        .filter(r=>r.length && get(r,'id'))
+        .map(r=>{
+          const images=[get(r,'image_1'),get(r,'image_2')].filter(Boolean);
+          const price=get(r,'price');
+          return{
+            id:get(r,'id'),
+            title:get(r,'title'),
+            price:price?Number(price.replace(/[^\d.]/g,'')):null,
+            category:get(r,'category')?.toLowerCase(),
+            sold:/^true$/i.test(get(r,'sold')),
+            type:get(r,'type'),
+            length:get(r,'length'),
+            sleeps:get(r,'sleeps'),
+            axleConfiguration:get(r,'axleConfiguration'),
+            suspension:get(r,'suspension'),
+            weight:get(r,'weight'),
+            registered:/^true$/i.test(get(r,'registered')),
+            description:get(r,'description_html'),
+            thumbnail:get(r,'thumbnail')||images[0]||'',
+            images,
+            date_created:new Date().toISOString()
+          };
+        });
+    }
 
-    const API = 'https://admin.caravanstasmania.com.au';
+    const currency=n=>{
+      if(n===null||n===undefined||n==='')return'POA';
+      const num=typeof n==='number'?n:parseFloat(n);
+      if(isNaN(num))return'POA';
+      return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+    };
 
-    const directusFileUrl = (id) => id ? `${API}/assets/${id}?width=800&fit=cover` : null;
+    const fileUrl=(url)=>url && /^https?:\/\//i.test(url) ? url : (url? (url.startsWith('/')?url:'/'+url) : 'assets/placeholder.jpg');
 
-    function thumbSrc(item) {
-      const local = item.thumbnail && (typeof item.thumbnail === 'string') && (item.thumbnail.includes('/') || item.thumbnail.includes('.'));
-      if (local) {
-        return ensureLeadingSlash(item.thumbnail);
-      }
-      if (item._firstFileId) {
-        return directusFileUrl(item._firstFileId);
-      }
+    function thumbSrc(it){
+      if(it.thumbnail) return fileUrl(it.thumbnail);
+      if(Array.isArray(it.images)&&it.images[0]) return fileUrl(it.images[0]);
       return 'assets/placeholder.jpg';
     }
 
-    function ensureLeadingSlash(path) {
-      if (!path) return path;
-      if (/^https?:\/\//i.test(path)) return path;
-      return path.startsWith('/') ? path : '/' + path;
-    }
-
-    const currency = n => {
-      if (n === null || n === undefined || n === '') return 'POA';
-      const num = typeof n === 'number' ? n : parseFloat(n);
-      if (isNaN(num)) return 'POA';
-      return num.toLocaleString('en-AU', { style:'currency', currency:'AUD', maximumFractionDigits:0 });
-    };
-
-    const qEl    = document.getElementById('q');
-    const catEl  = document.getElementById('category');
-    const soldEl = document.getElementById('sold');
-    const sortEl = document.getElementById('sort');
-    const grid   = document.getElementById('grid');
-    const countEl= document.getElementById('count');
-    const emptyEl= document.getElementById('empty');
-
     function matches(it){
-      const q = (qEl.value || '').toLowerCase().trim();
-      if (catEl.value && (it.category || '') !== catEl.value) return false;
-      if (soldEl.value) {
-        const s = it.sold ? 'sold' : 'available';
-        if (s !== soldEl.value) return false;
+      const q=(qEl.value||'').toLowerCase().trim();
+      if(catEl.value&&(it.category||'')!==catEl.value) return false;
+      if(soldEl.value){
+        const s=it.sold?'sold':'available';
+        if(s!==soldEl.value) return false;
       }
-      if (q){
-        const hay = [
-          it.title, it.length, it.suspension, it.axleConfiguration, it.type, it.category, it.id,
-          it.description_text, (it.sleeps ?? '')
-        ].join(' ').toLowerCase();
-        if (!hay.includes(q)) return false;
+      if(q){
+        const tmp=document.createElement('div'); tmp.innerHTML=it.description||'';
+        const hay=[it.title,it.length,it.suspension,it.axleConfiguration,it.type,it.category,it.id,tmp.textContent||'',(it.sleeps??'')].join(' ').toLowerCase();
+        if(!hay.includes(q)) return false;
       }
       return true;
     }
 
     function sortList(list){
-      switch (sortEl.value){
+      switch(sortEl.value){
         case 'price-asc':  return list.slice().sort((a,b)=>(parseFloat(a.price)||1e12)-(parseFloat(b.price)||1e12));
         case 'price-desc': return list.slice().sort((a,b)=>(parseFloat(b.price)||-1)-(parseFloat(a.price)||-1));
-        default:           return list.slice().sort((a,b)=> new Date(b.date_created||0) - new Date(a.date_created||0));
+        default:           return list.slice().sort((a,b)=>new Date(b.date_created||0)-new Date(a.date_created||0));
       }
     }
 
     function cardHTML(it){
-      const href = 'caravan.html?id=' + encodeURIComponent(it.id);
-      const img  = thumbSrc(it);
-      const meta = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
+      const href='caravan.html?id='+encodeURIComponent(it.id);
+      const img=thumbSrc(it);
+      const meta=[it.length,it.sleeps?`${it.sleeps} berth`:'',it.axleConfiguration].filter(Boolean).join(' • ');
       return `
         <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block">
           <div class="relative">
-            <img src="${img}" alt="${it.title || ''}" class="w-full h-48 object-cover">
+            <img src="${img}" alt="${it.title||''}" class="w-full h-48 object-cover">
             <div class="absolute top-2 left-2 flex gap-2">
-              ${it.category?`<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category === 'new' ? 'New' : 'Used'}</span>`:''}
+              ${it.category?`<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category==='new'?'New':'Used'}</span>`:''}
               ${it.sold?`<span class="inline-block text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>`:''}
             </div>
           </div>
           <div class="p-5">
-            <h3 class="font-semibold">${it.title || '(Untitled)'}</h3>
+            <h3 class="font-semibold">${it.title||'(Untitled)'}</h3>
             <p class="mt-1 text-sm text-slate-600">${meta}</p>
             <p class="mt-2 font-semibold">${currency(it.price)}</p>
           </div>
-        </a>
-      `;
+        </a>`;
     }
 
     function render(list){
-      const filtered = sortList(list.filter(matches));
-      grid.innerHTML = filtered.map(cardHTML).join('');
-      countEl.textContent = filtered.length;
-      emptyEl.classList.toggle('hidden', filtered.length > 0);
+      const filtered=sortList(list.filter(matches));
+      grid.innerHTML=filtered.map(cardHTML).join('');
+      countEl.textContent=filtered.length;
+      emptyEl.classList.toggle('hidden',filtered.length>0);
     }
 
-    (function loadStock(){
-      const JSON_URL = '/assets/stock.json';
-      console.log('[Stock] fetching', JSON_URL);
+    fetch(SHEET_CSV_URL,{cache:'no-store'})
+      .then(r=>r.text())
+      .then(csv=>{
+        const items=mapRowsToItems(parseCSV(csv));
+        window.__STOCK=items;
+        render(items);
+      })
+      .catch(err=>{
+        console.error('Sheet load error:',err);
+        emptyEl.classList.remove('hidden');
+        emptyEl.textContent='Could not load stock from Google Sheets.';
+      });
 
-      fetch(JSON_URL, { cache: 'no-store' })
-        .then(r => {
-          if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
-          return r.json();
-        })
-        .then(data => {
-          const raw = (data && Array.isArray(data.data)) ? data.data : (Array.isArray(data) ? data : []);
-          if (!raw.length) {
-            emptyEl.classList.remove('hidden');
-            emptyEl.textContent = 'No caravans found in assets/stock.json.';
-            return;
-          }
-
-          const items = raw.map(it => {
-            // try to discover a first Directus file id if images is relational
-            let firstId = null;
-            if (Array.isArray(it.images) && it.images.length) {
-              const first = it.images[0];
-              firstId = first?.directus_files_id?.id || first?.id || null;
-            }
-            const tmp = document.createElement('div');
-            tmp.innerHTML = it.description || '';
-            const descText = tmp.textContent || tmp.innerText || '';
-
-            return { ...it, _firstFileId: firstId, description_text: descText };
-          });
-
-          window.__STOCK = items; // handy for debugging
-          render(items);
-
-          qEl.addEventListener('input',   () => render(items));
-          catEl.addEventListener('change',() => render(items));
-          soldEl.addEventListener('change',() => render(items));
-          sortEl.addEventListener('change',() => render(items));
-        })
-        .catch(err => {
-          console.error('[Stock] load failed:', err);
-          emptyEl.classList.remove('hidden');
-          emptyEl.textContent = 'Could not load /assets/stock.json (check path & file casing).';
-        });
-    })();
+    qEl.addEventListener('input',()=>render(window.__STOCK||[]));
+    catEl.addEventListener('change',()=>render(window.__STOCK||[]));
+    soldEl.addEventListener('change',()=>render(window.__STOCK||[]));
+    sortEl.addEventListener('change',()=>render(window.__STOCK||[]));
   </script>
 </body>
 </html>
-
-
-
