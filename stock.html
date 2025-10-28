@@ -1,67 +1,303 @@
-// ====== PocketBase config (YOUR schema) ======
-const PB_BASE = "http://101.187.178.19:8090/api/collections/caravans/records";   // or your LAN/DDNS/HTTPS URL
-const PB_COLLECTION = "caravans";          // <-- note the capital C
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stock — Caravans Tasmania</title>
+  <meta name="description" content="In-stock caravans in Youngtown, Launceston. View New Age and Highclere models."/>
+  <link rel="icon" href="assets/ct_logo_email_600_white.png"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-white text-slate-800">
+  <!-- Top bar -->
+  <div class="w-full bg-slate-900 text-white text-sm">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+      <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
+      <div class="space-x-4 hidden sm:block">
+        <a href="https://www.facebook.com/caravanstasmania/" target="_blank" rel="noopener" class="hover:underline">Facebook</a>
+      </div>
+    </div>
+  </div>
 
-function pbFileUrl(base, rec, file, size = "900x600") {
-  if (!file) return "assets/placeholder.jpg";
-  const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
-  return `${base}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
-}
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html#home" class="flex items-center space-x-3">
+          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain"/>
+        </a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html#home">Home</a>
+          <a href="stock.html" class="font-semibold text-slate-900">Stock</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
+        <a href="index.html#home" class="py-2">Home</a>
+        <a href="stock.html" class="py-2">Stock</a>
+        <a href="index.html#services" class="py-2">Services</a>
+        <a href="index.html#about" class="py-2">About</a>
+        <a href="index.html#contact" class="py-2">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-// Map YOUR fields to the list card shape the page expects
-function mapPBToItem(rec) {
-  // Your fields are Title/Brand/Model/Year/Price/Condition/Status/Main_image/gallery/Size/berths/tare_kg/atm_kg/suspension
-  const statusRaw = (rec.Status || "").toString().toLowerCase();     // "available" / "sold" / etc
-  const conditionRaw = (rec.Condition || "").toString().toLowerCase(); // "new" / "used" / "demo"
-  const sold = statusRaw === "sold";
-  const length = rec.Size ? `${rec.Size} ft` : "";                    // Your "Size" looks like feet
+  <!-- Hero -->
+  <section class="py-10 bg-slate-50 border-b">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-3xl font-semibold">In-stock caravans</h1>
+      <p class="mt-2 text-slate-600">Ready for viewing at 389 Hobart Road, Youngtown TAS 7249.</p>
+    </div>
+  </section>
 
-  // Image: prefer Main_image, fallback to first in gallery
-  const hero = rec.Main_image || (Array.isArray(rec.gallery) && rec.gallery[0]);
-  const thumb = hero ? pbFileUrl(PB_BASE, rec, hero) : "assets/placeholder.jpg";
+  <!-- Filters -->
+  <section class="py-6">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid gap-3 md:grid-cols-6">
+        <input id="q" type="search" placeholder="Search title, brand, features…" class="md:col-span-2 border rounded-lg px-3 py-2">
+        <select id="brand" class="border rounded-lg px-3 py-2">
+          <option value="">All brands</option>
+        </select>
+        <select id="condition" class="border rounded-lg px-3 py-2">
+          <option value="">All conditions</option>
+          <option value="new">New</option>
+          <option value="used">Used</option>
+          <option value="demo">Demo</option>
+        </select>
+        <select id="status" class="border rounded-lg px-3 py-2">
+          <option value="">Any status</option>
+          <option value="available">Available</option>
+          <option value="sold">Sold</option>
+        </select>
+        <select id="sort" class="border rounded-lg px-3 py-2">
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+      </div>
+      <div class="mt-3 text-sm text-slate-600"><span id="count">0</span> units</div>
+    </div>
+  </section>
 
-  // Price: ensure a number or null
-  const price =
-    typeof rec.Price === "number"
-      ? rec.Price
-      : parseFloat((rec.Price || "").toString().replace(/[^\d.]/g, "")) || null;
+  <!-- Grid -->
+  <main class="py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <p id="empty" class="hidden text-slate-500 text-center py-16">No results. Try clearing filters or searching a different term.</p>
+    </div>
+  </main>
 
-  return {
-    id: rec.id,
-    title: rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(" ") || "(Untitled)",
-    price,
-    category: conditionRaw, // used by your "New/Used" filter
-    sold,                   // used by your "Available/Sold" filter
-    type: rec.Type || "",
-    length,
-    sleeps: rec.berths || "",
-    axleConfiguration: rec.axleConfiguration || rec.Axle || "",
-    suspension: rec.suspension || "",
-    weight: rec.weight || "",
-    registered: !!rec.registered,
-    description: rec.description || "",
-    thumbnail: thumb,
-    images: [
-      hero ? pbFileUrl(PB_BASE, rec, hero, "1600x1000") : null,
-      ...(Array.isArray(rec.gallery) ? rec.gallery.map(f => pbFileUrl(PB_BASE, rec, f, "1600x1000")) : [])
-    ].filter(Boolean),
-    date_created: rec.created || new Date().toISOString(),
-  };
-}
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-200 mt-10">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
+      <div>
+        <h4 class="font-semibold">Caravans Tasmania</h4>
+        <p class="text-sm text-slate-400 mt-2">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
+        <p class="mt-2 text-sm">Phone: <a class="underline" href="tel:+61363437287">(03) 6343 7287</a><br/>Email: <a class="underline" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a></p>
+      </div>
+      <div>
+        <h5 class="font-semibold">Hours</h5>
+        <p class="text-sm text-slate-400 mt-2">Mon–Fri 8:30–5:00<br/>Sat 8:00–12:00</p>
+      </div>
+      <div class="md:col-span-2">
+        <h5 class="font-semibold">Need details?</h5>
+        <p class="text-sm text-slate-300 mt-2">Click any unit to view full specs, photos and contact options.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-700">
+      <div class="max-w-7xl mx-auto px-4 py-6 text-sm flex items-center justify-between">
+        <p>© <span id="year"></span> Caravans Tasmania. All rights reserved.</p>
+        <div class="space-x-4">
+          <a href="index.html#contact" class="hover:underline">Contact</a>
+          <a href="https://maps.google.com/?q=389%20Hobart%20Road,%20Youngtown%20TAS%207249" target="_blank" rel="noopener" class="hover:underline">Directions</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-// Fetch YOUR records (public list). You can filter at PB level or do it client-side.
-async function fetchCaravansPB() {
-  // If you set List/View rules, you can add a PB-side filter here, e.g. Status="Available"
-  // const filter = encodeURIComponent('Status="Available"');
-  const params = new URLSearchParams({
-    perPage: "200",
-    sort: "-created"
-    // , filter
-  });
-  const url = `${PB_BASE}/api/collections/${encodeURIComponent(PB_COLLECTION)}/records?` + params.toString();
-  const r = await fetch(url, { headers: { "Accept": "application/json" }, cache: "no-store" });
-  if (!r.ok) throw new Error(`PocketBase fetch failed: ${r.status}`);
-  const data = await r.json();
-  const records = data.items || data.records || [];
-  return records.map(mapPBToItem);
-}
+  <script>
+    // --- header/menu ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
+    menuBtn?.addEventListener('click',()=>toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
+
+    // ===== PocketBase config (your local/self-hosted PB) =====
+    // If you proxy through Vercel, set PB_BASE = "/api/pb"
+    const PB_BASE = http://localhost:8090/api/collections/caravans/records;
+    const PB_COLLECTION = "caravans"; // NOTE: capital C matches your collectionName
+
+    // UI refs
+    const qEl = document.getElementById('q');
+    const brandEl = document.getElementById('brand');
+    const condEl = document.getElementById('condition');
+    const statusEl = document.getElementById('status');
+    const sortEl = document.getElementById('sort');
+    const grid = document.getElementById('grid');
+    const countEl = document.getElementById('count');
+    const emptyEl = document.getElementById('empty');
+
+    // Helpers
+    const currency = n => {
+      if(n===null||n===undefined||n==='') return 'POA';
+      const num = typeof n==='number' ? n : parseFloat(n);
+      if(isNaN(num)) return 'POA';
+      return num.toLocaleString('en-AU', { style:'currency', currency:'AUD', maximumFractionDigits:0 });
+    };
+
+    function pbFileUrl(base, rec, file, size="900x600"){
+      if(!file) return "assets/placeholder.jpg";
+      const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
+      return `${base}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
+    }
+
+    // Map YOUR schema -> list item shape
+    function mapPBToItem(rec){
+      const statusRaw = (rec.Status || "").toString().toLowerCase();     // e.g. "available" / "sold"
+      const conditionRaw = (rec.Condition || "").toString().toLowerCase(); // "new" / "used" / "demo"
+      const sold = statusRaw === "sold";
+      const length = rec.Size ? `${rec.Size} ft` : "";
+      const hero = rec.Main_image || (Array.isArray(rec.gallery) && rec.gallery[0]);
+      const thumb = hero ? pbFileUrl(PB_BASE, rec, hero) : "assets/placeholder.jpg";
+      const price =
+        typeof rec.Price === "number" ? rec.Price :
+        (parseFloat((rec.Price || "").toString().replace(/[^\d.]/g,"")) || null);
+
+      return {
+        id: rec.id,
+        brand: rec.Brand || "",
+        title: rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(" ") || "(Untitled)",
+        price,
+        category: conditionRaw, // used by Condition filter
+        status: statusRaw,      // keep the raw lowercase
+        sold,
+        length,
+        sleeps: rec.berths || "",
+        axleConfiguration: rec.axleConfiguration || rec.Axle || "",
+        suspension: rec.suspension || "",
+        tare_kg: rec.tare_kg,
+        atm_kg: rec.atm_kg,
+        description: rec.description || "",
+        featured: !!rec.featured,
+        thumbnail: thumb,
+        images: [
+          hero ? pbFileUrl(PB_BASE, rec, hero, "1600x1000") : null,
+          ...(Array.isArray(rec.gallery) ? rec.gallery.map(f => pbFileUrl(PB_BASE, rec, f, "1600x1000")) : [])
+        ].filter(Boolean),
+        date_created: rec.created || new Date().toISOString(),
+      };
+    }
+
+    async function fetchCaravansPB(){
+      // If you use PB rules (e.g. Status="Available"), you can add &filter=… here.
+      const params = new URLSearchParams({ perPage: "200", sort: "-created" });
+      const url = `${PB_BASE}/api/collections/${encodeURIComponent(PB_COLLECTION)}/records?${params.toString()}`;
+      const r = await fetch(url, { headers: { "Accept":"application/json" }, cache: "no-store" });
+      if(!r.ok) throw new Error(`PocketBase fetch failed: ${r.status}`);
+      const data = await r.json();
+      const records = data.items || data.records || [];
+      return records.map(mapPBToItem);
+    }
+
+    // Rendering
+    function cardHTML(it){
+      const href = 'caravan.html?id=' + encodeURIComponent(it.id);
+      const meta = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
+      return `
+        <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block">
+          <div class="relative">
+            <img src="${it.thumbnail}" alt="${it.title||''}" class="w-full h-48 object-cover">
+            <div class="absolute top-2 left-2 flex gap-2">
+              ${it.category ? `<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category==='new'?'New':it.category.charAt(0).toUpperCase()+it.category.slice(1)}</span>` : ''}
+              ${it.featured ? `<span class="inline-block text-xs px-2 py-1 rounded bg-amber-500 text-white">Featured</span>` : ''}
+              ${it.status==='sold' ? `<span class="inline-block text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>` : ''}
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold">${it.title||'(Untitled)'}</h3>
+            <p class="mt-1 text-sm text-slate-600">${meta}</p>
+            <p class="mt-2 font-semibold">${currency(it.price)}</p>
+          </div>
+        </a>
+      `;
+    }
+
+    function matches(it){
+      const q = (qEl.value||'').toLowerCase().trim();
+      const brand = (brandEl.value||'').toLowerCase();
+      const cond = (condEl.value||'').toLowerCase();
+      const status = (statusEl.value||'').toLowerCase();
+
+      if (brand && (it.brand||'').toLowerCase() !== brand) return false;
+      if (cond && (it.category||'') !== cond) return false;
+      if (status) {
+        const s = it.status || (it.sold ? 'sold' : 'available');
+        if (s !== status) return false;
+      }
+      if (q) {
+        const tmp = document.createElement('div'); tmp.innerHTML = it.description || '';
+        const hay = [
+          it.title, it.brand, it.length, it.suspension, it.axleConfiguration,
+          it.category, it.status, tmp.textContent || '', (it.sleeps ?? '')
+        ].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    }
+
+    function sortList(list){
+      switch(sortEl.value){
+        case 'price-asc':  return list.slice().sort((a,b)=>(parseFloat(a.price)||1e12)-(parseFloat(b.price)||1e12));
+        case 'price-desc': return list.slice().sort((a,b)=>(parseFloat(b.price)||-1)-(parseFloat(a.price)||-1));
+        default:           return list.slice().sort((a,b)=>new Date(b.date_created||0)-new Date(a.date_created||0));
+      }
+    }
+
+    function render(list){
+      const filtered = sortList(list.filter(matches));
+      grid.innerHTML = filtered.map(cardHTML).join('');
+      countEl.textContent = filtered.length;
+      emptyEl.classList.toggle('hidden', filtered.length > 0);
+    }
+
+    // Populate brand dropdown dynamically
+    function populateBrands(items){
+      const brands = Array.from(new Set(items.map(i => (i.brand||'').trim()).filter(Boolean))).sort();
+      brandEl.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
+    }
+
+    // Load data
+    fetchCaravansPB()
+      .then(items => {
+        window.__STOCK = items;
+        populateBrands(items);
+        render(items);
+      })
+      .catch(err => {
+        console.error('PB load error:', err);
+        emptyEl.classList.remove('hidden');
+        emptyEl.textContent = 'Could not load stock.';
+      });
+
+    // Bind filters
+    [qEl, brandEl, condEl, statusEl, sortEl].forEach(el => el.addEventListener('input', () => render(window.__STOCK||[])));
+    condEl.addEventListener('change', () => render(window.__STOCK||[]));
+    statusEl.addEventListener('change', () => render(window.__STOCK||[]));
+    brandEl.addEventListener('change', () => render(window.__STOCK||[]));
+    sortEl.addEventListener('change', () => render(window.__STOCK||[]));
+  </script>
+</body>
+</html>
