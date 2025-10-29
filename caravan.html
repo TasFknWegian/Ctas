@@ -230,11 +230,9 @@
         .join("");
 
       // features (optional future field)
-if (Array.isArray(rec.features) && rec.features.length) {
-  featuresEl.innerHTML = rec.features.map(f => `<li>${f}</li>`).join("");
-} else {
-  featuresEl.innerHTML = "<li class='text-slate-400'>No extra features listed.</li>";
-}
+featuresEl.innerHTML = rec.features_text 
+  ? `<li>${rec.features_text.replace(/\n/g, "</li><li>")}</li>` 
+  : "<li class='text-slate-400'>No extra features listed.</li>";
 
       // email link
       enquireEl.href=`mailto:reception@caravanstas.com.au?subject=${encodeURIComponent('Enquiry: '+title)}`;
