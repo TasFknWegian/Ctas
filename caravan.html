@@ -115,12 +115,17 @@
     <section class="py-6">
       <div class="max-w-7xl mx-auto px-4">
         <div id="descTab" class="prose prose-slate max-w-none"></div>
+
         <div id="featTab" class="hidden">
           <ul id="featuresList" class="list-disc list-inside space-y-1"></ul>
         </div>
+
+        <!-- Specifications with mini-tabs -->
         <div id="specsTab" class="hidden">
-          <div id="specsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm"></div>
+          <div class="flex flex-wrap gap-3 text-sm mb-4" id="specCats"></div>
+          <div id="specBody" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm"></div>
         </div>
+
         <div id="videoTab" class="hidden">
           <div id="videoWrap" class="aspect-video rounded-xl overflow-hidden bg-black">
             <!-- iframe injected if video_url present -->
@@ -192,7 +197,8 @@
     const specsTab = document.getElementById('specsTab');
     const videoTab = document.getElementById('videoTab');
     const featuresList = document.getElementById('featuresList');
-    const specsGrid = document.getElementById('specsGrid');
+    const specCats = document.getElementById('specCats');
+    const specBody = document.getElementById('specBody');
     const videoWrap = document.getElementById('videoWrap');
     const badgeCondition = document.getElementById('badgeCondition');
     const badgeSold = document.getElementById('badgeSold');
@@ -215,21 +221,77 @@
     }
     function youTubeEmbed(url){
       if(!url) return null;
-      // Accept plain YouTube links; extract video id
       const m = url.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
       return m ? `https://www.youtube.com/embed/${m[1]}` : url;
     }
 
-    // ---------- tabs ----------
+    // Tabs (top-level)
     document.querySelectorAll('[data-tab]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('tab-active'));
         btn.classList.add('tab-active');
         [descTab, featTab, specsTab, videoTab].forEach(p=>p.classList.add('hidden'));
-        const id = btn.getAttribute('data-tab');
-        document.getElementById(id).classList.remove('hidden');
+        const pane = document.getElementById(btn.getAttribute('data-tab'));
+        pane.classList.remove('hidden');
       });
     });
+
+    // ---------- specs mini-tabs helpers ----------
+    function parseLinesToPairs(str){
+      return String(str || "")
+        .split(/\r?\n/)
+        .map(l => l.trim())
+        .filter(Boolean)
+        .map(line => {
+          const i = line.indexOf(":");
+          if (i > -1) return { label: line.slice(0, i).trim(), value: line.slice(i+1).trim() };
+          return { label: "", value: line };
+        });
+    }
+    function buildSpecsFromRecord(rec){
+      if (rec.specs && typeof rec.specs === "object" && !Array.isArray(rec.specs)) {
+        return rec.specs;
+      }
+      const map = {
+        "Chassis": parseLinesToPairs(rec.specs_chassis),
+        "Appliance": parseLinesToPairs(rec.specs_appliance),
+        "External": parseLinesToPairs(rec.specs_external),
+        "Internal": parseLinesToPairs(rec.specs_internal),
+        "Measurements": parseLinesToPairs(rec.specs_measurements),
+      };
+      Object.keys(map).forEach(k => { if (!map[k]?.length) delete map[k]; });
+      return map;
+    }
+    function renderSpecTabs(specsObj){
+      specCats.innerHTML = "";
+      specBody.innerHTML = "";
+      const categories = Object.keys(specsObj);
+      if (!categories.length) {
+        specCats.innerHTML = `<span class="text-slate-500">No specifications provided.</span>`;
+        return;
+      }
+      function renderCat(cat){
+        const items = specsObj[cat] || [];
+        specBody.innerHTML = items.map(({label, value}) => `
+          <div class="rounded-lg border p-3 bg-white">
+            ${label ? `<div class="text-xs uppercase text-slate-500">${label}</div>` : ""}
+            <div class="mt-1 font-medium">${value || "-"}</div>
+          </div>
+        `).join("");
+      }
+      categories.forEach((cat, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `px-3 py-2 rounded-md border ${idx===0 ? 'bg-sky-50 border-sky-300 text-sky-700' : 'hover:bg-slate-50'}`;
+        btn.textContent = cat;
+        btn.addEventListener('click', () => {
+          Array.from(specCats.children).forEach(b => b.className = 'px-3 py-2 rounded-md border hover:bg-slate-50');
+          btn.className = 'px-3 py-2 rounded-md border bg-sky-50 border-sky-300 text-sky-700';
+          renderCat(cat);
+        });
+        specCats.appendChild(btn);
+      });
+      renderCat(categories[0]);
+    }
 
     // ---------- load ----------
     if(!id){ titleEl.textContent = "Missing ID"; }
@@ -259,7 +321,7 @@
       priceEl.textContent = currency(price);
       mobilePriceEl.textContent = currency(price);
 
-      // Show sticky enquire on mobile when we have a price or title
+      // sticky bar visible on mobile
       stickyBar.classList.remove('hidden');
 
       if(condition){
@@ -268,14 +330,14 @@
       }
       if(status==='sold') badgeSold.classList.remove('hidden');
 
-      // Meta line under price
+      // Meta under price
       metaEl.textContent = [
         rec.Size ? `${rec.Size} ft` : '',
         rec.berths ? `${rec.berths} berth` : '',
         rec.suspension || ''
       ].filter(Boolean).join(' • ');
 
-      // Chips (key highlights)
+      // Key chips
       const chips = [
         rec.tare_kg ? `Tare ${rec.tare_kg} kg` : '',
         rec.atm_kg ? `ATM ${rec.atm_kg} kg` : '',
@@ -297,30 +359,8 @@
         featuresList.innerHTML = `<li class="text-slate-400">No extra features listed.</li>`;
       }
 
-      // Specifications grid
-      const specs = [
-        ["Brand", rec.Brand],
-        ["Model", rec.Model],
-        ["Year", rec.Year],
-        ["Condition", rec.Condition],
-        ["Status", rec.Status],
-        ["Length (ft)", rec.Size],
-        ["Berths", rec.berths],
-        ["Suspension", rec.suspension],
-        ["Tare (kg)", rec.tare_kg],
-        ["ATM (kg)", rec.atm_kg],
-        ["Solar (W)", rec.solar_watts],
-        ["Battery (Ah)", rec.battery_ah],
-        ["Chassis", rec.Chassis],
-        ["VIN", rec.vin],
-        ["Registered", rec.registered ? "Yes" : ""]
-      ].filter(([,v])=>v!==undefined && v!==null && String(v).trim()!=='');
-      specsGrid.innerHTML = specs.map(([k,v])=>`
-        <div class="rounded-lg border p-3 bg-white">
-          <div class="text-xs uppercase text-slate-500">${k}</div>
-          <div class="mt-1 font-medium">${v}</div>
-        </div>
-      `).join('');
+      // Specifications mini-tabs
+      renderSpecTabs(buildSpecsFromRecord(rec));
 
       // Gallery
       const files = [];
@@ -333,13 +373,15 @@
           <img src="${u.replace('1600x1000','900x600')}" class="w-full h-16 object-cover" loading="lazy"/>
         </button>
       `).join('') : '';
-      thumbsEl.querySelectorAll('.thumb').forEach(btn=>{
-        btn.addEventListener('click',()=>{
-          heroEl.src = btn.dataset.src;
-          thumbsEl.querySelectorAll('.thumb').forEach(b=>b.classList.remove('active'));
-          btn.classList.add('active');
+      if(urls.length){
+        thumbsEl.querySelectorAll('.thumb').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            heroEl.src = btn.dataset.src;
+            thumbsEl.querySelectorAll('.thumb').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+          });
         });
-      });
+      }
 
       // Video (walk-around)
       const v = rec.video_url || rec.video || "";
@@ -347,7 +389,6 @@
       if(embed){
         videoWrap.innerHTML = `<iframe src="${embed}" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
       }else{
-        // hide the tab if no video
         document.querySelector('[data-tab="videoTab"]').classList.add('hidden');
       }
 
