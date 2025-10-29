@@ -7,9 +7,13 @@
   <meta name="description" content="View caravan details, photos and specifications."/>
   <link rel="icon" href="assets/ct_logo_email_600_white.png"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>.nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}</style>
+  <style>
+    .nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}
+    .thumb.active { outline: 2px solid #0ea5e9; }
+  </style>
 </head>
 <body class="bg-white text-slate-800">
+  <!-- top bar -->
   <div class="w-full bg-slate-900 text-white text-sm">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
       <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
@@ -19,6 +23,7 @@
     </div>
   </div>
 
+  <!-- header -->
   <header class="sticky top-0 z-40 bg-white/80 nav-backdrop border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -28,7 +33,7 @@
         </a>
         <nav class="hidden md:flex items-center space-x-6">
           <a href="index.html#home">Home</a>
-          <a href="stock.html">Stock</a>
+          <a href="stock.html" class="font-semibold text-slate-900">Stock</a>
           <a href="index.html#services">Services</a>
           <a href="index.html#about">About</a>
           <a href="index.html#contact">Contact</a>
@@ -92,6 +97,7 @@
     </div>
   </main>
 
+  <!-- footer -->
   <footer class="bg-slate-900 text-slate-200 mt-10">
     <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
       <div>
@@ -121,24 +127,18 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
     const menuBtn=document.getElementById('menuBtn'), mobileNav=document.getElementById('mobileNav');
-    function toggleNav(open){ const isOpen=open??mobileNav.classList.contains('hidden'); mobileNav.classList.toggle('hidden',!isOpen); menuBtn?.setAttribute('aria-expanded',String(isOpen)); }
+    function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
     menuBtn?.addEventListener('click',()=>toggleNav());
     mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
-    document.addEventListener('keydown',e=>{ if(e.key==='Escape') toggleNav(false) });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
-    const id = new URLSearchParams(location.search).get('id') || '';
-    const DIRECTUS_ASSET_BASE = 'https://admin.caravanstasmania.com.au/assets/';
-    const fileUrl = (fid) => fid ? `${DIRECTUS_ASSET_BASE}${fid}?width=1600&fit=cover` : 'assets/placeholder.jpg';
-    const currency = n => {
-      if (n === null || n === undefined || n === '') return 'POA';
-      const num = typeof n === 'number' ? n : parseFloat(n);
-      if (isNaN(num)) return 'POA';
-      return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
-    };
+    // ===== PocketBase setup =====
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com/"; // change if tunnel changes
+    const PB_COLLECTION = "caravans";
+    const id = new URLSearchParams(location.search).get('id');
 
-    const main = document.getElementById('mainImg');
+    const mainImg = document.getElementById('mainImg');
     const thumbs = document.getElementById('thumbs');
     const titleEl = document.getElementById('title');
     const metaEl = document.getElementById('meta');
@@ -149,66 +149,94 @@
     const enquireEl = document.getElementById('enquire');
     const soldTag = document.getElementById('soldTag');
 
-    fetch('assets/stock.json', { cache:'no-store' })
-      .then(r=>r.json())
-      .then(payload=>{
-        const arr = Array.isArray(payload) ? payload : (payload.data || []);
-        const it = arr.find(x => String(x.id) === String(id));
-        if(!it){ titleEl.textContent='Not found'; return; }
+    const currency = n=>{
+      if(n===null||n===undefined||n==='')return'POA';
+      const num=typeof n==='number'?n:parseFloat(n);
+      if(isNaN(num))return'POA';
+      return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+    };
 
-        document.title = `${it.title || 'Caravan'} — Caravans Tasmania`;
-        const md = document.querySelector('meta[name="description"]');
-        if (md) md.setAttribute('content', `${it.title || ''} — ${[it.length,it.sleeps?it.sleeps+' berth':'',it.axleConfiguration].filter(Boolean).join(' • ')}.`);
+    function fileUrl(rec,file,size="1600x1000"){
+      if(!file)return"assets/placeholder.jpg";
+      const col=rec.collectionId||rec.collectionName||PB_COLLECTION;
+      return `${PB_BASE}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
+    }
 
-        titleEl.textContent = it.title || '(Untitled)';
-        metaEl.textContent = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
-        priceEl.textContent = currency(it.price);
-        if (it.sold) soldTag.classList.remove('hidden');
+    async function loadCaravan(){
+      if(!id){titleEl.textContent="Missing ID";return;}
+      try{
+        const res=await fetch(`${PB_BASE}/api/collections/${PB_COLLECTION}/records/${id}`,{cache:'no-store'});
+        if(!res.ok)throw new Error(res.status);
+        const rec=await res.json();
+        render(rec);
+      }catch(err){
+        console.error('PB error',err);
+        titleEl.textContent="Not found";
+      }
+    }
 
-        descEl.innerHTML = it.description || '';
+    function render(rec){
+      const title=rec.Title||[rec.Brand,rec.Model].filter(Boolean).join(" ")||"(Untitled)";
+      const price=typeof rec.Price==="number"?rec.Price:parseFloat((rec.Price||"").toString().replace(/[^\d.]/g,""))||null;
+      const cond=(rec.Condition||"").toLowerCase();
+      const stat=(rec.Status||"").toLowerCase();
+      const sold=stat==="sold";
 
-        const ids = Array.isArray(it.images)
-          ? it.images.map(p => p?.directus_files_id?.id || p?.id || (typeof p==='string'?p:null)).filter(Boolean)
-          : [];
-        if (!ids.length && it.thumbnail) ids.push(it.thumbnail);
-        const images = (ids.length ? ids : [null]).map(fileUrl);
-        main.src = images[0]; main.alt = it.title || '';
-        thumbs.innerHTML = images.map((src,i)=>`
-          <button class="border rounded-lg overflow-hidden ${i===0?'ring-2 ring-slate-900':''}" data-i="${i}">
-            <img src="${src}" alt="" class="w-full h-16 object-cover">
-          </button>`).join('');
-        thumbs.querySelectorAll('button').forEach(btn=>{
-          btn.addEventListener('click',()=>{
-            const i=+btn.dataset.i;
-            main.src=images[i];
-            thumbs.querySelectorAll('button').forEach(b=>b.classList.remove('ring-2','ring-slate-900'));
-            btn.classList.add('ring-2','ring-slate-900');
-          });
+      document.title=`${title} — Caravans Tasmania`;
+      titleEl.textContent=title;
+      metaEl.textContent=[rec.Size?`${rec.Size} ft`:"",rec.berths?`${rec.berths} berth`:"",rec.suspension].filter(Boolean).join(" • ");
+      priceEl.textContent=currency(price);
+      if(sold)soldTag.classList.remove("hidden");
+
+      descEl.innerHTML=rec.description||"";
+
+      // images
+      const imgs=[];
+      if(rec.Main_image)imgs.push(rec.Main_image);
+      if(Array.isArray(rec.gallery))imgs.push(...rec.gallery);
+      const urls=imgs.map(f=>fileUrl(rec,f,"1600x1000"));
+      mainImg.src=urls[0]||"assets/placeholder.jpg";
+      thumbs.innerHTML=urls.map((u,i)=>`
+        <button class="thumb rounded overflow-hidden border ${i===0?'active':''}" data-src="${u}">
+          <img src="${u.replace('1600x1000','900x600')}" class="w-full h-16 object-cover">
+        </button>`).join("");
+      thumbs.querySelectorAll('.thumb').forEach(b=>{
+        b.addEventListener('click',()=>{
+          mainImg.src=b.dataset.src;
+          thumbs.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
+          b.classList.add('active');
         });
-
-        const specMap = {
-          "Category": it.category === 'new' ? 'New' : (it.category || ''),
-          "Type": it.type,
-          "Registered": it.registered ? 'Yes' : 'No',
-          "Sleeps": it.sleeps,
-          "Weight (kg)": it.weight,
-          "Length": it.length,
-          "Suspension": it.suspension,
-          "Axle Configuration": it.axleConfiguration
-        };
-        specsEl.innerHTML = Object.entries(specMap)
-          .filter(([_,v])=>v!==undefined && v!==null && String(v).trim()!=='')
-          .map(([k,v])=> `<dt class="text-slate-500">${k}</dt><dd class="text-slate-800">${v}</dd>`).join('');
-
-        featuresEl.innerHTML = '';
-
-        // Enquiry
-        enquireEl.href = `mailto:reception@caravanstas.com.au?subject=${encodeURIComponent('Enquiry: ' + (it.title || id))}`;
-      })
-      .catch(err=>{
-        console.error(err);
-        titleEl.textContent = 'Not found';
       });
+
+      // specs
+      const specMap={
+        "Brand":rec.Brand,
+        "Model":rec.Model,
+        "Year":rec.Year,
+        "Condition":rec.Condition,
+        "Status":rec.Status,
+        "Length (ft)":rec.Size,
+        "Berths":rec.berths,
+        "Suspension":rec.suspension,
+        "Tare (kg)":rec.tare_kg,
+        "ATM (kg)":rec.atm_kg,
+        "Solar (W)":rec.solar_watts,
+        "Battery (Ah)":rec.battery_ah,
+        "Chassis":rec.Chassis
+      };
+      specsEl.innerHTML=Object.entries(specMap)
+        .filter(([_,v])=>v!==undefined&&v!==null&&String(v).trim()!=='')
+        .map(([k,v])=>`<dt class="text-slate-500">${k}</dt><dd class="text-slate-800">${v}</dd>`)
+        .join("");
+
+      // features (optional future field)
+      featuresEl.innerHTML="";
+
+      // email link
+      enquireEl.href=`mailto:reception@caravanstas.com.au?subject=${encodeURIComponent('Enquiry: '+title)}`;
+    }
+
+    loadCaravan();
   </script>
 </body>
 </html>
