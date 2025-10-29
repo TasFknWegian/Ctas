@@ -230,8 +230,8 @@
         .join("");
 
       // features (optional future field)
-featuresEl.innerHTML = rec.features_text 
-  ? `<li>${rec.features_text.replace(/\n/g, "</li><li>")}</li>` 
+featuresEl.innerHTML = rec.features
+  ? `<li>${rec.features.replace(/\n/g, "</li><li>")}</li>` 
   : "<li class='text-slate-400'>No extra features listed.</li>";
 
       // email link
