@@ -1,119 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang=\"en\">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset=\"UTF-8\"/>
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>
   <title>Caravan — Caravans Tasmania</title>
-  <meta name="description" content="View caravan details, photos and specifications."/>
-  <link rel="icon" href="assets/ct_logo_email_600_white.png"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>.nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}</style>
+  <meta name=\"description\" content=\"Caravan details: photos, specs, and contact for Caravans Tasmania.\"/>
+  <link rel=\"icon\" href=\"assets/ct_logo_email_600_white.png\"/>
+  <script src=\"https://cdn.tailwindcss.com\"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .thumb.active { outline: 2px solid #0ea5e9; }
+  </style>
 </head>
-<body class="bg-white text-slate-800">
-  <div class="w-full bg-slate-900 text-white text-sm">
-    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-      <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
-      <div class="space-x-4 hidden sm:block">
-        <a href="https://www.facebook.com/caravanstasmania/" target="_blank" rel="noopener" class="hover:underline">Facebook</a>
+<body class=\"bg-white text-slate-800\">
+  <div class=\"w-full bg-slate-900 text-white text-sm\">
+    <div class=\"max-w-7xl mx-auto px-4 py-2 flex items-center justify-between\">
+      <a href=\"tel:+61363437287\" class=\"hover:underline\">Call (03) 6343 7287</a>
+      <div class=\"space-x-4 hidden sm:block\">
+        <a href=\"https://www.facebook.com/caravanstasmania/\" target=\"_blank\" rel=\"noopener\" class=\"hover:underline\">Facebook</a>
       </div>
     </div>
   </div>
 
-  <header class="sticky top-0 z-40 bg-white/80 nav-backdrop border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex items-center justify-between h-16">
-        <a href="index.html#home" class="flex items-center space-x-3">
-          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-10 w-auto object-contain"/>
-          <span class="sr-only">Caravans Tasmania</span>
+  <header class=\"sticky top-0 z-40 bg-white border-b border-slate-200\">
+    <div class=\"max-w-7xl mx-auto px-4\">
+      <div class=\"flex items-center justify-between h-16\">
+        <a href=\"index.html#home\" class=\"flex items-center space-x-3\">
+          <img src=\"assets/ct_logo_email_600_white.png\" alt=\"Caravans Tasmania\" class=\"h-12 md:h-14 w-auto object-contain\"/>
         </a>
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="index.html#home">Home</a>
-          <a href="stock.html">Stock</a>
-          <a href="index.html#services">Services</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#contact">Contact</a>
+        <nav class=\"hidden md:flex items-center space-x-6\">
+          <a href=\"index.html#home\">Home</a>
+          <a href=\"stock.html\" class=\"font-semibold text-slate-900\">Stock</a>
+          <a href=\"index.html#services\">Services</a>
+          <a href=\"index.html#about\">About</a>
+          <a href=\"index.html#contact\">Contact</a>
         </nav>
-        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button id=\"menuBtn\" class=\"md:hidden p-2 rounded hover:bg-slate-100\" aria-label=\"Open Menu\">
+          <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16M4 18h16\"/></svg>
         </button>
       </div>
     </div>
-    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
-      <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
-        <a href="index.html#home" class="py-2">Home</a>
-        <a href="stock.html" class="py-2">Stock</a>
-        <a href="index.html#services" class="py-2">Services</a>
-        <a href="index.html#about" class="py-2">About</a>
-        <a href="index.html#contact" class="py-2">Contact</a>
+    <div id=\"mobileNav\" class=\"md:hidden hidden border-t border-slate-200 bg-white\">
+      <nav class=\"max-w-7xl mx-auto px-4 py-4 grid gap-3\">
+        <a href=\"index.html#home\" class=\"py-2\">Home</a>
+        <a href=\"stock.html\" class=\"py-2\">Stock</a>
+        <a href=\"index.html#services\" class=\"py-2\">Services</a>
+        <a href=\"index.html#about\" class=\"py-2\">About</a>
+        <a href=\"index.html#contact\" class=\"py-2\">Contact</a>
       </nav>
     </div>
   </header>
 
-  <main class="py-10">
-    <div class="max-w-7xl mx-auto px-4">
-      <a href="stock.html" class="text-sm underline">← Back to stock</a>
+  <main class=\"py-8\">
+    <div class=\"max-w-7xl mx-auto px-4\">
+      <a href=\"stock.html\" class=\"text-sm underline\">← Back to stock</a>
 
-      <div id="van" class="mt-4 grid lg:grid-cols-2 gap-8">
-        <!-- Gallery -->
-        <section>
-          <div class="relative rounded-xl overflow-hidden border border-slate-200">
-            <img id="mainImg" src="assets/placeholder.jpg" alt="" class="w-full h-80 object-cover">
+      <div class=\"mt-4 grid lg:grid-cols-2 gap-8\">
+        <div>
+          <div class=\"aspect-video bg-slate-100 rounded-xl overflow-hidden\">
+            <img id=\"hero\" src=\"assets/placeholder.jpg\" alt=\"Caravan photo\" class=\"w-full h-full object-cover\"/>
           </div>
-          <div id="thumbs" class="mt-3 grid grid-cols-5 sm:grid-cols-6 gap-2"></div>
-        </section>
+          <div id=\"thumbs\" class=\"mt-3 grid grid-cols-5 gap-2\"></div>
+        </div>
 
-        <section>
-          <div class="flex items-start gap-3">
-            <h1 id="title" class="text-2xl font-semibold">Loading…</h1>
-            <span id="soldTag" class="hidden text-xs px-2 py-1 rounded bg-red-600 text-white mt-1">Sold</span>
+        <div>
+          <h1 id=\"title\" class=\"text-2xl font-semibold\">Loading…</h1>
+          <div class=\"mt-2 flex items-center gap-2\">
+            <span id=\"badgeCondition\" class=\"hidden text-xs px-2 py-1 rounded border bg-white/80\"></span>
+            <span id=\"badgeSold\" class=\"hidden text-xs px-2 py-1 rounded bg-red-600 text-white\">Sold</span>
           </div>
-          <p id="meta" class="mt-1 text-slate-600"></p>
-          <p id="price" class="mt-2 text-xl font-semibold"></p>
+          <div id=\"price\" class=\"mt-4 text-3xl font-bold\">—</div>
 
-          <div class="mt-4 flex gap-3">
-            <a id="enquire" href="#" class="px-4 py-2 rounded-lg bg-slate-900 text-white">Enquire</a>
-            <a href="index.html#contact" class="px-4 py-2 rounded-lg border">Visit showroom</a>
+          <div id=\"meta\" class=\"mt-3 text-slate-700 flex flex-wrap gap-3\"></div>
+
+          <div id=\"description\" class=\"prose max-w-none mt-6\"></div>
+
+          <div class=\"mt-8 grid sm:grid-cols-2 gap-3\">
+            <a id=\"callBtn\" href=\"tel:+61363437287\" class=\"inline-flex items-center justify-center px-4 py-3 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700\">
+              Call (03) 6343 7287
+            </a>
+            <a id=\"emailBtn\" href=\"mailto:reception@caravanstas.com.au?subject=Caravan%20Enquiry\" class=\"inline-flex items-center justify-center px-4 py-3 rounded-lg border border-slate-300 font-medium hover:bg-slate-50\">
+              Email us about this caravan
+            </a>
           </div>
-
-          <div id="desc" class="prose prose-slate max-w-none mt-6"></div>
-
-          <div class="mt-8 grid md:grid-cols-2 gap-6">
-            <div>
-              <h2 class="font-semibold">Specifications</h2>
-              <dl id="specs" class="mt-2 text-sm grid grid-cols-2 gap-y-1"></dl>
-            </div>
-            <div>
-              <h2 class="font-semibold">Features</h2>
-              <ul id="features" class="mt-2 text-sm list-disc list-inside space-y-1"></ul>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
+
+      <section class=\"mt-12\">
+        <h2 class=\"text-xl font-semibold mb-4\">Specifications</h2>
+        <div id=\"specs\" class=\"grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm\"></div>
+      </section>
     </div>
   </main>
 
-  <footer class="bg-slate-900 text-slate-200 mt-10">
-    <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
+  <footer class=\"bg-slate-900 text-slate-200 mt-10\">
+    <div class=\"max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8\">
       <div>
-        <h4 class="font-semibold">Caravans Tasmania</h4>
-        <p class="text-sm text-slate-400 mt-2">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
-        <p class="mt-2 text-sm">Phone: <a class="underline" href="tel:+61363437287">(03) 6343 7287</a><br/>Email: <a class="underline" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a></p>
+        <h4 class=\"font-semibold\">Caravans Tasmania</h4>
+        <p class=\"text-sm text-slate-400 mt-2\">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
+        <p class=\"mt-2 text-sm\">Phone: <a class=\"underline\" href=\"tel:+61363437287\">(03) 6343 7287</a><br/>Email: <a class=\"underline\" href=\"mailto:reception@caravanstas.com.au\">reception@caravanstas.com.au</a></p>
       </div>
       <div>
-        <h5 class="font-semibold">Hours</h5>
-        <p class="text-sm text-slate-400 mt-2">Mon–Fri 8:30–5:00<br/>Sat 8:00–12:00</p>
+        <h5 class=\"font-semibold\">Hours</h5>
+        <p class=\"text-sm text-slate-400 mt-2\">Mon–Fri 8:30–5:00<br/>Sat 8:00–12:00</p>
       </div>
-      <div class="md:col-span-2">
-        <h5 class="font-semibold">Ready to view?</h5>
-        <p class="text-sm text-slate-300 mt-2">Drop in or contact us to organise a time.</p>
+      <div class=\"md:col-span-2\">
+        <h5 class=\"font-semibold\">Need details?</h5>
+        <p class=\"text-sm text-slate-300 mt-2\">Click any unit to view full specs, photos and contact options.</p>
       </div>
     </div>
-    <div class="border-t border-slate-700">
-      <div class="max-w-7xl mx-auto px-4 py-6 text-sm flex items-center justify-between">
-        <p>© <span id="year"></span> Caravans Tasmania. All rights reserved.</p>
-        <div class="space-x-4">
-          <a href="stock.html" class="hover:underline">Stock</a>
-          <a href="index.html#contact" class="hover:underline">Contact</a>
+    <div class=\"border-t border-slate-700\">
+      <div class=\"max-w-7xl mx-auto px-4 py-6 text-sm flex items-center justify-between\">
+        <p>© <span id=\"year\"></span> Caravans Tasmania. All rights reserved.</p>
+        <div class=\"space-x-4\">
+          <a href=\"index.html#contact\" class=\"hover:underline\">Contact</a>
+          <a href=\"https://maps.google.com/?q=389%20Hobart%20Road,%20Youngtown%20TAS%207249\" target=\"_blank\" rel=\"noopener\" class=\"hover:underline\">Directions</a>
         </div>
       </div>
     </div>
@@ -121,94 +122,122 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    const menuBtn=document.getElementById('menuBtn'), mobileNav=document.getElementById('mobileNav');
-    function toggleNav(open){ const isOpen=open??mobileNav.classList.contains('hidden'); mobileNav.classList.toggle('hidden',!isOpen); menuBtn?.setAttribute('aria-expanded',String(isOpen)); }
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
     menuBtn?.addEventListener('click',()=>toggleNav());
     mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
-    document.addEventListener('keydown',e=>{ if(e.key==='Escape') toggleNav(false) });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
-    const id = new URLSearchParams(location.search).get('id') || '';
-    const DIRECTUS_ASSET_BASE = 'https://admin.caravanstasmania.com.au/assets/';
-    const fileUrl = (fid) => fid ? `${DIRECTUS_ASSET_BASE}${fid}?width=1600&fit=cover` : 'assets/placeholder.jpg';
-    const currency = n => {
-      if (n === null || n === undefined || n === '') return 'POA';
-      const num = typeof n === 'number' ? n : parseFloat(n);
-      if (isNaN(num)) return 'POA';
+    const PB_BASE = "http://localhost:8090";
+    const PB_COLLECTION = "caravans";
+
+    const currency=n=>{
+      if(n===null||n===undefined||n==='')return'POA';
+      const num=typeof n==='number'?n:parseFloat(n);
+      if(isNaN(num))return'POA';
       return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
     };
+    function fileUrl(rec, file, size="1600x1000"){
+      if(!file) return "assets/placeholder.jpg";
+      const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
+      return `${PB_BASE}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
+    }
 
-    const main = document.getElementById('mainImg');
-    const thumbs = document.getElementById('thumbs');
-    const titleEl = document.getElementById('title');
-    const metaEl = document.getElementById('meta');
-    const priceEl = document.getElementById('price');
-    const descEl = document.getElementById('desc');
-    const specsEl = document.getElementById('specs');
-    const featuresEl = document.getElementById('features');
-    const enquireEl = document.getElementById('enquire');
-    const soldTag = document.getElementById('soldTag');
+    async function loadCaravan(){
+      const id = new URLSearchParams(location.search).get('id');
+      if(!id){
+        document.getElementById('title').textContent = "Missing caravan id";
+        return;
+      }
+      const url = `${PB_BASE}/api/collections/${encodeURIComponent(PB_COLLECTION)}/records/${encodeURIComponent(id)}`;
+      const r = await fetch(url, { headers: { "Accept": "application/json" }, cache: "no-store" });
+      if(!r.ok){
+        document.getElementById('title').textContent = "Caravan not found";
+        return;
+      }
+      const rec = await r.json();
+      render(rec);
+    }
 
-    fetch('assets/stock.json', { cache:'no-store' })
-      .then(r=>r.json())
-      .then(payload=>{
-        const arr = Array.isArray(payload) ? payload : (payload.data || []);
-        const it = arr.find(x => String(x.id) === String(id));
-        if(!it){ titleEl.textContent='Not found'; return; }
+    function render(rec){
+      const title = rec.title || [rec.brand, rec.model].filter(Boolean).join(" ") || "(Untitled)";
+      const price = typeof rec.price==="number" ? rec.price : parseFloat((rec.price||"").toString().replace(/[^\d.]/g,"")) || null;
+      const status = (rec.status||"").toLowerCase();
+      const condition = (rec.condition||rec.category||"").toLowerCase();
 
-        document.title = `${it.title || 'Caravan'} — Caravans Tasmania`;
-        const md = document.querySelector('meta[name="description"]');
-        if (md) md.setAttribute('content', `${it.title || ''} — ${[it.length,it.sleeps?it.sleeps+' berth':'',it.axleConfiguration].filter(Boolean).join(' • ')}.`);
+      document.title = `${title} — Caravans Tasmania`;
+      document.getElementById('title').textContent = title;
+      document.getElementById('price').textContent = currency(price);
 
-        titleEl.textContent = it.title || '(Untitled)';
-        metaEl.textContent = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
-        priceEl.textContent = currency(it.price);
-        if (it.sold) soldTag.classList.remove('hidden');
+      const badgeCondition = document.getElementById('badgeCondition');
+      if(condition){
+        badgeCondition.textContent = condition==="new" ? "New" : condition.charAt(0).toUpperCase()+condition.slice(1);
+        badgeCondition.classList.remove('hidden');
+      }
+      const badgeSold = document.getElementById('badgeSold');
+      if(status==="sold"){ badgeSold.classList.remove('hidden'); }
 
-        descEl.innerHTML = it.description || '';
+      const descEl = document.getElementById('description');
+      descEl.innerHTML = rec.description_html || rec.description || "";
 
-        const ids = Array.isArray(it.images)
-          ? it.images.map(p => p?.directus_files_id?.id || p?.id || (typeof p==='string'?p:null)).filter(Boolean)
-          : [];
-        if (!ids.length && it.thumbnail) ids.push(it.thumbnail);
-        const images = (ids.length ? ids : [null]).map(fileUrl);
-        main.src = images[0]; main.alt = it.title || '';
-        thumbs.innerHTML = images.map((src,i)=>`
-          <button class="border rounded-lg overflow-hidden ${i===0?'ring-2 ring-slate-900':''}" data-i="${i}">
-            <img src="${src}" alt="" class="w-full h-16 object-cover">
-          </button>`).join('');
-        thumbs.querySelectorAll('button').forEach(btn=>{
-          btn.addEventListener('click',()=>{
-            const i=+btn.dataset.i;
-            main.src=images[i];
-            thumbs.querySelectorAll('button').forEach(b=>b.classList.remove('ring-2','ring-slate-900'));
-            btn.classList.add('ring-2','ring-slate-900');
-          });
+      const meta = [];
+      if(rec.length_ft) meta.push(`${rec.length_ft} ft`);
+      if(rec.berths)    meta.push(`${rec.berths} berth`);
+      if(rec.axleConfiguration) meta.push(rec.axleConfiguration);
+      document.getElementById('meta').innerHTML = meta.map(m=>`<span class=\"text-sm px-3 py-1 rounded-full bg-slate-100 border\">${m}</span>`).join("");
+
+      const specs = [
+        ["Brand", rec.brand],
+        ["Model", rec.model],
+        ["Year", rec.year],
+        ["Condition", condition? condition[0].toUpperCase()+condition.slice(1) : ""],
+        ["Tare (kg)", rec.tare_kg],
+        ["ATM (kg)", rec.atm_kg],
+        ["Sleeps", rec.berths || rec.sleeps],
+        ["Type", rec.type],
+        ["Suspension", rec.suspension],
+        ["Axle", rec.axleConfiguration || rec.axle],
+        ["Registered", rec.registered ? "Yes" : "No"],
+        ["Stock Code", rec.stock_code],
+        ["VIN", rec.vin]
+      ].filter(([_,v]) => v!==undefined && v!==null && v!=="");
+
+      document.getElementById('specs').innerHTML = specs.map(([k,v])=>`
+        <div class=\"rounded-lg border p-3 bg-white\">
+          <div class=\"text-xs uppercase text-slate-500\">${k}</div>
+          <div class=\"mt-1 font-medium\">${v}</div>
+        </div>
+      `).join("");
+
+      const files = [];
+      if (Array.isArray(rec.hero) && rec.hero[0]) files.push(rec.hero[0]);
+      else if (typeof rec.hero === 'string' && rec.hero) files.push(rec.hero);
+      if (Array.isArray(rec.gallery)) files.push(...rec.gallery);
+      const urls = files.map(f => fileUrl(rec, f, "1600x1000"));
+
+      const heroEl = document.getElementById('hero');
+      heroEl.src = urls[0] || "assets/placeholder.jpg";
+      const thumbs = document.getElementById('thumbs');
+      thumbs.innerHTML = urls.map((u,i)=>`
+        <button class=\"thumb rounded-lg overflow-hidden border ${i===0?'active':''}\" data-src=\"${u}\">
+          <img src=\"${u.replace('1600x1000','900x600')}\" class=\"w-full aspect-video object-cover\" loading=\"lazy\" />
+        </button>
+      `).join("");
+      thumbs.querySelectorAll('.thumb').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          heroEl.src = btn.dataset.src;
+          thumbs.querySelectorAll('.thumb').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
         });
-
-        const specMap = {
-          "Category": it.category === 'new' ? 'New' : (it.category || ''),
-          "Type": it.type,
-          "Registered": it.registered ? 'Yes' : 'No',
-          "Sleeps": it.sleeps,
-          "Weight (kg)": it.weight,
-          "Length": it.length,
-          "Suspension": it.suspension,
-          "Axle Configuration": it.axleConfiguration
-        };
-        specsEl.innerHTML = Object.entries(specMap)
-          .filter(([_,v])=>v!==undefined && v!==null && String(v).trim()!=='')
-          .map(([k,v])=> `<dt class="text-slate-500">${k}</dt><dd class="text-slate-800">${v}</dd>`).join('');
-
-        featuresEl.innerHTML = '';
-
-        // Enquiry
-        enquireEl.href = `mailto:reception@caravanstas.com.au?subject=${encodeURIComponent('Enquiry: ' + (it.title || id))}`;
-      })
-      .catch(err=>{
-        console.error(err);
-        titleEl.textContent = 'Not found';
       });
+
+      const emailBtn = document.getElementById('emailBtn');
+      const subject = encodeURIComponent(`Caravan Enquiry: ${title}`);
+      emailBtn.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
+    }
+
+    loadCaravan();
   </script>
 </body>
 </html>
