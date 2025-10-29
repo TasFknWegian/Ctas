@@ -127,9 +127,7 @@
         </div>
 
         <div id="videoTab" class="hidden">
-          <div id="videoWrap" class="aspect-video rounded-xl overflow-hidden bg-black">
-            <!-- iframe injected if video_url present -->
-          </div>
+          <div id="videoWrap" class="aspect-video rounded-xl overflow-hidden bg-black"></div>
         </div>
       </div>
     </section>
@@ -180,8 +178,8 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
     // ---------- PB config ----------
-    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; // update if your tunnel changes
-    const PB_COLLECTION = "caravans";
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; // TODO: change to your domain/tunnel
+    const PB_COLLECTION = "Caravans";
     const id = new URLSearchParams(location.search).get('id');
 
     // ---------- els ----------
@@ -237,60 +235,31 @@
     });
 
     // ---------- specs mini-tabs helpers ----------
-    function parseLinesToPairs(str){
-      return String(str || "")
-        .split(/\r?\n/)
-        .map(l => l.trim())
-        .filter(Boolean)
-        .map(line => {
-          const i = line.indexOf(":");
-          if (i > -1) return { label: line.slice(0, i).trim(), value: line.slice(i+1).trim() };
-          return { label: "", value: line };
-        });
+    function isArrayOfLabelValue(v){
+      return Array.isArray(v) && v.every(x => x && typeof x === 'object' && 'value' in x);
     }
-    function buildSpecsFromRecord(rec){
-      if (rec.specs && typeof rec.specs === "object" && !Array.isArray(rec.specs)) {
-        return rec.specs;
+    function renderSpecCards(items){
+      if(!isArrayOfLabelValue(items) || !items.length){
+        return '<div class="text-slate-500">No items.</div>';
       }
-      const map = {
-        "Chassis": parseLinesToPairs(rec.specs_chassis),
-        "Appliance": parseLinesToPairs(rec.specs_appliance),
-        "External": parseLinesToPairs(rec.specs_external),
-        "Internal": parseLinesToPairs(rec.specs_internal),
-        "Measurements": parseLinesToPairs(rec.specs_measurements),
-      };
-      Object.keys(map).forEach(k => { if (!map[k]?.length) delete map[k]; });
-      return map;
+      return items.map(({label, value}) => `
+        <div class="rounded-lg border p-3 bg-white">
+          ${label ? `<div class="text-xs uppercase text-slate-500">${String(label)}</div>` : ""}
+          <div class="mt-1 font-medium whitespace-pre-wrap break-words">${String(value)}</div>
+        </div>
+      `).join('');
     }
-    function renderSpecTabs(specsObj){
-      specCats.innerHTML = "";
-      specBody.innerHTML = "";
-      const categories = Object.keys(specsObj);
-      if (!categories.length) {
-        specCats.innerHTML = `<span class="text-slate-500">No specifications provided.</span>`;
-        return;
-      }
-      function renderCat(cat){
-        const items = specsObj[cat] || [];
-        specBody.innerHTML = items.map(({label, value}) => `
-          <div class="rounded-lg border p-3 bg-white">
-            ${label ? `<div class="text-xs uppercase text-slate-500">${label}</div>` : ""}
-            <div class="mt-1 font-medium">${value || "-"}</div>
-          </div>
-        `).join("");
-      }
-      categories.forEach((cat, idx) => {
-        const btn = document.createElement('button');
-        btn.className = `px-3 py-2 rounded-md border ${idx===0 ? 'bg-sky-50 border-sky-300 text-sky-700' : 'hover:bg-slate-50'}`;
-        btn.textContent = cat;
-        btn.addEventListener('click', () => {
-          Array.from(specCats.children).forEach(b => b.className = 'px-3 py-2 rounded-md border hover:bg-slate-50');
-          btn.className = 'px-3 py-2 rounded-md border bg-sky-50 border-sky-300 text-sky-700';
-          renderCat(cat);
-        });
-        specCats.appendChild(btn);
+    function addMiniTab(label, onClick, active){
+      const btn = document.createElement('button');
+      btn.textContent = label;
+      btn.className = `px-3 py-2 rounded-md border ${active ? 'bg-sky-50 border-sky-300 text-sky-700' : 'hover:bg-slate-50'}`;
+      btn.addEventListener('click', () => {
+        Array.from(specCats.children).forEach(b => b.className = 'px-3 py-2 rounded-md border hover:bg-slate-50');
+        btn.className = 'px-3 py-2 rounded-md border bg-sky-50 border-sky-300 text-sky-700';
+        onClick();
       });
-      renderCat(categories[0]);
+      specCats.appendChild(btn);
+      if(active) onClick();
     }
 
     // ---------- load ----------
@@ -320,8 +289,6 @@
       titleEl.textContent = title;
       priceEl.textContent = currency(price);
       mobilePriceEl.textContent = currency(price);
-
-      // sticky bar visible on mobile
       stickyBar.classList.remove('hidden');
 
       if(condition){
@@ -337,7 +304,7 @@
         rec.suspension || ''
       ].filter(Boolean).join(' • ');
 
-      // Key chips
+      // Chips
       const chips = [
         rec.tare_kg ? `Tare ${rec.tare_kg} kg` : '',
         rec.atm_kg ? `ATM ${rec.atm_kg} kg` : '',
@@ -350,7 +317,7 @@
       // Description
       descTab.innerHTML = rec.description || '<p class="text-slate-500">No description provided.</p>';
 
-      // Features (multi-select OR text fallback)
+      // Features
       if(Array.isArray(rec.features) && rec.features.length){
         featuresList.innerHTML = rec.features.map(f=>`<li>${f}</li>`).join('');
       }else if(rec.features_text){
@@ -358,9 +325,6 @@
       }else{
         featuresList.innerHTML = `<li class="text-slate-400">No extra features listed.</li>`;
       }
-
-      // Specifications mini-tabs
-      renderSpecTabs(buildSpecsFromRecord(rec));
 
       // Gallery
       const files = [];
@@ -383,27 +347,85 @@
         });
       }
 
-      // Video (walk-around)
-      const v = rec.video_url || rec.video || "";
-      const embed = youTubeEmbed(v);
+      // Video
+      const embed = youTubeEmbed(rec.video_url || rec.video);
       if(embed){
         videoWrap.innerHTML = `<iframe src="${embed}" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
       }else{
         document.querySelector('[data-tab="videoTab"]').classList.add('hidden');
       }
 
-      // Brochure (optional file)
+      // Brochure
       if(rec.brochure){
-        const href = fileUrl(rec, rec.brochure, "1600x1000").replace(/\?thumb=.*/,''); // raw file
+        const href = fileUrl(rec, rec.brochure, "1600x1000").replace(/\?thumb=.*/,'');
         brochureBtn.href = href;
         brochureBtn.classList.remove('hidden');
         brochureBtn.textContent = 'Download brochure';
       }
 
-      // Enquiry links
+      // Enquiry
       const subject = encodeURIComponent(`Caravan Enquiry: ${title}`);
       enquireBtn.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
       mobileEnquire.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
+
+      // ---------- SPECIFICATIONS MINI-TABS ----------
+      specCats.innerHTML = '';
+      specBody.innerHTML = '';
+
+      // Desired order and labels:
+      const specOrder = [
+        ["specs_chassis","Chassis"],
+        ["specs_furniture","Furniture"],
+        ["specs_plumbing","Plumbing"],
+        ["specs_electrical","Electrical"],
+        ["specs_external","External"],
+        ["specs_upholstery","Upholstery"],
+        ["specs_finishing","Finishing"],
+        ["specs_measurements","Measurements"],
+      ];
+
+      // Collect available sections that actually have data
+      const sections = [];
+      for(const [field, label] of specOrder){
+        const data = rec[field];
+        if(isArrayOfLabelValue(data) && data.length){
+          sections.push({field,label,items:data});
+        }
+      }
+      // Floorplan mini-tab (image)
+      const hasFloorplan = !!rec.floorplan_image;
+
+      let firstActivated = false;
+
+      // Build tabs for JSON sections
+      for(const sec of sections){
+        addMiniTab(sec.label, () => {
+          specBody.className = "grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm";
+          specBody.innerHTML = renderSpecCards(sec.items);
+        }, !firstActivated);
+        if(!firstActivated) firstActivated = true;
+      }
+
+      // Floorplan tab if available
+      if(hasFloorplan){
+        addMiniTab("Floorplan", () => {
+          specBody.className = "grid gap-3 text-sm";
+          const img = fileUrl(rec, rec.floorplan_image, "1600x1000").replace(/\?thumb=.*/,'?thumb=1600x1000'); // keep a large preview
+          specBody.innerHTML = `
+            <a href="${img}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden border">
+              <img src="${img}" alt="Floorplan" class="w-full h-auto object-contain bg-white"/>
+            </a>
+            <p class="text-slate-500">Click to open full-size floorplan.</p>
+          `;
+        }, !firstActivated);
+        if(!firstActivated) firstActivated = true;
+      }
+
+      // If nothing available, show a friendly note
+      if(!firstActivated){
+        specCats.innerHTML = `<span class="text-slate-500">No specifications provided.</span>`;
+        specBody.innerHTML = '';
+      }
     }
   </script>
 </body>
