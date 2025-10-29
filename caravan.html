@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Caravan — Caravans Tasmania</title>
-  <meta name="description" content="View caravan details, photos and specifications."/>
+  <meta name="description" content="View caravan details, photos, specifications and video."/>
   <link rel="icon" href="assets/ct_logo_email_600_white.png"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}
-    .thumb.active { outline: 2px solid #0ea5e9; }
+    .thumb.active{outline:2px solid #0ea5e9}
+    .tab-active{border-bottom:2px solid #0ea5e9;color:#0ea5e9}
+    .sticky-bar{box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+    .prose :where(img){margin:0;border-radius:.75rem}
   </style>
 </head>
 <body class="bg-white text-slate-800">
-  <!-- top bar -->
+  <!-- Top strip -->
   <div class="w-full bg-slate-900 text-white text-sm">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
       <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
@@ -23,8 +26,8 @@
     </div>
   </div>
 
-  <!-- header -->
-  <header class="sticky top-0 z-40 bg-white/80 nav-backdrop border-b border-slate-200">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/90 nav-backdrop border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <a href="index.html#home" class="flex items-center space-x-3">
@@ -54,50 +57,87 @@
     </div>
   </header>
 
-  <main class="py-10">
-    <div class="max-w-7xl mx-auto px-4">
-      <a href="stock.html" class="text-sm underline">← Back to stock</a>
+  <main>
+    <!-- Breadcrumb + Title -->
+    <section class="py-6 border-b bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4">
+        <a href="stock.html" class="text-sm text-slate-600 hover:underline">← Back to stock</a>
+        <h1 id="title" class="mt-2 text-3xl font-semibold">Loading…</h1>
+        <div class="mt-2 flex flex-wrap items-center gap-2">
+          <span id="badgeCondition" class="hidden text-xs px-2 py-1 rounded border bg-white/80"></span>
+          <span id="badgeSold" class="hidden text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>
+        </div>
+      </div>
+    </section>
 
-      <div id="van" class="mt-4 grid lg:grid-cols-2 gap-8">
+    <!-- Gallery + Summary -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8">
         <!-- Gallery -->
-        <section>
-          <div class="relative rounded-xl overflow-hidden border border-slate-200">
-            <img id="mainImg" src="assets/placeholder.jpg" alt="" class="w-full h-80 object-cover">
+        <div>
+          <div class="aspect-video bg-slate-100 rounded-xl overflow-hidden border">
+            <img id="hero" src="assets/placeholder.jpg" alt="Caravan photo" class="w-full h-full object-cover"/>
           </div>
           <div id="thumbs" class="mt-3 grid grid-cols-5 sm:grid-cols-6 gap-2"></div>
-        </section>
+        </div>
 
-        <section>
-          <div class="flex items-start gap-3">
-            <h1 id="title" class="text-2xl font-semibold">Loading…</h1>
-            <span id="soldTag" class="hidden text-xs px-2 py-1 rounded bg-red-600 text-white mt-1">Sold</span>
+        <!-- Summary / CTAs -->
+        <div class="flex flex-col">
+          <div class="text-3xl font-bold" id="price">—</div>
+          <p id="meta" class="mt-2 text-slate-700"></p>
+
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a id="enquireBtn" href="#" class="px-5 py-3 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700">Enquire</a>
+            <a href="tel:+61363437287" class="px-5 py-3 rounded-lg border font-medium hover:bg-slate-50">Call (03) 6343 7287</a>
+            <a href="https://maps.google.com/?q=389%20Hobart%20Road,%20Youngtown%20TAS%207249" target="_blank" rel="noopener" class="px-5 py-3 rounded-lg border font-medium hover:bg-slate-50">Get directions</a>
+            <a id="brochureBtn" class="hidden px-5 py-3 rounded-lg border font-medium hover:bg-slate-50" target="_blank" rel="noopener">Download brochure</a>
           </div>
-          <p id="meta" class="mt-1 text-slate-600"></p>
-          <p id="price" class="mt-2 text-xl font-semibold"></p>
 
-          <div class="mt-4 flex gap-3">
-            <a id="enquire" href="#" class="px-4 py-2 rounded-lg bg-slate-900 text-white">Enquire</a>
-            <a href="index.html#contact" class="px-4 py-2 rounded-lg border">Visit showroom</a>
-          </div>
-
-          <div id="desc" class="prose prose-slate max-w-none mt-6"></div>
-
-          <div class="mt-8 grid md:grid-cols-2 gap-6">
-            <div>
-              <h2 class="font-semibold">Specifications</h2>
-              <dl id="specs" class="mt-2 text-sm grid grid-cols-2 gap-y-1"></dl>
-            </div>
-            <div>
-              <h2 class="font-semibold">Features</h2>
-              <ul id="features" class="mt-2 text-sm list-disc list-inside space-y-1"></ul>
-            </div>
-          </div>
-        </section>
+          <!-- Key spec chips -->
+          <div id="chips" class="mt-6 flex flex-wrap gap-2"></div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="pb-6 border-b">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex gap-6 text-sm">
+          <button class="tab-active px-1 py-2" data-tab="descTab">Description</button>
+          <button class="px-1 py-2" data-tab="featTab">Features</button>
+          <button class="px-1 py-2" data-tab="specsTab">Specifications</button>
+          <button class="px-1 py-2" data-tab="videoTab">Walk-around Video</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panels -->
+    <section class="py-6">
+      <div class="max-w-7xl mx-auto px-4">
+        <div id="descTab" class="prose prose-slate max-w-none"></div>
+        <div id="featTab" class="hidden">
+          <ul id="featuresList" class="list-disc list-inside space-y-1"></ul>
+        </div>
+        <div id="specsTab" class="hidden">
+          <div id="specsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm"></div>
+        </div>
+        <div id="videoTab" class="hidden">
+          <div id="videoWrap" class="aspect-video rounded-xl overflow-hidden bg-black">
+            <!-- iframe injected if video_url present -->
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- footer -->
+  <!-- Sticky mobile price bar -->
+  <div id="stickyBar" class="md:hidden fixed bottom-0 left-0 right-0 bg-white sticky-bar border-t hidden">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="font-semibold" id="mobilePrice">—</div>
+      <a id="mobileEnquire" href="#" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-medium">Enquire</a>
+    </div>
+  </div>
+
   <footer class="bg-slate-900 text-slate-200 mt-10">
     <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
       <div>
@@ -126,6 +166,7 @@
   </footer>
 
   <script>
+    // ---------- chrome ----------
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn=document.getElementById('menuBtn'), mobileNav=document.getElementById('mobileNav');
     function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
@@ -133,112 +174,196 @@
     mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
-    // ===== PocketBase setup =====
-    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; // change if tunnel changes
+    // ---------- PB config ----------
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com/"; // update if your tunnel changes
     const PB_COLLECTION = "caravans";
     const id = new URLSearchParams(location.search).get('id');
 
-    const mainImg = document.getElementById('mainImg');
-    const thumbs = document.getElementById('thumbs');
+    // ---------- els ----------
     const titleEl = document.getElementById('title');
-    const metaEl = document.getElementById('meta');
     const priceEl = document.getElementById('price');
-    const descEl = document.getElementById('desc');
-    const specsEl = document.getElementById('specs');
-    const featuresEl = document.getElementById('features');
-    const enquireEl = document.getElementById('enquire');
-    const soldTag = document.getElementById('soldTag');
+    const mobilePriceEl = document.getElementById('mobilePrice');
+    const heroEl = document.getElementById('hero');
+    const thumbsEl = document.getElementById('thumbs');
+    const metaEl = document.getElementById('meta');
+    const chipsEl = document.getElementById('chips');
+    const descTab = document.getElementById('descTab');
+    const featTab = document.getElementById('featTab');
+    const specsTab = document.getElementById('specsTab');
+    const videoTab = document.getElementById('videoTab');
+    const featuresList = document.getElementById('featuresList');
+    const specsGrid = document.getElementById('specsGrid');
+    const videoWrap = document.getElementById('videoWrap');
+    const badgeCondition = document.getElementById('badgeCondition');
+    const badgeSold = document.getElementById('badgeSold');
+    const enquireBtn = document.getElementById('enquireBtn');
+    const mobileEnquire = document.getElementById('mobileEnquire');
+    const stickyBar = document.getElementById('stickyBar');
+    const brochureBtn = document.getElementById('brochureBtn');
 
-    const currency = n=>{
-      if(n===null||n===undefined||n==='')return'POA';
-      const num=typeof n==='number'?n:parseFloat(n);
-      if(isNaN(num))return'POA';
-      return num.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+    // ---------- utils ----------
+    const currency = n => {
+      if(n===null||n===undefined||n==='') return 'POA';
+      const num = typeof n==='number' ? n : parseFloat(n);
+      if(isNaN(num)) return 'POA';
+      return num.toLocaleString('en-AU',{style:'currency', currency:'AUD', maximumFractionDigits:0});
     };
-
-    function fileUrl(rec,file,size="1600x1000"){
-      if(!file)return"assets/placeholder.jpg";
-      const col=rec.collectionId||rec.collectionName||PB_COLLECTION;
+    function fileUrl(rec, file, size="1600x1000"){
+      if(!file) return "assets/placeholder.jpg";
+      const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
       return `${PB_BASE}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
     }
+    function youTubeEmbed(url){
+      if(!url) return null;
+      // Accept plain YouTube links; extract video id
+      const m = url.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
+      return m ? `https://www.youtube.com/embed/${m[1]}` : url;
+    }
 
-    async function loadCaravan(){
-      if(!id){titleEl.textContent="Missing ID";return;}
+    // ---------- tabs ----------
+    document.querySelectorAll('[data-tab]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('tab-active'));
+        btn.classList.add('tab-active');
+        [descTab, featTab, specsTab, videoTab].forEach(p=>p.classList.add('hidden'));
+        const id = btn.getAttribute('data-tab');
+        document.getElementById(id).classList.remove('hidden');
+      });
+    });
+
+    // ---------- load ----------
+    if(!id){ titleEl.textContent = "Missing ID"; }
+    else loadRecord();
+
+    async function loadRecord(){
       try{
-        const res=await fetch(`${PB_BASE}/api/collections/${PB_COLLECTION}/records/${id}`,{cache:'no-store'});
-        if(!res.ok)throw new Error(res.status);
-        const rec=await res.json();
+        const r = await fetch(`${PB_BASE}/api/collections/${encodeURIComponent(PB_COLLECTION)}/records/${encodeURIComponent(id)}`, {cache:'no-store'});
+        if(!r.ok) throw new Error(r.status);
+        const rec = await r.json();
         render(rec);
       }catch(err){
-        console.error('PB error',err);
-        titleEl.textContent="Not found";
+        console.error('PB load error:', err);
+        titleEl.textContent = "Not found";
       }
     }
 
     function render(rec){
-      const title=rec.Title||[rec.Brand,rec.Model].filter(Boolean).join(" ")||"(Untitled)";
-      const price=typeof rec.Price==="number"?rec.Price:parseFloat((rec.Price||"").toString().replace(/[^\d.]/g,""))||null;
-      const cond=(rec.Condition||"").toLowerCase();
-      const stat=(rec.Status||"").toLowerCase();
-      const sold=stat==="sold";
+      // Title/price/badges
+      const title = rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(' ') || '(Untitled)';
+      const price = typeof rec.Price==='number' ? rec.Price : parseFloat((rec.Price||'').toString().replace(/[^\d.]/g,'')) || null;
+      const condition = (rec.Condition || '').toLowerCase();
+      const status = (rec.Status || '').toLowerCase();
 
-      document.title=`${title} — Caravans Tasmania`;
-      titleEl.textContent=title;
-      metaEl.textContent=[rec.Size?`${rec.Size} ft`:"",rec.berths?`${rec.berths} berth`:"",rec.suspension].filter(Boolean).join(" • ");
-      priceEl.textContent=currency(price);
-      if(sold)soldTag.classList.remove("hidden");
+      document.title = `${title} — Caravans Tasmania`;
+      titleEl.textContent = title;
+      priceEl.textContent = currency(price);
+      mobilePriceEl.textContent = currency(price);
 
-      descEl.innerHTML=rec.description||"";
+      // Show sticky enquire on mobile when we have a price or title
+      stickyBar.classList.remove('hidden');
 
-      // images
-      const imgs=[];
-      if(rec.Main_image)imgs.push(rec.Main_image);
-      if(Array.isArray(rec.gallery))imgs.push(...rec.gallery);
-      const urls=imgs.map(f=>fileUrl(rec,f,"1600x1000"));
-      mainImg.src=urls[0]||"assets/placeholder.jpg";
-      thumbs.innerHTML=urls.map((u,i)=>`
-        <button class="thumb rounded overflow-hidden border ${i===0?'active':''}" data-src="${u}">
-          <img src="${u.replace('1600x1000','900x600')}" class="w-full h-16 object-cover">
-        </button>`).join("");
-      thumbs.querySelectorAll('.thumb').forEach(b=>{
-        b.addEventListener('click',()=>{
-          mainImg.src=b.dataset.src;
-          thumbs.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
-          b.classList.add('active');
+      if(condition){
+        badgeCondition.textContent = condition==='new' ? 'New' : condition.charAt(0).toUpperCase()+condition.slice(1);
+        badgeCondition.classList.remove('hidden');
+      }
+      if(status==='sold') badgeSold.classList.remove('hidden');
+
+      // Meta line under price
+      metaEl.textContent = [
+        rec.Size ? `${rec.Size} ft` : '',
+        rec.berths ? `${rec.berths} berth` : '',
+        rec.suspension || ''
+      ].filter(Boolean).join(' • ');
+
+      // Chips (key highlights)
+      const chips = [
+        rec.tare_kg ? `Tare ${rec.tare_kg} kg` : '',
+        rec.atm_kg ? `ATM ${rec.atm_kg} kg` : '',
+        rec.Brand || '',
+        rec.Model || '',
+        rec.Year || ''
+      ].filter(Boolean);
+      chipsEl.innerHTML = chips.map(c=>`<span class="text-xs px-3 py-1 rounded-full bg-slate-100 border">${c}</span>`).join('');
+
+      // Description
+      descTab.innerHTML = rec.description || '<p class="text-slate-500">No description provided.</p>';
+
+      // Features (multi-select OR text fallback)
+      if(Array.isArray(rec.features) && rec.features.length){
+        featuresList.innerHTML = rec.features.map(f=>`<li>${f}</li>`).join('');
+      }else if(rec.features_text){
+        featuresList.innerHTML = `<li>${String(rec.features_text).trim().replace(/\n+/g,'</li><li>')}</li>`;
+      }else{
+        featuresList.innerHTML = `<li class="text-slate-400">No extra features listed.</li>`;
+      }
+
+      // Specifications grid
+      const specs = [
+        ["Brand", rec.Brand],
+        ["Model", rec.Model],
+        ["Year", rec.Year],
+        ["Condition", rec.Condition],
+        ["Status", rec.Status],
+        ["Length (ft)", rec.Size],
+        ["Berths", rec.berths],
+        ["Suspension", rec.suspension],
+        ["Tare (kg)", rec.tare_kg],
+        ["ATM (kg)", rec.atm_kg],
+        ["Solar (W)", rec.solar_watts],
+        ["Battery (Ah)", rec.battery_ah],
+        ["Chassis", rec.Chassis],
+        ["VIN", rec.vin],
+        ["Registered", rec.registered ? "Yes" : ""]
+      ].filter(([,v])=>v!==undefined && v!==null && String(v).trim()!=='');
+      specsGrid.innerHTML = specs.map(([k,v])=>`
+        <div class="rounded-lg border p-3 bg-white">
+          <div class="text-xs uppercase text-slate-500">${k}</div>
+          <div class="mt-1 font-medium">${v}</div>
+        </div>
+      `).join('');
+
+      // Gallery
+      const files = [];
+      if(rec.Main_image) files.push(rec.Main_image);
+      if(Array.isArray(rec.gallery)) files.push(...rec.gallery);
+      const urls = files.map(f=>fileUrl(rec, f, "1600x1000"));
+      heroEl.src = urls[0] || "assets/placeholder.jpg";
+      thumbsEl.innerHTML = urls.length ? urls.map((u,i)=>`
+        <button class="thumb rounded-lg overflow-hidden border ${i===0?'active':''}" data-src="${u}">
+          <img src="${u.replace('1600x1000','900x600')}" class="w-full h-16 object-cover" loading="lazy"/>
+        </button>
+      `).join('') : '';
+      thumbsEl.querySelectorAll('.thumb').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          heroEl.src = btn.dataset.src;
+          thumbsEl.querySelectorAll('.thumb').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
         });
       });
 
-      // specs
-      const specMap={
-        "Brand":rec.Brand,
-        "Model":rec.Model,
-        "Year":rec.Year,
-        "Condition":rec.Condition,
-        "Status":rec.Status,
-        "Length (ft)":rec.Size,
-        "Berths":rec.berths,
-        "Suspension":rec.suspension,
-        "Tare (kg)":rec.tare_kg,
-        "ATM (kg)":rec.atm_kg,
-        "Solar (W)":rec.solar_watts,
-        "Battery (Ah)":rec.battery_ah,
-        "Chassis":rec.Chassis
-      };
-      specsEl.innerHTML=Object.entries(specMap)
-        .filter(([_,v])=>v!==undefined&&v!==null&&String(v).trim()!=='')
-        .map(([k,v])=>`<dt class="text-slate-500">${k}</dt><dd class="text-slate-800">${v}</dd>`)
-        .join("");
+      // Video (walk-around)
+      const v = rec.video_url || rec.video || "";
+      const embed = youTubeEmbed(v);
+      if(embed){
+        videoWrap.innerHTML = `<iframe src="${embed}" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+      }else{
+        // hide the tab if no video
+        document.querySelector('[data-tab="videoTab"]').classList.add('hidden');
+      }
 
-      // features (optional future field)
-featuresEl.innerHTML = rec.features_text 
-  ? `<li>${rec.features_text.replace(/\n/g, "</li><li>")}</li>` 
-  : "<li class='text-slate-400'>No extra features listed.</li>";
+      // Brochure (optional file)
+      if(rec.brochure){
+        const href = fileUrl(rec, rec.brochure, "1600x1000").replace(/\?thumb=.*/,''); // raw file
+        brochureBtn.href = href;
+        brochureBtn.classList.remove('hidden');
+        brochureBtn.textContent = 'Download brochure';
+      }
 
-      // email link
-      enquireEl.href=`mailto:reception@caravanstas.com.au?subject=${encodeURIComponent('Enquiry: '+title)}`;
+      // Enquiry links
+      const subject = encodeURIComponent(`Caravan Enquiry: ${title}`);
+      enquireBtn.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
+      mobileEnquire.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
     }
-
-    loadCaravan();
   </script>
 </body>
 </html>
