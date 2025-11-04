@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caravan — Caravans Tasmania</title>
+  <meta name="description" content="View caravan details, photos, specifications and video."/>
+  <!-- Using placeholder for asset -->
+  <link rel="icon" href="https://placehold.co/32x32/0f172a/ffffff?text=CT"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Basic styles from your original file */
+    .nav-backdrop{backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}
+    .thumb.active{outline:2px solid #0ea5e9; box-shadow: 0 0 5px rgba(14, 165, 233, 0.5);}
+    .tab-active{border-bottom:2px solid #0ea5e9;color:#0ea5e9}
+    .sticky-bar{box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+    .prose :where(img){margin:0;border-radius:.75rem}
+    
+    /* Added CSS for Video Aspect Ratio */
+    .aspect-w-16 { --aspect-w: 16; }
+    .aspect-h-9 { --aspect-h: 9; }
+    .aspect-w-16, .aspect-h-9 { position: relative; padding-bottom: calc(var(--aspect-h) / var(--aspect-w) * 100%); }
+    .aspect-w-16 > *, .aspect-h-9 > * { position: absolute; height: 100%; width: 100%; top: 0; left: 0; }
+    
+    /* Hide content until loaded */
+    #content-wrapper.loading { display: none; }
+  </style>
+</head>
+<body class="bg-white text-slate-800">
+  <!-- Top strip -->
+  <div class="w-full bg-slate-900 text-white text-sm">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+      <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
+      <div class="space-x-4 hidden sm:block">
+        <a href="https://www.facebook.com/caravanstasmania/" target="_blank" rel="noopener" class="hover:underline">Facebook</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-40 bg-white/80 nav-backdrop border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center space-x-3">
+          <img src="https://placehold.co/150x50/0f172a/ffffff?text=CT" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain"/>
+        </a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html">Home</a>
+          <a href="stock.html" class="font-semibold text-slate-900">Stock</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
+        <a href="index.html" class="py-2">Home</a>
+        <a href="stock.html" class="py-2">Stock</a>
+        <a href="index.html#services" class="py-2">Services</a>
+        <a href="index.html#about" class="py-2">About</a>
+        <a href="index.html#contact" class="py-2">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Loading Indicator -->
+  <div id="loading" class="max-w-7xl mx-auto py-20 px-4 text-center text-blue-500">
+    <svg class="animate-spin h-8 w-8 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    Loading caravan details...
+  </div>
+
+  <!-- Error Message -->
+  <div id="error" class="max-w-7xl mx-auto py-20 px-4 text-center text-red-600 hidden">
+    <h2 class="text-2xl font-semibold mb-2">Could not load caravan</h2>
+    <p class="text-slate-600">The requested caravan could not be found. It may have been sold or removed.</p>
+    <a href="stock.html" class="mt-4 inline-block bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700">Back to Stock</a>
+  </div>
+
+  <!-- Main Content Wrapper (hidden until loaded) -->
+  <main id="content-wrapper" class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 loading">
+    
+    <!-- Breadcrumb -->
+    <nav class="mb-4 text-sm text-slate-500">
+      <a href="stock.html" class="hover:underline">Stock</a> / <span id="breadcrumb-title">...</span>
+    </nav>
+    
+    <!-- Title and Price Section -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
+      <h1 id="caravan-title" class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+        Loading title...
+      </h1>
+      <div class="mt-2 md:mt-0 text-right flex-shrink-0">
+        <p id="caravan-price" class="text-2xl font-bold text-green-700">POA</p>
+        <p class="text-xs text-slate-500">Approx. Drive Away Price</p>
+      </div>
+    </div>
+
+    <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+      
+      <!-- Column 1 (Large - 8/12): Gallery, Description, Tabs -->
+      <section class="lg:col-span-8 space-y-8">
+        
+        <!-- Image Gallery -->
+        <div class="bg-slate-50 rounded-xl shadow-lg border p-4">
+            <div class="relative">
+                 <img id="main-image" src="https://placehold.co/1000x600/e2e8f0/94a3b8?text=Loading+Image" alt="Main caravan photo" class="w-full h-auto rounded-lg mb-4 object-cover shadow-inner cursor-zoom-in" onclick="openModal()">
+                 <div id="status-badges" class="absolute top-3 left-3 flex flex-wrap gap-2">
+                    <!-- Badges will be inserted here by JS -->
+                 </div>
+            </div>
+            <div id="gallery-thumbs" class="flex space-x-3 overflow-x-auto pb-2">
+                <!-- Thumbnails will be inserted here by JS -->
+            </div>
+        </div>
+
+        <!-- Description and Feature Boxes -->
+        <div class="bg-white rounded-xl shadow-lg border p-6">
+          <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Overview</h2>
+          <div id="overview-content" class="prose max-w-none text-slate-700">
+            <p>Loading description...</p>
+          </div>
+          <div id="features-grid" class="grid md:grid-cols-2 gap-6 mt-6">
+            <!-- Features will be inserted here by JS -->
+          </div>
+        </div>
+
+        <!-- Tabs Section: Specifications & Video -->
+        <div class="bg-white rounded-xl shadow-lg border p-6">
+          <!-- Tabs Menu -->
+          <div id="tabs-menu" class="flex border-b border-slate-200 mb-4">
+            <button class="tab-button tab-active px-4 py-3 text-slate-600 hover:text-blue-700 transition" data-tab="specs">Full Specifications</button>
+            <button id="video-tab-button" class="tab-button px-4 py-3 text-slate-600 hover:text-blue-700 transition hidden" data-tab="video">Walk-around Video</button>
+          </div>
+          
+          <!-- Tab Content 1: Specifications -->
+          <div id="specs" class="tab-content py-4">
+            <div id="specs-content" class="space-y-6">
+              <p>Loading specifications...</p>
+            </div>
+          </div>
+          
+          <!-- Tab Content 2: Video -->
+          <div id="video" class="tab-content py-4 hidden">
+            <h3 class="text-xl font-bold text-slate-900 mb-4">See this caravan in Action</h3>
+            <div id="video-embed" class="aspect-w-16 aspect-h-9">
+              <!-- YouTube iframe will be inserted here by JS -->
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Column 2 (Small - 4/12): Mini Specs and Contact CTA -->
+      <aside class="lg:col-span-4 mt-8 lg:mt-0">
+        <div class="sticky top-24 space-y-6">
+          
+          <!-- Mini Specs Card -->
+          <div class="bg-white rounded-xl shadow-lg border p-6">
+            <h2 class="text-xl font-bold text-slate-900 mb-4 border-b pb-2">Key Features at a Glance</h2>
+            <div id="key-features" class="grid grid-cols-2 gap-4 text-center">
+              <!-- Key features will be inserted here by JS -->
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Berths</span>
+              </div>
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Length</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Contact CTA Card -->
+          <div class="bg-blue-50 border border-blue-200 rounded-xl shadow-lg p-6">
+              <h2 class="text-xl font-bold text-blue-800 mb-4 text-center">Ready to Inspect?</h2>
+              <a href="tel:+61363437287" class="block w-full text-center bg-blue-600 text-white p-4 rounded-lg font-extrabold text-lg hover:bg-blue-700 transition duration-150 shadow-lg mb-3">
+                  Call Us Now (03) 6343 7287
+              </a>
+              <a href="index.html#contact" id="enquiry-button" class="block w-full text-center bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition duration-150 shadow-md">
+                  Send Online Enquiry
+              </a>
+              <p class="text-sm text-center text-slate-500 mt-4">Ask about our finance options!</p>
+          </div>
+
+        </div>
+      </aside>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-bold mb-2">Caravans Tasmania</h3>
+          <p class="text-slate-400">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
+        </div>
+        <div>
+          <h3 class="font-bold mb-2">Quick Links</h3>
+          <ul class="space-y-1">
+            <li><a href="index.html" class="hover:underline text-slate-400 hover:text-white">Home</a></li>
+            <li><a href="stock.html" class="hover:underline text-slate-400 hover:text-white">Our Stock</a></li>
+            <li><a href="index.html#services" class="hover:underline text-slate-400 hover:text-white">Services</a></li>
+            <li><a href="index.html#contact" class="hover:underline text-slate-400 hover:text-white">Contact & Service</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold mb-2">Hours</h3>
+          <p class="text-slate-400">Mon–Fri: 8:30am – 5:00pm</p>
+          <p class="text-slate-400">Sat: 8:00am – 12:00pm</p>
+          <p class="text-slate-400">Sun: Closed</p>
+        </div>
+      </div>
+      <div class="mt-8 pt-4 border-t border-slate-700 text-center text-xs opacity-75">
+        &copy; <span id="year"></span> Caravans Tasmania. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Image Modal -->
+  <div id="image-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeModal()">
+    <button class="absolute top-4 right-4 text-white text-4xl" aria-label="Close modal">&times;</button>
+    <img id="modal-image" src="" alt="Zoomed caravan image" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+  </div>
+  
+  <script>
+    // --- header/menu ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
+    menuBtn?.addEventListener('click',()=>toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
+
+    // ===== PocketBase config (matches stock.html) =====
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com";
+    const PB_COLLECTION = "caravans";
+
+    // --- UI Element Refs ---
+    const loadingEl = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    const contentEl = document.getElementById('content-wrapper');
+    const breadcrumbTitleEl = document.getElementById('breadcrumb-title');
+    const caravanTitleEl = document.getElementById('caravan-title');
+    const caravanPriceEl = document.getElementById('caravan-price');
+    const mainImageEl = document.getElementById('main-image');
+    const galleryThumbsEl = document.getElementById('gallery-thumbs');
+    const statusBadgesEl = document.getElementById('status-badges');
+    const overviewContentEl = document.getElementById('overview-content');
+    const featuresGridEl = document.getElementById('features-grid');
+    const tabsMenuEl = document.getElementById('tabs-menu');
+    const specsContentEl = document.getElementById('specs-content');
+    const videoTabButtonEl = document.getElementById('video-tab-button');
+    const videoEl = document.getElementById('video');
+    const videoEmbedEl = document.getElementById('video-embed');
+    const keyFeaturesEl = document.getElementById('key-features');
+    const enquiryButtonEl = document.getElementById('enquiry-button');
+    const modalEl = document.getElementById('image-modal');
+    const modalImageEl = document.getElementById('modal-image');
+
+    // --- Helper Functions (matches stock.html) ---
+    const currency = n => {
+      if(n===null||n===undefined||n==='') return 'POA';
+      const num = typeof n==='number' ? n : parseFloat(n);
+      if(isNaN(num)) return 'POA';
+      return num.toLocaleString('en-AU', { style:'currency', currency:'AUD', maximumFractionDigits:0 });
+    };
+
+    function pbFileUrl(base, rec, file, size="900x600"){
+      if(!file) return `https://placehold.co/${size.replace('x', '/')}/e2e8f0/94a3b8?text=Image+Not+Found`;
+      const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
+      return `${base}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
+    }
+
+    // --- Image Gallery & Modal Logic ---
+    function changeImage(src, thumbEl) {
+        mainImageEl.src = src;
+        // Update active class on thumbnails
+        document.querySelectorAll('.thumb').forEach(thumb => thumb.classList.remove('active'));
+        if (thumbEl) {
+            thumbEl.classList.add('active');
+        }
+    }
+    
+    function openModal() {
+        modalImageEl.src = mainImageEl.src.replace('?thumb=1200x800', ''); // Load full-res
+        modalEl.classList.remove('hidden');
+        modalEl.classList.add('flex');
+    }
+
+    function closeModal() {
+        modalEl.classList.add('hidden');
+        modalEl.classList.remove('flex');
+        modalImageEl.src = ""; // Clear src
+    }
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // --- Tab Switching Logic ---
+    function setupTabs() {
+        const tabButtons = tabsMenuEl.querySelectorAll('.tab-button');
+        const tabContents = contentEl.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Deactivate all
+                tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+
+                // Activate clicked
+                button.classList.add('tab-active');
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+    }
+
+    // --- Data Fetching ---
+    async function fetchCaravanPB(id) {
+        if (!id) throw new Error("No caravan ID provided.");
+        const url = `${PB_BASE}/api/collections/${encodeURIComponent(PB_COLLECTION)}/records/${encodeURIComponent(id)}`;
+        const r = await fetch(url, { headers: { "Accept":"application/json" }, cache: "no-store" });
+        if (!r.ok) throw new Error(`PocketBase fetch failed: ${r.status}`);
+        const record = await r.json();
+        return record;
+    }
+
+    // --- Data Rendering ---
+    function renderPage(rec) {
+        const title = rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(" ") || "Caravan Details";
+        document.title = `${title} — Caravans Tasmania`;
+        
+        // Header
+        breadcrumbTitleEl.textContent = title;
+        caravanTitleEl.textContent = title;
+        caravanPriceEl.textContent = currency(rec.Price);
+
+        // Enquiry button link
+        const enquirySubject = `Enquiry about: ${title} (Stock ID: ${rec.id})`;
+        enquiryButtonEl.href = `index.html#contact?subject=${encodeURIComponent(enquirySubject)}`;
+
+        // Status Badges
+        const statusRaw = (rec.Status || "").toString().toLowerCase();
+        const conditionRaw = (rec.Condition || "").toString().toLowerCase();
+        statusBadgesEl.innerHTML = ''; // Clear
+        if (conditionRaw) {
+            statusBadgesEl.innerHTML += `<span class="inline-block text-xs px-2.5 py-1 rounded-full bg-blue-600 text-white font-semibold shadow">${conditionRaw.charAt(0).toUpperCase()+conditionRaw.slice(1)}</span>`;
+        }
+        if (rec.featured) {
+            statusBadgesEl.innerHTML += `<span class="inline-block text-xs px-2.5 py-1 rounded-full bg-amber-500 text-white font-semibold shadow">Featured</span>`;
+        }
+        if (statusRaw === 'sold') {
+            statusBadgesEl.innerHTML += `<span class="inline-block text-xs px-2.5 py-1 rounded-full bg-red-600 text-white font-semibold shadow">Sold</span>`;
+        }
+
+        // Gallery
+        const images = [rec.Main_image, ...(rec.gallery || [])].filter(Boolean);
+        galleryThumbsEl.innerHTML = ''; // Clear thumbs
+        if (images.length > 0) {
+            const mainSrc = pbFileUrl(PB_BASE, rec, images[0], '1200x800');
+            mainImageEl.src = mainSrc;
+            
+            images.forEach((imgFile, index) => {
+                const thumbSrc = pbFileUrl(PB_BASE, rec, imgFile, '150x100');
+                const largeSrc = pbFileUrl(PB_BASE, rec, imgFile, '1200x800');
+                const thumb = document.createElement('img');
+                thumb.src = thumbSrc;
+                thumb.alt = `Thumbnail ${index + 1}`;
+                thumb.className = 'thumb h-20 w-30 rounded-md cursor-pointer border border-gray-300 object-cover';
+                if (index === 0) thumb.classList.add('active');
+                thumb.onclick = () => changeImage(largeSrc, thumb);
+                galleryThumbsEl.appendChild(thumb);
+            });
+        }
+
+        // Overview & Features
+        overviewContentEl.innerHTML = rec.description || "<p>No overview provided.</p>";
+        
+        // Assuming 'features' is a simple array of strings
+        if (Array.isArray(rec.features) && rec.features.length > 0) {
+            const featuresHTML = rec.features.map(f => `<li>${f}</li>`).join('');
+            featuresGridEl.innerHTML = `
+                <div>
+                    <h3 class="font-bold text-lg text-blue-700 mb-2">Key Features</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-700 text-sm pl-4">
+                        ${featuresHTML}
+                    </ul>
+                </div>`;
+        } else {
+            featuresGridEl.innerHTML = ''; // No features
+        }
+
+        // Key Features Box
+        keyFeaturesEl.innerHTML = `
+            <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">${rec.berths || 'N/A'}</span>
+                <span class="text-sm text-slate-500">Berths</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">${rec.Size ? `${rec.Size} ft` : 'N/A'}</span>
+                <span class="text-sm text-slate-500">Length</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">${rec.atm_kg ? `${rec.atm_kg} kg` : 'N/A'}</span>
+                <span class="text-sm text-slate-500">ATM</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">${conditionRaw ? (conditionRaw.charAt(0).toUpperCase()+conditionRaw.slice(1)) : 'N/A'}</span>
+                <span class="text-sm text-slate-500">Condition</span>
+            </div>
+        `;
+
+        // Specifications
+        let specsData = {};
+        if (typeof rec.specifications === 'string') {
+            try { specsData = JSON.parse(rec.specifications); } catch(e) { console.warn("Specs field is not valid JSON."); }
+        } else if (typeof rec.specifications === 'object') {
+            specsData = rec.specifications;
+        }
+
+        if (Object.keys(specsData).length > 0) {
+            specsContentEl.innerHTML = Object.entries(specsData).map(([category, items]) => `
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">${category}</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                        ${Object.entries(items).map(([label, value]) => `
+                            <div class="p-2 bg-gray-50 rounded">
+                                <span class="block text-xs text-gray-500">${label}</span>
+                                <strong class="text-gray-900">${value}</strong>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            specsContentEl.innerHTML = "<p>Detailed specifications are not available for this model.</p>";
+        }
+
+        // Video Tab
+        if (rec.video_url) {
+            videoTabButtonEl.classList.remove('hidden');
+            let embedUrl = '';
+            try {
+                const url = new URL(rec.video_url);
+                if (url.hostname.includes('youtube.com')) {
+                    const v = url.searchParams.get('v');
+                    if (v) embedUrl = `https://www.youtube.com/embed/${v}`;
+                } else if (url.hostname.includes('youtu.be')) {
+                    embedUrl = `https://www.youtube.com/embed/${url.pathname.slice(1)}`;
+                }
+            } catch(e) { console.warn("Invalid video URL", rec.video_url); }
+
+            if (embedUrl) {
+                videoEmbedEl.innerHTML = `<iframe width="100%" height="100%" src="${embedUrl}" title="Caravan Walk-around Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-lg shadow-xl"></iframe>`;
+            } else {
+                videoTabButtonEl.classList.add('hidden');
+            }
+        }
+        
+        setupTabs();
+    }
+
+    // --- Page Load Logic ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        const params = new URLSearchParams(window.location.search);
+        const caravanId = params.get('id');
+
+        if (!caravanId) {
+            loadingEl.classList.add('hidden');
+            errorEl.classList.remove('hidden');
+            errorEl.querySelector('p').textContent = "No caravan ID was provided in the URL.";
+            return;
+        }
+
+        try {
+            const record = await fetchCaravanPB(caravanId);
+            renderPage(record);
+            // Show content
+            loadingEl.classList.add('hidden');
+            contentEl.classList.remove('loading');
+
+        } catch (err) {
+            console.error("Failed to load caravan:", err);
+            loadingEl.classList.add('hidden');
+            errorEl.classList.remove('hidden');
+        }
+    });
+
+  </script>
+</body>
+</html>
+
