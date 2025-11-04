@@ -151,6 +151,8 @@
     
     // Global App ID and Collection Path (Public Data)
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    // --- FIX 1: Reverted to the correct public path for this environment ---
+    // This path is required by the environment's security rules for public read access.
     const COLLECTION_PATH = `/artifacts/${appId}/public/data/caravans`;
 
     // --- header/menu ---
@@ -316,8 +318,10 @@
 
             const itemsRef = collection(db, COLLECTION_PATH);
             
-            // Create a query that orders by creation date descending
-            const q = query(itemsRef, orderBy('created', 'desc'));
+            // --- FIX 2: Removed the orderBy from the query ---
+            // This avoids the need for a custom Firestore index.
+            // The JavaScript sortList() function already handles sorting by "newest" by default.
+            const q = query(itemsRef);
 
             // Set up the real-time listener
             onSnapshot(q, (snapshot) => {
@@ -329,6 +333,10 @@
                         console.error("Error mapping document:", doc.id, e);
                     }
                 });
+                
+                if (items.length === 0) {
+                    console.warn(`No documents found at path: ${COLLECTION_PATH}. Check if this path is correct.`);
+                }
 
                 window.__STOCK = items; // Store data globally for filtering
                 populateBrands(items);
@@ -361,3 +369,4 @@
   </script>
 </body>
 </html>
+
