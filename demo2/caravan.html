@@ -338,7 +338,7 @@
       if(isNaN(num)) return 'POA';
       return num.toLocaleString('en-AU',{style:'currency', currency:'AUD', maximumFractionDigits:0});
     };
-    function fileUrl(rec, file, size="1600x1000"){
+    function fileUrl(rec, file, size="900x600"){
       if(!file) return "assets/placeholder.jpg";
       const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
       return `${PB_BASE}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
