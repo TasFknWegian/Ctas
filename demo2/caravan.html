@@ -448,9 +448,21 @@
       chipsEl.innerHTML = chips.map(c=>`<span class="text-xs px-3 py-1 rounded-full bg-slate-100 border">${c}</span>`).join('');
 
       // 
-      // ADDED SCRIPT LOGIC FOR KEY FEATURES
+      // UPDATED SCRIPT LOGIC FOR KEY FEATURES
       // 
       if(keyFeaturesEl) {
+          // Find Solar and Battery info from specs
+          let solar_wattage = 'N/A';
+          let battery_ah = 'N/A';
+          const electrical_specs = rec.specs_electrical;
+
+          if (isArrayOfLabelValue(electrical_specs)) {
+              const solar_spec = electrical_specs.find(s => s.label && s.label.toLowerCase().includes('solar'));
+              const battery_spec = electrical_specs.find(s => s.label && s.label.toLowerCase().includes('battery'));
+              if (solar_spec && solar_spec.value) solar_wattage = solar_spec.value;
+              if (battery_spec && battery_spec.value) battery_ah = battery_spec.value;
+          }
+
           keyFeaturesEl.innerHTML = `
             <div class="p-3 border rounded-lg bg-blue-50">
               <span class="block text-xl font-bold text-slate-900">${rec.berths || 'N/A'}</span>
@@ -461,12 +473,28 @@
               <span class="text-sm text-slate-500">Length</span>
             </div>
             <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${condition ? (condition==='new' ? 'New' : condition.charAt(0).toUpperCase()+condition.slice(1)) : 'N/A'}</span>
+              <span class="text-sm text-slate-500">Condition</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.suspension || 'N/A'}</span>
+              <span class="text-sm text-slate-500">Suspension</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.tare_kg ? `${rec.tare_kg} kg` : 'N/A'}</span>
+              <span class="text-sm text-slate-500">Tare</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
               <span class="block text-xl font-bold text-slate-900">${rec.atm_kg ? `${rec.atm_kg} kg` : 'N/A'}</span>
               <span class="text-sm text-slate-500">ATM</span>
             </div>
             <div class="p-3 border rounded-lg bg-blue-50">
-              <span class="block text-xl font-bold text-slate-900">${condition ? (condition==='new' ? 'New' : condition.charAt(0).toUpperCase()+condition.slice(1)) : 'N/A'}</span>
-              <span class="text-sm text-slate-500">Condition</span>
+              <span class="block text-xl font-bold text-slate-900">${solar_wattage}</span>
+              <span class="text-sm text-slate-500">Solar</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${battery_ah}</span>
+              <span class="text-sm text-slate-500">Battery</span>
             </div>
           `;
       }
