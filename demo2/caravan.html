@@ -64,9 +64,25 @@
       </nav>
     </div>
   </header>
+  
+  <!-- Loading Indicator (Added from previous HTML) -->
+  <div id="loading" class="max-w-7xl mx-auto py-20 px-4 text-center text-blue-500">
+    <svg class="animate-spin h-8 w-8 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    Loading caravan details...
+  </div>
 
-  <!-- Main Content Wrapper -->
-  <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+  <!-- Error Message (Added from previous HTML) -->
+  <div id="error" class="max-w-7xl mx-auto py-20 px-4 text-center text-red-600 hidden">
+    <h2 class="text-2xl font-semibold mb-2">Could not load caravan</h2>
+    <p class="text-slate-600">The requested caravan could not be found. It may have been sold or removed.</p>
+    <a href="stock.html" class="mt-4 inline-block bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700">Back to Stock</a>
+  </div>
+
+  <!-- Main Content Wrapper (Added 'loading' class from previous HTML) -->
+  <main id="content-wrapper" class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 loading">
     
     <!-- Breadcrumb -->
     <nav class="mb-4 text-sm text-slate-500">
@@ -97,7 +113,7 @@
         <!-- Image Gallery -->
         <div class="bg-slate-50 rounded-xl shadow-lg border p-4">
             <div class="relative">
-                 <img id="hero" src="https://placehold.co/1000x600/e2e8f0/94a3b8?text=Loading+Image" alt="Main caravan photo" class="w-full h-auto rounded-lg mb-4 object-cover shadow-inner">
+                 <img id="hero" src="https://placehold.co/1000x600/e2e8f0/94a3b8?text=Loading+Image" alt="Main caravan photo" class="w-full h-auto rounded-lg mb-4 object-cover shadow-inner cursor-zoom-in">
                  <div class="absolute top-3 left-3 flex flex-wrap gap-2">
                     <!-- Badges -->
                     <span id="badgeCondition" class="hidden inline-block text-xs px-2.5 py-1 rounded-full bg-blue-600 text-white font-semibold shadow"></span>
@@ -157,6 +173,34 @@
       <!-- Column 2 (Small - 4/12): Contact CTA -->
       <aside class="lg:col-span-4 mt-8 lg:mt-0">
         <div class="sticky top-24 space-y-6">
+          
+          <!-- 
+            =================================
+            RE-ADDED "KEY FEATURES" CARD
+            =================================
+          -->
+          <div class="bg-white rounded-xl shadow-lg border p-6">
+            <h2 class="text-xl font-bold text-slate-900 mb-4 border-b pb-2">Key Features at a Glance</h2>
+            <div id="key-features-glance" class="grid grid-cols-2 gap-4 text-center">
+              <!-- Dynamic content will be injected here by JS -->
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Berths</span>
+              </div>
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Length</span>
+              </div>
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">ATM</span>
+              </div>
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Condition</span>
+              </div>
+            </div>
+          </div>
           
           <!-- Contact CTA Card -->
           <div class="bg-blue-50 border border-blue-200 rounded-xl shadow-lg p-6">
@@ -229,7 +273,7 @@
   
   <!-- 
     =================================
-    NEW SCRIPT BLOCK AS PROVIDED
+    UPDATED SCRIPT BLOCK
     =================================
   -->
   <script>
@@ -242,15 +286,13 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
     // ---------- PB config ----------
-    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; // TODO: change to your domain/tunnel
-    const PB_COLLECTION = "caravans"; // NOTE: This was "Caravans" in your script, but "caravans" in stock.html. I'll use "caravans" for consistency.
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; 
+    const PB_COLLECTION = "caravans"; 
     const id = new URLSearchParams(location.search).get('id');
 
     // ---------- els ----------
-    // Note: The main title element `<h1>` is not referenced by this script, only the <title> tag.
-    // I've added an ID to the h1 tag to update it too.
-    const titleEl_h1 = document.getElementById('title-main'); // Added this
-    const titleEl = document.getElementById('title'); // This is the breadcrumb
+    const titleEl_h1 = document.getElementById('title-main'); 
+    const titleEl = document.getElementById('title'); 
     const priceEl = document.getElementById('price');
     const mobilePriceEl = document.getElementById('mobilePrice');
     const heroEl = document.getElementById('hero');
@@ -275,7 +317,10 @@
     // Added refs for loading/error states from the HTML
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
-    const contentEl = document.getElementById('content-wrapper'); // This ID wasn't in your script, but is in the HTML. I'll use it.
+    const contentEl = document.getElementById('content-wrapper'); 
+    
+    // ADDED REF FOR KEY FEATURES
+    const keyFeaturesEl = document.getElementById('key-features-glance');
 
     // ---------- utils ----------
     const currency = n => {
@@ -337,9 +382,12 @@
     // ---------- load ----------
     if(!id){ 
         titleEl.textContent = "Missing ID";
-        loadingEl.classList.add('hidden');
-        errorEl.classList.remove('hidden');
-        errorEl.querySelector('p').textContent = "No caravan ID was provided in the URL.";
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) {
+            errorEl.classList.remove('hidden');
+            const errorPEl = errorEl.querySelector('p');
+            if (errorPEl) errorPEl.textContent = "No caravan ID was provided in the URL.";
+        }
     }
     else {
         loadRecord();
@@ -352,13 +400,13 @@
         const rec = await r.json();
         render(rec);
         // Show content
-        loadingEl.classList.add('hidden');
-        contentEl.classList.remove('loading'); // Assumes contentEl is the main wrapper
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (contentEl) contentEl.classList.remove('loading'); // Assumes contentEl is the main wrapper
       }catch(err){
         console.error('PB load error:', err);
         titleEl.textContent = "Not found";
-        loadingEl.classList.add('hidden');
-        errorEl.classList.remove('hidden');
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) errorEl.classList.remove('hidden');
       }
     }
 
@@ -399,6 +447,30 @@
       ].filter(Boolean);
       chipsEl.innerHTML = chips.map(c=>`<span class="text-xs px-3 py-1 rounded-full bg-slate-100 border">${c}</span>`).join('');
 
+      // 
+      // ADDED SCRIPT LOGIC FOR KEY FEATURES
+      // 
+      if(keyFeaturesEl) {
+          keyFeaturesEl.innerHTML = `
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.berths || 'N/A'}</span>
+              <span class="text-sm text-slate-500">Berths</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.Size ? `${rec.Size} ft` : 'N/A'}</span>
+              <span class="text-sm text-slate-500">Length</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.atm_kg ? `${rec.atm_kg} kg` : 'N/A'}</span>
+              <span class="text-sm text-slate-500">ATM</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${condition ? (condition==='new' ? 'New' : condition.charAt(0).toUpperCase()+condition.slice(1)) : 'N/A'}</span>
+              <span class="text-sm text-slate-500">Condition</span>
+            </div>
+          `;
+      }
+
       // Description
       descTab.innerHTML = rec.description || '<p class="text-slate-500">No description provided.</p>';
 
@@ -421,7 +493,7 @@
       // FIX for "pictures are too big": Removed w-full from img, grid container handles width
       thumbsEl.innerHTML = urls.length ? urls.map((u,i)=>`
         <button class="thumb rounded-lg overflow-hidden border ${i===0?'active':''}" data-src="${u}">
-          <img src="${u.replace('1600x1000','900x600')}" class="h-16 object-cover" loading="lazy"/>
+          <img src="${u.replace('1600x1000','900x600')}" class="w-full h-16 object-cover" loading="lazy"/>
         </button>
       `).join('') : '';
       
@@ -522,7 +594,8 @@
     const modalImageEl = document.getElementById('modal-image');
     
     function openModal() {
-        modalImageEl.src = heroEl.src.replace('?thumb=1600x1000', ''); // Load full-res
+        if (heroEl.src.includes('placeholder.jpg')) return; // Don't zoom placeholder
+        modalImageEl.src = heroEl.src.replace(/\?thumb=.*/, ''); // Load full-res
         modalEl.classList.remove('hidden');
         modalEl.classList.add('flex');
     }
@@ -539,6 +612,19 @@
     // Close modal on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
+    });
+    
+    // --- Safe Loading/Error Handling ---
+    // Added safety checks for loading/error elements
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!id) {
+            if (loadingEl) loadingEl.classList.add('hidden');
+            if (errorEl) {
+                errorEl.classList.remove('hidden');
+                const errorPEl = errorEl.querySelector('p');
+                if (errorPEl) errorPEl.textContent = "No caravan ID was provided in the URL.";
+            }
+        }
     });
   </script>
 </body>
