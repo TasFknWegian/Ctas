@@ -23,257 +23,341 @@
   </div>
 
   <!-- Header / Nav -->
-  <header class="sticky top-0 z-40 bg-white/80 backdrop-filter backdrop-blur-md border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        <a href="index.html" class="flex items-center space-x-3">
-          <!-- Placeholder for Logo image -->
-          <img src="https://placehold.co/40x40/0f172a/ffffff?text=CT" alt="Caravans Tasmania Logo" class="h-8 w-auto">
-          <span class="text-xl font-bold text-slate-900">Caravans Tasmania</span>
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html#home" class="flex items-center space-x-3">
+          <!-- Placeholder image for 'assets/ct_logo_email_600_white.png' -->
+          <img src="https://placehold.co/56x56/0f172a/ffffff?text=CT" onerror="this.src='assets/ct_logo_email_600_white.png'" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain rounded-lg"/>
         </a>
-        <nav class="hidden md:flex space-x-6">
-          <a href="index.html" class="text-slate-600 hover:text-sky-600 transition">Home</a>
-          <a href="stock.html" class="text-slate-900 font-semibold border-b-2 border-sky-600 pb-1">Stock</a>
-          <a href="index.html#enquiry" class="text-slate-600 hover:text-sky-600 transition">Contact</a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html#home">Home</a>
+          <a href="stock.html" class="font-semibold text-slate-900">Stock</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
         </nav>
-        <!-- Mobile menu button - RETAINED for completeness -->
-        <button class="md:hidden text-slate-600 hover:text-sky-600">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
+    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
+        <a href="index.html#home" class="py-2">Home</a>
+        <a href="stock.html" class="py-2">Stock</a>
+        <a href="index.html#services" class="py-2">Services</a>
+        <a href="index.html#about" class="py-2">About</a>
+        <a href="index.html#contact" class="py-2">Contact</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Current Caravan Stock</h1>
-    <p class="text-lg text-slate-600 mb-8">View all new and pre-owned caravans ready for sale in Youngtown, Tasmania.</p>
+  <!-- Hero -->
+  <section class="py-10 bg-slate-50 border-b">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-3xl font-semibold">In-stock caravans</h1>
+      <p class="mt-2 text-slate-600">Ready for viewing at 389 Hobart Road, Youngtown TAS 7249.</p>
+    </div>
+  </section>
 
-    <!-- Filter and Sort Controls -->
-    <div class="bg-gray-50 p-6 rounded-xl shadow-inner mb-8 space-y-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <input type="text" id="filter-query" placeholder="Search model, length, features..." class="p-3 border rounded-lg focus:ring-sky-500 focus:border-sky-500">
-        <select id="filter-brand" class="p-3 border rounded-lg">
-          <!-- Brands populated by JS -->
+  <!-- Filters -->
+  <section class="py-6">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid gap-3 md:grid-cols-6">
+        <input id="q" type="search" placeholder="Search title, brand, features…" class="md:col-span-2 border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+        <select id="brand" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="">All brands</option>
         </select>
-        <select id="filter-condition" class="p-3 border rounded-lg">
-          <option value="">Condition (Any)</option>
-          <option value="New">New</option>
-          <option value="Used">Used</option>
-          <option value="Demo">Demo</option>
+        <select id="condition" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="">All conditions</option>
+          <option value="new">New</option>
+          <option value="used">Used</option>
+          <option value="demo">Demo</option>
         </select>
-        <select id="filter-status" class="p-3 border rounded-lg">
-          <option value="">Status (Any)</option>
-          <option value="In Stock">In Stock</option>
-          <option value="Incoming">Incoming</option>
+        <select id="status" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="">Any status</option>
+          <option value="available">Available</option>
+          <option value="sold">Sold</option>
+        </select>
+        <select id="sort" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
         </select>
       </div>
-      <div class="flex justify-between items-center border-t pt-4">
-        <p class="text-sm text-slate-600">Showing <strong id="caravan-count">0</strong> Caravans</p>
-        <select id="sort-by" class="p-2 border rounded-lg text-sm">
-          <option value="price_desc">Price (High to Low)</option>
-          <option value="price_asc">Price (Low to High)</option>
-          <option value="newest">Newest Listed</option>
-          <option value="oldest">Oldest Listed</option>
-        </select>
+      <div class="mt-3 text-sm text-slate-600"><span id="count">0</span> units</div>
+    </div>
+  </section>
+
+  <!-- Grid -->
+  <main class="py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="loading" class="sm:col-span-2 lg:col-span-3 text-center py-16 text-blue-500">
+            <svg class="animate-spin h-5 w-5 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Loading stock...
+        </div>
       </div>
-    </div>
-
-    <!-- Caravan Grid -->
-    <div id="caravan-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Caravan Cards will be injected here -->
-    </div>
-
-    <!-- Empty State -->
-    <div id="empty-state" class="hidden text-center py-12 bg-gray-50 rounded-xl mt-8">
-      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2zM12 11v6m3-3H9"/></svg>
-      <h3 class="mt-2 text-xl font-medium text-gray-900">No Caravans Match Your Filters</h3>
-      <p class="mt-1 text-gray-500">Try adjusting your search query or filters.</p>
+      <p id="empty" class="hidden text-slate-500 text-center py-16">No results. Try clearing filters or searching a different term.</p>
     </div>
   </main>
 
-  <!-- Footer - RETAINED -->
-  <footer class="bg-slate-900 text-white mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-          <h3 class="font-bold mb-2">Caravans Tasmania</h3>
-          <p>Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
-          <p>ABN: 12 345 678 901</p>
-        </div>
-        <div>
-          <h3 class="font-bold mb-2">Quick Links</h3>
-          <ul class="space-y-1">
-            <li><a href="index.html" class="hover:underline">Home</a></li>
-            <li><a href="stock.html" class="hover:underline">Our Stock</a></li>
-            <li><a href="index.html#enquiry" class="hover:underline">Contact & Service</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-bold mb-2">Hours</h3>
-          <p>Mon–Fri: 8:30am – 5:00pm</p>
-          <p>Sat: 8:00am – 12:00pm</p>
-          <p>Sun: Closed</p>
-        </div>
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-200 mt-10">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
+      <div>
+        <h4 class="font-semibold">Caravans Tasmania</h4>
+        <p class="text-sm text-slate-400 mt-2">Sales & Service: 389 Hobart Road, Youngtown TAS 7249</p>
+        <p class="mt-2 text-sm">Phone: <a class="underline" href="tel:+61363437287">(03) 6343 7287</a><br/>Email: <a class="underline" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a></p>
       </div>
-      <div class="mt-8 pt-4 border-t border-slate-700 text-center text-xs opacity-75">
-        &copy; 2025 Caravans Tasmania. All rights reserved.
+      <div>
+        <h5 class="font-semibold">Hours</h5>
+        <p class="text-sm text-slate-400 mt-2">Mon–Fri 8:30–5:00<br/>Sat 8:00–12:00</p>
+      </div>
+      <div class="md:col-span-2">
+        <h5 class="font-semibold">Need details?</h5>
+        <p class="text-sm text-slate-300 mt-2">Click any unit to view full specs, photos and contact options.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-700">
+      <div class="max-w-7xl mx-auto px-4 py-6 text-sm flex items-center justify-between">
+        <p>© <span id="year"></span> Caravans Tasmania. All rights reserved.</p>
+        <div class="space-x-4">
+          <a href="index.html#contact" class="hover:underline">Contact</a>
+          <a href="https://maps.google.com/?q=389%20Hobart%20Road,%20Youngtown%20TAS%207249" target="_blank" rel="noopener" class="hover:underline">Directions</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <script>
-    // --- PocketBase Configuration ---
-    const PB_BASE_URL = 'https://compilation-race-conduct-mud.trycloudflare.com';
-    const PB_COLLECTION = 'caravans';
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    
+    // Set Firestore log level for debugging
+    setLogLevel('debug');
 
-    function fileUrl(record, filename, thumb = '200x200') {
-      if (!record || !filename) return 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image';
-      return `${PB_BASE_URL}/api/files/${PB_COLLECTION}/${record.id}/${filename}?thumb=${thumb}`;
-    }
+    // --- Firebase Initialization ---
+    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
+    // Global App ID and Collection Path (Public Data)
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const COLLECTION_PATH = `/artifacts/${appId}/public/data/caravans`;
 
-    // --- Data Fetching ---
-    async function fetchCaravansPB() {
-      try {
-        // Fetch records without relying on complex filters for simplicity
-        const response = await fetch(`${PB_BASE_URL}/api/collections/${PB_COLLECTION}/records?perPage=500&sort=-created`);
-        if (!response.ok) {
-            console.error('PocketBase response error:', response.status, response.statusText);
-            throw new Error('Network response was not ok');
+    // --- header/menu ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
+    menuBtn?.addEventListener('click',()=>toggleNav());
+    mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
+
+    // UI refs
+    const qEl = document.getElementById('q');
+    const brandEl = document.getElementById('brand');
+    const condEl = document.getElementById('condition');
+    const statusEl = document.getElementById('status');
+    const sortEl = document.getElementById('sort');
+    const grid = document.getElementById('grid');
+    const loadingEl = document.getElementById('loading');
+    const countEl = document.getElementById('count');
+    const emptyEl = document.getElementById('empty');
+
+    // Helper: format currency
+    const currency = n => {
+      if(n===null||n===undefined||n==='') return 'POA';
+      const num = typeof n==='number' ? n : parseFloat(n);
+      if(isNaN(num)) return 'POA';
+      return num.toLocaleString('en-AU', { style:'currency', currency:'AUD', maximumFractionDigits:0 });
+    };
+
+    // Helper: image URL handling (simplified for Firestore)
+    function getImageURL(urlOrPath){
+        // We assume the Firestore document fields (Main_image, gallery items)
+        // contain the direct, full public URL to the image.
+        if (urlOrPath && typeof urlOrPath === 'string' && urlOrPath.length > 0) {
+            return urlOrPath;
         }
-        const data = await response.json();
-        return data.items || [];
-      } catch (error) {
-        console.error('Failed to fetch caravans from PocketBase:', error);
-        return [];
-      }
+        return "assets/placeholder.jpg";
     }
 
-    // --- HTML Generation ---
-    function formatPrice(price) {
-      if (!price || isNaN(price)) return 'Price on Application';
-      return new Intl.NumberFormat('en-AU', {
-        style: 'currency',
-        currency: 'AUD',
-        minimumFractionDigits: 0
-      }).format(price);
-    }
-
-    function cardHTML(item) {
-      // Use the first image in the array, or a placeholder
-      const imageUrl = item.images && item.images.length > 0 ? fileUrl(item, item.images[0], '500x350') : 'https://placehold.co/500x350/e2e8f0/64748b?text=No+Image';
-      const priceString = formatPrice(item.price);
+    // Map Firestore document data -> list item shape
+    function mapDocToItem(doc){
+      const rec = doc.data();
+      const statusRaw = (rec.Status || "").toString().toLowerCase();       // e.g. "available" / "sold"
+      const conditionRaw = (rec.Condition || "").toString().toLowerCase(); // "new" / "used" / "demo"
+      const sold = statusRaw === "sold";
+      const length = rec.Size ? `${rec.Size} ft` : "";
       
+      // Get image URL using the new helper
+      const hero = rec.Main_image || (Array.isArray(rec.gallery) && rec.gallery[0]);
+      const thumb = getImageURL(hero); 
+      
+      const price =
+        typeof rec.Price === "number" ? rec.Price :
+        (parseFloat((rec.Price || "").toString().replace(/[^\d.]/g,"")) || null);
+
+      return {
+        id: doc.id,
+        brand: rec.Brand || "",
+        title: rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(" ") || "(Untitled)",
+        price,
+        category: conditionRaw, // used by Condition filter
+        status: statusRaw,       // keep the raw lowercase
+        sold,
+        length,
+        sleeps: rec.berths || "",
+        axleConfiguration: rec.axleConfiguration || rec.Axle || "",
+        suspension: rec.suspension || "",
+        tare_kg: rec.tare_kg,
+        atm_kg: rec.atm_kg,
+        description: rec.description || "",
+        featured: !!rec.featured,
+        thumbnail: thumb,
+        // Assuming gallery items are also full URLs
+        images: [
+          getImageURL(hero),
+          ...(Array.isArray(rec.gallery) ? rec.gallery.map(getImageURL) : [])
+        ].filter(Boolean),
+        date_created: rec.created?.toDate()?.toISOString() || new Date().toISOString(), // Handle Firestore Timestamp
+      };
+    }
+
+    // Rendering HTML for a single caravan card
+    function cardHTML(it){
+      const href = 'caravan.html?id=' + encodeURIComponent(it.id);
+      const meta = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
       return `
-        <a href="caravan.html?id=${item.id}" class="block bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300">
-          <div class="h-48 overflow-hidden">
-            <img src="${imageUrl}" alt="${item.title} ${item.model}" class="w-full h-full object-cover transition duration-300 hover:scale-[1.05]" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/500x350/e2e8f0/64748b?text=Image+Error';">
+        <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-lg hover:shadow-xl transition duration-300 block">
+          <div class="relative">
+            <img src="${it.thumbnail}" alt="${it.title||''}" class="w-full h-48 object-cover bg-slate-100" onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
+            <div class="absolute top-2 left-2 flex gap-2">
+              ${it.category ? `<span class="inline-block text-xs px-2 py-1 rounded-full bg-blue-600 text-white font-medium">${it.category==='new'?'New':it.category.charAt(0).toUpperCase()+it.category.slice(1)}</span>` : ''}
+              ${it.featured ? `<span class="inline-block text-xs px-2 py-1 rounded-full bg-amber-500 text-white font-medium">Featured</span>` : ''}
+              ${it.status==='sold' ? `<span class="inline-block text-xs px-2 py-1 rounded-full bg-red-600 text-white font-medium">Sold</span>` : ''}
+            </div>
           </div>
           <div class="p-5">
-            <div class="flex justify-between items-start mb-2">
-              <h2 class="text-xl font-bold text-slate-900 leading-tight">${item.title} ${item.model}</h2>
-              <span class="text-sm font-semibold p-1 px-3 rounded-full ${item.status === 'In Stock' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${item.status || 'Unknown'}</span>
-            </div>
-            <p class="text-2xl font-extrabold text-blue-600 mb-3">${priceString}</p>
-            <div class="flex space-x-4 text-sm text-slate-600 border-t pt-3">
-              <span class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span>${item.condition || 'Used'}</span>
-              </span>
-              <span class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                <span>${item.length || 'N/A'}</span>
-              </span>
-              <span class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                <span>${item.berths || 2} Berth</span>
-              </span>
-            </div>
+            <h3 class="font-bold text-lg text-slate-900">${it.title||'(Untitled)'}</h3>
+            <p class="mt-1 text-sm text-slate-600">${meta}</p>
+            <p class="mt-3 font-extrabold text-xl text-blue-700">${currency(it.price)}</p>
           </div>
         </a>
       `;
     }
 
-    // --- Filtering Logic ---
-    const qEl = document.getElementById('filter-query');
-    const brandEl = document.getElementById('filter-brand');
-    const condEl = document.getElementById('filter-condition');
-    const statusEl = document.getElementById('filter-status');
-    const sortEl = document.getElementById('sort-by');
-    const grid = document.getElementById('caravan-grid');
-    const countEl = document.getElementById('caravan-count');
-    const emptyEl = document.getElementById('empty-state');
+    function matches(it){
+      const q = (qEl.value||'').toLowerCase().trim();
+      const brand = (brandEl.value||'').toLowerCase();
+      const cond = (condEl.value||'').toLowerCase();
+      const status = (statusEl.value||'').toLowerCase();
 
-    function matches(item) {
-      const q = qEl.value.toLowerCase().trim();
-      const brand = brandEl.value.trim();
-      const condition = condEl.value.trim();
-      const status = statusEl.value.trim();
-
-      // Check against title, model, length, and features (if available)
-      const itemText = `${item.title || ''} ${item.model || ''} ${item.condition || ''} ${item.length || ''} ${item.features ? item.features.join(' ') : ''}`.toLowerCase();
-      
-      if (q && !itemText.includes(q)) return false;
-      if (brand && item.brand !== brand) return false;
-      if (condition && item.condition !== condition) return false;
-      if (status && item.status !== status) return false;
-
+      if (brand && (it.brand||'').toLowerCase() !== brand) return false;
+      if (cond && (it.category||'') !== cond) return false;
+      if (status) {
+        const s = it.status || (it.sold ? 'sold' : 'available');
+        if (s !== status) return false;
+      }
+      if (q) {
+        // Search logic remains the same
+        const tmp = document.createElement('div'); tmp.innerHTML = it.description || '';
+        const hay = [
+          it.title, it.brand, it.length, it.suspension, it.axleConfiguration,
+          it.category, it.status, tmp.textContent || '', (it.sleeps ?? '')
+        ].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
       return true;
     }
 
-    function sortList(list) {
-      const sortValue = sortEl.value;
-      
-      return list.sort((a, b) => {
-        // Handle potential null/undefined prices by defaulting to 0
-        const priceA = a.price || 0;
-        const priceB = b.price || 0;
-
-        if (sortValue === 'price_asc') return priceA - priceB;
-        if (sortValue === 'price_desc') return priceB - priceA;
-        
-        // Handle date sorting based on the 'created' field (PocketBase standard)
-        const dateA = new Date(a.created || 0);
-        const dateB = new Date(b.created || 0);
-        
-        if (sortValue === 'newest') return dateB - dateA;
-        if (sortValue === 'oldest') return dateA - dateB;
-        
-        return 0; // Default: no sort
-      });
+    function sortList(list){
+      switch(sortEl.value){
+        case 'price-asc':  return list.slice().sort((a,b)=>(parseFloat(a.price)||1e12)-(parseFloat(b.price)||1e12));
+        case 'price-desc': return list.slice().sort((a,b)=>(parseFloat(b.price)||-1)-(parseFloat(a.price)||-1));
+        default:           return list.slice().sort((a,b)=>new Date(b.date_created||0).getTime() - new Date(a.date_created||0).getTime());
+      }
     }
 
-    function render(list) {
+    function render(list){
       const filtered = sortList(list.filter(matches));
       grid.innerHTML = filtered.map(cardHTML).join('');
       countEl.textContent = filtered.length;
       emptyEl.classList.toggle('hidden', filtered.length > 0);
+      loadingEl.classList.add('hidden'); // Hide loading spinner once render is called
     }
 
     // Populate brand dropdown dynamically
-    function populateBrands(items) {
-      const brands = Array.from(new Set(items.map(i => (i.brand || '').trim()).filter(Boolean))).sort();
+    function populateBrands(items){
+      const brands = Array.from(new Set(items.map(i => (i.brand||'').trim()).filter(Boolean))).sort();
       brandEl.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
     }
+    
+    // --- Firestore Data Listener and Auth ---
+    async function setupFirebaseListener() {
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        try {
+            if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+                await signInAnonymously(auth);
+            }
+            console.log("Firebase Auth success.");
 
-    // Load data
-    fetchCaravansPB()
-      .then(items => {
-        window.__STOCK = items;
-        populateBrands(items);
-        render(items);
-      })
-      .catch(err => {
-        console.error('PB load error:', err);
-        emptyEl.classList.remove('hidden');
-        emptyEl.textContent = 'Could not load stock. Please check your PocketBase connection.';
-      });
+            const itemsRef = collection(db, COLLECTION_PATH);
+            
+            // Create a query that orders by creation date descending
+            const q = query(itemsRef, orderBy('created', 'desc'));
+
+            // Set up the real-time listener
+            onSnapshot(q, (snapshot) => {
+                const items = [];
+                snapshot.forEach(doc => {
+                    try {
+                        items.push(mapDocToItem(doc));
+                    } catch (e) {
+                        console.error("Error mapping document:", doc.id, e);
+                    }
+                });
+
+                window.__STOCK = items; // Store data globally for filtering
+                populateBrands(items);
+                render(items); // Initial render with all data
+            }, (error) => {
+                console.error("Firestore onSnapshot error:", error);
+                loadingEl.classList.add('hidden');
+                emptyEl.classList.remove('hidden');
+                emptyEl.textContent = 'Could not load stock: ' + error.message;
+            });
+
+        } catch (error) {
+            console.error("Firebase Auth or Setup Error:", error);
+            loadingEl.classList.add('hidden');
+            emptyEl.classList.remove('hidden');
+            emptyEl.textContent = 'Authorization failed. Please ensure Firebase is configured.';
+        }
+    }
 
     // Bind filters
-    [qEl, brandEl, condEl, statusEl, sortEl].forEach(el => el.addEventListener('input', () => render(window.__STOCK || [])));
-    brandEl.addEventListener('change', () => render(window.__STOCK || []));
-    condEl.addEventListener('change', () => render(window.__STOCK || []));
-    statusEl.addEventListener('change', () => render(window.__STOCK || []));
-    sortEl.addEventListener('change', () => render(window.__STOCK || []));
+    [qEl, brandEl, condEl, statusEl, sortEl].forEach(el => el.addEventListener('input', () => render(window.__STOCK||[])));
+    condEl.addEventListener('change', () => render(window.__STOCK||[]));
+    statusEl.addEventListener('change', () => render(window.__STOCK||[]));
+    brandEl.addEventListener('change', () => render(window.__STOCK||[]));
+    sortEl.addEventListener('change', () => render(window.__STOCK||[]));
+    
+    // Start the whole process
+    setupFirebaseListener();
+
   </script>
 </body>
 </html>
