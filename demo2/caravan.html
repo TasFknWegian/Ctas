@@ -199,6 +199,15 @@
                 <span class="block text-xl font-bold text-slate-900">...</span>
                 <span class="text-sm text-slate-500">Condition</span>
               </div>
+              <!-- ADDED SUSPENSION AND TARE PLACEHOLDERS -->
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Suspension</span>
+              </div>
+              <div class="p-3 border rounded-lg bg-blue-50">
+                <span class="block text-xl font-bold text-slate-900">...</span>
+                <span class="text-sm text-slate-500">Tare</span>
+              </div>
             </div>
           </div>
           
@@ -468,6 +477,15 @@
               <span class="block text-xl font-bold text-slate-900">${condition ? (condition==='new' ? 'New' : condition.charAt(0).toUpperCase()+condition.slice(1)) : 'N/A'}</span>
               <span class="text-sm text-slate-500">Condition</span>
             </div>
+            <!-- ADDED SUSPENSION AND TARE DYNAMIC CONTENT -->
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.suspension || 'N/A'}</span>
+              <span class="text-sm text-slate-500">Suspension</span>
+            </div>
+            <div class="p-3 border rounded-lg bg-blue-50">
+              <span class="block text-xl font-bold text-slate-900">${rec.tare_kg ? `${rec.tare_kg} kg` : 'N/A'}</span>
+              <span class="text-sm text-slate-500">Tare</span>
+            </div>
           `;
       }
 
@@ -629,4 +647,5 @@
   </script>
 </body>
 </html>
+
 
