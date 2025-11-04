@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stock — Caravans Tasmania</title>
   <meta name="description" content="In-stock caravans in Youngtown, Launceston. View New Age and Highclere models."/>
-  <link rel="icon" href="assets/ct_logo_email_600_white.png"/>
+  <!-- Using placeholder for asset -->
+  <link rel="icon" href="https://placehold.co/32x32/0f172a/ffffff?text=CT"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html { scroll-behavior: smooth; }
@@ -27,8 +28,8 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <a href="index.html#home" class="flex items-center space-x-3">
-          <!-- Placeholder image for 'assets/ct_logo_email_600_white.png' -->
-          <img src="https://placehold.co/56x56/0f172a/ffffff?text=CT" onerror="this.src='assets/ct_logo_email_600_white.png'" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain rounded-lg"/>
+          <!-- Using placeholder for asset -->
+          <img src="https://placehold.co/150x50/0f172a/ffffff?text=CT" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain"/>
         </a>
         <nav class="hidden md:flex items-center space-x-6">
           <a href="index.html#home">Home</a>
@@ -65,22 +66,22 @@
   <section class="py-6">
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid gap-3 md:grid-cols-6">
-        <input id="q" type="search" placeholder="Search title, brand, features…" class="md:col-span-2 border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-        <select id="brand" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+        <input id="q" type="search" placeholder="Search title, brand, features…" class="md:col-span-2 border rounded-lg px-3 py-2">
+        <select id="brand" class="border rounded-lg px-3 py-2">
           <option value="">All brands</option>
         </select>
-        <select id="condition" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+        <select id="condition" class="border rounded-lg px-3 py-2">
           <option value="">All conditions</option>
           <option value="new">New</option>
           <option value="used">Used</option>
           <option value="demo">Demo</option>
         </select>
-        <select id="status" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+        <select id="status" class="border rounded-lg px-3 py-2">
           <option value="">Any status</option>
           <option value="available">Available</option>
           <option value="sold">Sold</option>
         </select>
-        <select id="sort" class="border rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+        <select id="sort" class="border rounded-lg px-3 py-2">
           <option value="newest">Newest</option>
           <option value="price-asc">Price: Low → High</option>
           <option value="price-desc">Price: High → Low</option>
@@ -94,6 +95,7 @@
   <main class="py-8">
     <div class="max-w-7xl mx-auto px-4">
       <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Loading spinner -->
         <div id="loading" class="sm:col-span-2 lg:col-span-3 text-center py-16 text-blue-500">
             <svg class="animate-spin h-5 w-5 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -134,27 +136,7 @@
     </div>
   </footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    
-    // Set Firestore log level for debugging
-    setLogLevel('debug');
-
-    // --- Firebase Initialization ---
-    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-    
-    // Global App ID and Collection Path (Public Data)
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    // --- FIX 1: Reverted to the correct public path for this environment ---
-    // This path is required by the environment's security rules for public read access.
-    const COLLECTION_PATH = `/artifacts/${appId}/public/data/caravans`;
-
+  <script>
     // --- header/menu ---
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn = document.getElementById('menuBtn');
@@ -164,6 +146,10 @@
     mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
+    // ===== PocketBase config (UPDATED with your info) =====
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com";
+    const PB_COLLECTION = "caravans";
+
     // UI refs
     const qEl = document.getElementById('q');
     const brandEl = document.getElementById('brand');
@@ -171,11 +157,11 @@
     const statusEl = document.getElementById('status');
     const sortEl = document.getElementById('sort');
     const grid = document.getElementById('grid');
-    const loadingEl = document.getElementById('loading');
+    const loadingEl = document.getElementById('loading'); // Added loading ref
     const countEl = document.getElementById('count');
     const emptyEl = document.getElementById('empty');
 
-    // Helper: format currency
+    // Helpers
     const currency = n => {
       if(n===null||n===undefined||n==='') return 'POA';
       const num = typeof n==='number' ? n : parseFloat(n);
@@ -183,39 +169,31 @@
       return num.toLocaleString('en-AU', { style:'currency', currency:'AUD', maximumFractionDigits:0 });
     };
 
-    // Helper: image URL handling (simplified for Firestore)
-    function getImageURL(urlOrPath){
-        // We assume the Firestore document fields (Main_image, gallery items)
-        // contain the direct, full public URL to the image.
-        if (urlOrPath && typeof urlOrPath === 'string' && urlOrPath.length > 0) {
-            return urlOrPath;
-        }
-        return "assets/placeholder.jpg";
+    function pbFileUrl(base, rec, file, size="900x600"){
+      if(!file) return "https://placehold.co/600x400/e2e8f0/94a3b8?text=Caravan+Image"; // Placeholder
+      const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
+      return `${base}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
     }
 
-    // Map Firestore document data -> list item shape
-    function mapDocToItem(doc){
-      const rec = doc.data();
-      const statusRaw = (rec.Status || "").toString().toLowerCase();       // e.g. "available" / "sold"
+    // Map YOUR schema -> list item shape
+    function mapPBToItem(rec){
+      const statusRaw = (rec.Status || "").toString().toLowerCase();     // e.g. "available" / "sold"
       const conditionRaw = (rec.Condition || "").toString().toLowerCase(); // "new" / "used" / "demo"
       const sold = statusRaw === "sold";
       const length = rec.Size ? `${rec.Size} ft` : "";
-      
-      // Get image URL using the new helper
       const hero = rec.Main_image || (Array.isArray(rec.gallery) && rec.gallery[0]);
-      const thumb = getImageURL(hero); 
-      
+      const thumb = hero ? pbFileUrl(PB_BASE, rec, hero) : "https://placehold.co/600x400/e2e8f0/94a3b8?text=Caravan+Image";
       const price =
         typeof rec.Price === "number" ? rec.Price :
         (parseFloat((rec.Price || "").toString().replace(/[^\d.]/g,"")) || null);
 
       return {
-        id: doc.id,
+        id: rec.id,
         brand: rec.Brand || "",
         title: rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(" ") || "(Untitled)",
         price,
         category: conditionRaw, // used by Condition filter
-        status: statusRaw,       // keep the raw lowercase
+        status: statusRaw,     // keep the raw lowercase
         sold,
         length,
         sleeps: rec.berths || "",
@@ -226,32 +204,46 @@
         description: rec.description || "",
         featured: !!rec.featured,
         thumbnail: thumb,
-        // Assuming gallery items are also full URLs
         images: [
-          getImageURL(hero),
-          ...(Array.isArray(rec.gallery) ? rec.gallery.map(getImageURL) : [])
+          hero ? pbFileUrl(PB_BASE, rec, hero, "1600x1000") : null,
+          ...(Array.isArray(rec.gallery) ? rec.gallery.map(f => pbFileUrl(PB_BASE, rec, f, "1600x1000")) : [])
         ].filter(Boolean),
-        date_created: rec.created?.toDate()?.toISOString() || new Date().toISOString(), // Handle Firestore Timestamp
+        date_created: rec.created || new Date().toISOString(),
       };
     }
 
-    // Rendering HTML for a single caravan card
+    async function fetchCaravansPB(){
+      // If you use PB rules (e.g. Status="Available"), you can add &filter=… here.
+      const params = new URLSearchParams({ perPage: "200", sort: "-created" });
+      const url = "https://compilation-race-conduct-mud.trycloudflare.com";
+      // Added no-store cache to ensure freshness
+      const r = await fetch(url, { headers: { "Accept":"application/json" }, cache: "no-store" });
+      if(!r.ok) throw new Error(`PocketBase fetch failed: ${r.status}`);
+      const data = await r.json();
+      const records = data.items || data.records || [];
+      return records.map(mapPBToItem);
+    }
+
+    // Rendering
     function cardHTML(it){
+      // This is the critical link that passes the ID to caravan.html
       const href = 'caravan.html?id=' + encodeURIComponent(it.id);
       const meta = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
+      
+      // Using a slightly enhanced card style from previous version
       return `
-        <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-lg hover:shadow-xl transition duration-300 block">
+        <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-lg hover:shadow-xl transition duration-300 block group">
           <div class="relative">
-            <img src="${it.thumbnail}" alt="${it.title||''}" class="w-full h-48 object-cover bg-slate-100" onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
-            <div class="absolute top-2 left-2 flex gap-2">
-              ${it.category ? `<span class="inline-block text-xs px-2 py-1 rounded-full bg-blue-600 text-white font-medium">${it.category==='new'?'New':it.category.charAt(0).toUpperCase()+it.category.slice(1)}</span>` : ''}
-              ${it.featured ? `<span class="inline-block text-xs px-2 py-1 rounded-full bg-amber-500 text-white font-medium">Featured</span>` : ''}
-              ${it.status==='sold' ? `<span class="inline-block text-xs px-2 py-1 rounded-full bg-red-600 text-white font-medium">Sold</span>` : ''}
+            <img src="${it.thumbnail}" alt="${it.title||''}" class="w-full h-48 object-cover bg-slate-100 group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/94a3b8?text=Image+Not+Found';">
+            <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+              ${it.category ? `<span class="inline-block text-xs px-2.5 py-1 rounded-full bg-blue-600 text-white font-semibold shadow">${it.category==='new'?'New':it.category.charAt(0).toUpperCase()+it.category.slice(1)}</span>` : ''}
+              ${it.featured ? `<span class="inline-block text-xs px-2.5 py-1 rounded-full bg-amber-500 text-white font-semibold shadow">Featured</span>` : ''}
+              ${it.status==='sold' ? `<span class="inline-block text-xs px-2.5 py-1 rounded-full bg-red-600 text-white font-semibold shadow">Sold</span>` : ''}
             </div>
           </div>
           <div class="p-5">
-            <h3 class="font-bold text-lg text-slate-900">${it.title||'(Untitled)'}</h3>
-            <p class="mt-1 text-sm text-slate-600">${meta}</p>
+            <h3 class="font-bold text-lg text-slate-900 truncate">${it.title||'(Untitled)'}</h3>
+            <p class="mt-1 text-sm text-slate-600 truncate">${meta || '·'}</p>
             <p class="mt-3 font-extrabold text-xl text-blue-700">${currency(it.price)}</p>
           </div>
         </a>
@@ -271,7 +263,6 @@
         if (s !== status) return false;
       }
       if (q) {
-        // Search logic remains the same
         const tmp = document.createElement('div'); tmp.innerHTML = it.description || '';
         const hay = [
           it.title, it.brand, it.length, it.suspension, it.axleConfiguration,
@@ -283,10 +274,22 @@
     }
 
     function sortList(list){
+      const safeParseFloat = (val) => parseFloat(val) || 0;
       switch(sortEl.value){
-        case 'price-asc':  return list.slice().sort((a,b)=>(parseFloat(a.price)||1e12)-(parseFloat(b.price)||1e12));
-        case 'price-desc': return list.slice().sort((a,b)=>(parseFloat(b.price)||-1)-(parseFloat(a.price)||-1));
-        default:           return list.slice().sort((a,b)=>new Date(b.date_created||0).getTime() - new Date(a.date_created||0).getTime());
+        case 'price-asc':  
+          return list.slice().sort((a,b) => {
+            const priceA = safeParseFloat(a.price) || Infinity; // Put POA (Infinity) at the end
+            const priceB = safeParseFloat(b.price) || Infinity;
+            return priceA - priceB;
+          });
+        case 'price-desc': 
+          return list.slice().sort((a,b) => {
+            const priceA = safeParseFloat(a.price);
+            const priceB = safeParseFloat(b.price);
+            return priceB - priceA;
+          });
+        default: // 'newest'
+          return list.slice().sort((a,b)=>new Date(b.date_created||0)-new Date(a.date_created||0));
       }
     }
 
@@ -295,7 +298,7 @@
       grid.innerHTML = filtered.map(cardHTML).join('');
       countEl.textContent = filtered.length;
       emptyEl.classList.toggle('hidden', filtered.length > 0);
-      loadingEl.classList.add('hidden'); // Hide loading spinner once render is called
+      loadingEl.classList.add('hidden'); // Hide loading spinner
     }
 
     // Populate brand dropdown dynamically
@@ -303,58 +306,20 @@
       const brands = Array.from(new Set(items.map(i => (i.brand||'').trim()).filter(Boolean))).sort();
       brandEl.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
     }
-    
-    // --- Firestore Data Listener and Auth ---
-    async function setupFirebaseListener() {
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
-        try {
-            if (initialAuthToken) {
-                await signInWithCustomToken(auth, initialAuthToken);
-            } else {
-                await signInAnonymously(auth);
-            }
-            console.log("Firebase Auth success.");
 
-            const itemsRef = collection(db, COLLECTION_PATH);
-            
-            // --- FIX 2: Removed the orderBy from the query ---
-            // This avoids the need for a custom Firestore index.
-            // The JavaScript sortList() function already handles sorting by "newest" by default.
-            const q = query(itemsRef);
-
-            // Set up the real-time listener
-            onSnapshot(q, (snapshot) => {
-                const items = [];
-                snapshot.forEach(doc => {
-                    try {
-                        items.push(mapDocToItem(doc));
-                    } catch (e) {
-                        console.error("Error mapping document:", doc.id, e);
-                    }
-                });
-                
-                if (items.length === 0) {
-                    console.warn(`No documents found at path: ${COLLECTION_PATH}. Check if this path is correct.`);
-                }
-
-                window.__STOCK = items; // Store data globally for filtering
-                populateBrands(items);
-                render(items); // Initial render with all data
-            }, (error) => {
-                console.error("Firestore onSnapshot error:", error);
-                loadingEl.classList.add('hidden');
-                emptyEl.classList.remove('hidden');
-                emptyEl.textContent = 'Could not load stock: ' + error.message;
-            });
-
-        } catch (error) {
-            console.error("Firebase Auth or Setup Error:", error);
-            loadingEl.classList.add('hidden');
-            emptyEl.classList.remove('hidden');
-            emptyEl.textContent = 'Authorization failed. Please ensure Firebase is configured.';
-        }
-    }
+    // Load data
+    fetchCaravansPB()
+      .then(items => {
+        window.__STOCK = items;
+        populateBrands(items);
+        render(items);
+      })
+      .catch(err => {
+        console.error('PB load error:', err);
+        loadingEl.classList.add('hidden'); // Hide loading on error
+        emptyEl.classList.remove('hidden');
+        emptyEl.textContent = 'Could not load stock. Please check the connection.';
+      });
 
     // Bind filters
     [qEl, brandEl, condEl, statusEl, sortEl].forEach(el => el.addEventListener('input', () => render(window.__STOCK||[])));
@@ -362,10 +327,6 @@
     statusEl.addEventListener('change', () => render(window.__STOCK||[]));
     brandEl.addEventListener('change', () => render(window.__STOCK||[]));
     sortEl.addEventListener('change', () => render(window.__STOCK||[]));
-    
-    // Start the whole process
-    setupFirebaseListener();
-
   </script>
 </body>
 </html>
