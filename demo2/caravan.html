@@ -589,7 +589,7 @@
       if(hasFloorplan){
         addMiniTab("Floorplan", () => {
           specBody.className = "grid gap-3 text-sm";
-          const img = fileUrl(rec, rec.floorplan_image, "1600x1000").replace(/\?thumb=.*/,'?thumb=1600x1000'); // keep a large preview
+          const img = fileUrl(rec, rec.floorplan_image, "900x600").replace(/\?thumb=.*/,'?thumb=900x6000'); // keep a large preview
           specBody.innerHTML = `
             <a href="${img}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden border">
               <img src="${img}" alt="Floorplan" class="w-full h-auto object-contain bg-white"/>
