@@ -505,7 +505,7 @@
       const files = [];
       if(rec.Main_image) files.push(rec.Main_image);
       if(Array.isArray(rec.gallery)) files.push(...rec.gallery);
-      const urls = files.map(f=>fileUrl(rec, f, "1600x1000"));
+      const urls = files.map(f=>fileUrl(rec, f, "900x600"));
       heroEl.src = urls[0] || "assets/placeholder.jpg";
       
       // FIX for "pictures are too big": Removed w-full from img, grid container handles width
