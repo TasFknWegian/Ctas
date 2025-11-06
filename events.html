@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events — Caravans Tasmania</title>
+  <meta name="description" content="Upcoming events, sales, and trade shows at Caravans Tasmania. Stay up to date with what's happening in Launceston." />
+  <link rel="icon" href="assets/ct_logo_email_600_white.png" />
+  <meta name="theme-color" content="#0f172a">
+
+  <meta property="og:title" content="Events — Caravans Tasmania">
+  <meta property="og:description" content="Join us for upcoming sales, BBQs, and trade shows in Launceston.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/ct_logo_email_600_white.png">
+  <meta property="og:url" content="https://ctas1.vercel.app/events.html">
+  <meta name="twitter:card" content="summary">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .logo-white { filter: brightness(0) invert(1); }
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 96px; }
+    .nav-backdrop { backdrop-filter: saturate(180%) blur(8px); -webkit-backdrop-filter: saturate(180%) blur(8px); }
+    .dropdown:hover .dropdown-menu { display: block; }
+    .dropdown:focus-within .dropdown-menu { display: block; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 flex flex-col min-h-screen">
+  <div class="w-full bg-slate-900 text-white text-sm">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+      <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
+      <div class="space-x-4 hidden sm:block">
+        <a href="https://www.facebook.com/caravanstasmania/" target="_blank" rel="noopener noreferrer" class="hover:underline">Facebook</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html#home" class="flex items-center space-x-3">
+          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain" />
+        </a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html#home" class="hover:text-slate-600">Home</a>
+          <div class="relative dropdown">
+            <button class="inline-flex items-center gap-1 hover:text-slate-600">
+              Our Caravans
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+            </button>
+            <div class="dropdown-menu absolute left-0 mt-3 w-[760px] bg-white border border-slate-200 shadow-xl rounded-xl p-6 hidden">
+              <div class="grid grid-cols-3 gap-6 text-sm">
+                <div>
+                  <h4 class="font-semibold mb-2">New Age Caravans</h4>
+                  <ul class="space-y-1">
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/escape-my25-5/" target="_blank" rel="noopener noreferrer">Escape</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/expedition/" target="_blank" rel="noopener noreferrer">Expedition</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/embark/" target="_blank" rel="noopener noreferrer">Manta Ray</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/desert-rose/" target="_blank" rel="noopener noreferrer">Desert Rose</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/oz-classic/" target="_blank" rel="noopener noreferrer">Oz Classic</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-2">Highclere Caravans</h4>
+                  <ul class="space-y-1">
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-hauss-176-ft/" target="_blank" rel="noopener noreferrer">Little Hauss 17'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-cote-186/" target="_blank" rel="noopener noreferrer">Little Cote 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-palace-186-ft/" target="_blank" rel="noopener noreferrer">Little Palace 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-villa-186-ft/" target="_blank" rel="noopener noreferrer">Little Villa 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/classic-196-ft/" target="_blank" rel="noopener noreferrer">Classic 19'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/royal/" target="_blank" rel="noopener noreferrer">Royal 22FT</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/arundel/" target="_blank" rel="noopener noreferrer">ARUNDEL 22'6"-FT</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/oasis-216-ft/" target="_blank" rel="noopener noreferrer">OASIS 21'6"-FT</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="stock.html" class="hover:text-slate-600">Stock</a>
+          <a href="events.html" class="font-semibold text-slate-900">Events</a> <a href="index.html#services" class="hover:text-slate-600">Services</a>
+          <a href="index.html#about" class="hover:text-slate-600">About</a>
+          <a href="index.html#contact" class="hover:text-slate-600">Contact</a>
+        </nav>
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
+        <a href="index.html#home" class="py-2">Home</a>
+        <a href="stock.html" class="py-2">Stock</a>
+        <a href="events.html" class="py-2 font-semibold">Events</a>
+        <a href="index.html#services" class="py-2">Services</a>
+        <a href="index.html#about" class="py-2">About</a>
+        <a href="index.html#contact" class="py-2">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="bg-slate-50 py-12 md:py-16 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-3xl md:text-4xl font-bold text-slate-900">What's On</h1>
+      <p class="mt-4 text-lg text-slate-600 max-w-2xl">
+        Keep up to date with upcoming sales, trade shows, BBQs, and special events at Caravans Tasmania.
+      </p>
+    </div>
+  </section>
+
+  <main class="flex-grow py-16">
+    <div class="max-w-7xl mx-auto px-4">
+      
+      <div id="events-container" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="col-span-full text-center py-12 text-slate-500">
+          Loading upcoming events...
+        </div>
+      </div>
+
+      <div id="past-events-section" class="hidden mt-20 pt-12 border-t border-slate-200">
+        <h2 class="text-2xl font-semibold text-slate-800 mb-8">Past Events</h2>
+        <div id="past-events-container" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 opacity-75">
+          </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-200 mt-auto">
+    <div class="border-b border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-slate-400 uppercase tracking-wider font-medium">Proud dealers of</p>
+        <div class="flex items-center gap-8 opacity-90 hover:opacity-100 transition">
+          <img src="assets/347646878_910836809978084_4849413234819503772_n.png" alt="New Age Caravans" class="h-12 md:h-16 w-auto object-contain" loading="lazy" decoding="async">
+          <img src="assets/Highclere-Caravans-logo-2.png" alt="Highclere Caravans" class="h-8 md:h-11 w-auto object-contain logo-white" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
+      <div>
+        <h4 class="font-semibold text-white">Caravans Tasmania</h4>
+        <p class="text-sm text-slate-400 mt-3 leading-relaxed">
+          389 Hobart Road, Youngtown TAS 7249<br>
+          <a class="hover:text-white transition" href="tel:+61363437287">(03) 6343 7287</a><br>
+          <a class="hover:text-white transition" href="mailto:reception@caravanstas.com.au">reception@caravanstas.com.au</a>
+        </p>
+      </div>
+      <div>
+        <h5 class="font-semibold text-white">Opening Hours</h5>
+        <p class="text-sm text-slate-400 mt-3 leading-relaxed">
+          Mon–Fri: 8:30am – 5:00pm<br>
+          Sat: 8:00am – 12:00pm<br>
+          Sun: Closed
+        </p>
+      </div>
+      <div class="md:col-span-2 md:pl-12">
+        <h5 class="font-semibold text-white">Connect with us</h5>
+        <p class="text-sm text-slate-400 mt-3">Follow us for news and event updates.</p>
+        <a href="https://www.facebook.com/caravanstasmania/" target="_blank" rel="noopener" class="mt-4 inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 hover:bg-[#1877F2] transition text-white" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.14 8.44 9.94v-7.03H7.9v-2.9h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.8 8.44-4.94 8.44-9.94Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 bg-slate-950">
+      <div class="max-w-7xl mx-auto px-4 py-6 text-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
+        <p>© <span id="year"></span> Caravans Tasmania. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="index.html#home" class="hover:text-slate-300 transition">Home</a>
+          <a href="stock.html" class="hover:text-slate-300 transition">Stock</a>
+          <a href="index.html#contact" class="hover:text-slate-300 transition">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Basic page setup
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    function toggleNav() { mobileNav.classList.toggle('hidden'); }
+    menuBtn?.addEventListener('click', toggleNav);
+
+    // --- EVENTS FETCHING LOGIC ---
+    const PB_BASE = 'https://compilation-race-conduct-mud.trycloudflare.com';
+    const PB_COLLECTION = 'Events'; // Matches your new collection name
+
+    function getFileUrl(record, filename) {
+      if (!filename) return null;
+      return `${PB_BASE}/api/files/${record.collectionId}/${record.id}/${filename}`;
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-AU', {
+            day: 'numeric', month: 'long', year: 'numeric',
+            hour: 'numeric', minute: '2-digit', hour12: true
+        }).format(date);
+    }
+
+    function createEventCard(event) {
+      const imageUrl = getFileUrl(event, event.banner);
+      const startFormatted = formatDate(event.start_date);
+      // Optional: Format end date if it exists
+      const endFormatted = event.end_date ? ` – ${formatDate(event.end_date)}` : '';
+
+      return `
+        <article class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
+          ${imageUrl ? `<div class="h-48 overflow-hidden bg-slate-100">
+            <img src="${imageUrl}?thumb=800x500" alt="${event.title}" class="w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy">
+          </div>` : ''}
+          <div class="p-6 flex flex-col flex-grow">
+            <div class="mb-4">
+               <p class="text-sm font-semibold text-blue-700 mb-1">
+                 ${startFormatted}${endFormatted}
+               </p>
+               <h3 class="text-xl font-bold text-slate-900 leading-tight">${event.title}</h3>
+            </div>
+
+            ${event.location ? `
+              <div class="flex items-start gap-2 text-sm text-slate-600 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 shrink-0 opacity-75"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" /></svg>
+                <span>${event.location}</span>
+              </div>
+            ` : ''}
+
+            <div class="prose prose-slate prose-sm max-w-none text-slate-600 flex-grow">
+               ${event.description || ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // Fetch events
+    fetch(`${PB_BASE}/api/collections/${PB_COLLECTION}/records?sort=start_date`, { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        const events = data.items || [];
+        const now = new Date();
+        const upcoming = events.filter(e => new Date(e.start_date) >= now || (e.end_date && new Date(e.end_date) >= now));
+        const past = events.filter(e => !upcoming.includes(e)).reverse(); // Most recent past first
+
+        const container = document.getElementById('events-container');
+        const pastContainer = document.getElementById('past-events-container');
+        const pastSection = document.getElementById('past-events-section');
+
+        if (upcoming.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full text-center py-16 px-4 bg-slate-50 rounded-2xl border border-slate-200 border-dashed">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto text-slate-400 mb-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+              <h3 class="text-lg font-semibold text-slate-900">No upcoming events right now</h3>
+              <p class="text-slate-600 mt-1">Check back soon for sales, shows, and BBQs!</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = upcoming.map(createEventCard).join('');
+        }
+
+        // Handle past events
+        if (past.length > 0) {
+          pastSection.classList.remove('hidden');
+          pastContainer.innerHTML = past.map(createEventCard).join('');
+        }
+      })
+      .catch(err => {
+        console.error('Error loading events:', err);
+        document.getElementById('events-container').innerHTML = '<p class="text-red-600 col-span-full text-center py-8">Unable to load events at this time.</p>';
+      });
+  </script>
+</body>
+</html>
