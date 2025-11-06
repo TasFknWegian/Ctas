@@ -505,16 +505,23 @@
       }
     })();
 
-  // Stock preview fetcher (Direct from PocketBase)
+<script>
+    // Stock preview fetcher (Direct from PocketBase)
     const PB_URL = 'https://compilation-race-conduct-mud.trycloudflare.com';
-    const PB_COLLECTION = 'caravans';
+    const PB_COLLECTION = 'stock';
 
     fetch(`${PB_URL}/api/collections/${PB_COLLECTION}/records?perPage=3&sort=-created`, { cache: 'no-store' })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+        return r.json();
+      })
       .then(payload => {
-        // PocketBase returns records in an 'items' array
+        console.log('Full PocketBase payload:', payload); // DEBUG: Check your console for this!
         
-        // Helper to build PocketBase file URL: /api/files/COLLECTION_ID/RECORD_ID/FILENAME
+        // Safely get the items array
+        const items = payload.items || [];
+        
+        // Helper to build PocketBase file URL
         const fileUrl = (record, filename) => {
             if (!filename || !record?.id || !record?.collectionId) return 'assets/placeholder.jpg';
             return `${PB_URL}/api/files/${record.collectionId}/${record.id}/${filename}?thumb=800x500`;
@@ -525,7 +532,6 @@
         const el = document.getElementById('stockPreview');
         if (!el) return;
         
-        // If no items, show a message or leave empty
         if (items.length === 0) {
              el.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">No stock currently available to display.</p>';
              return;
@@ -554,7 +560,7 @@
       .catch(err => {
           console.error('Failed to fetch stock:', err);
           const el = document.getElementById('stockPreview');
-          if (el) el.innerHTML = '<p class="text-red-500 col-span-full text-center py-10">Currently unable to load stock. Please try again later.</p>';
+          if (el) el.innerHTML = '<p class="text-red-500 col-span-full text-center py-10">Unable to load stock at this time.</p>';
       });
   </script>
 </body>
