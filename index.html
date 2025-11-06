@@ -507,7 +507,7 @@
 
     // Stock preview fetcher (Direct from PocketBase)
     const PB_URL = 'https://compilation-race-conduct-mud.trycloudflare.com';
-    const PB_COLLECTION = 'stock';
+    const PB_COLLECTION = 'caravans';
 
     fetch(`${PB_URL}/api/collections/${PB_COLLECTION}/records?perPage=3&sort=-created`, { cache: 'no-store' })
       .then(r => {
