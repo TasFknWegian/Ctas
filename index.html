@@ -505,61 +505,80 @@
       }
     })();
 
-    // Stock preview fetcher (Direct from PocketBase)
-    const PB_URL = 'https://compilation-race-conduct-mud.trycloudflare.com';
-    const PB_COLLECTION = 'caravans';
+    // --- PocketBase Config ---
+    const PB_BASE = 'https://compilation-race-conduct-mud.trycloudflare.com';
+    const PB_COLLECTION = 'caravans'; // Matches your stock page config
 
-    fetch(`${PB_URL}/api/collections/${PB_COLLECTION}/records?perPage=3&sort=-created`, { cache: 'no-store' })
+    // Helper to build PocketBase file URL
+    function pbFileUrl(base, rec, file, size = '800x500') {
+      if (!file) return 'assets/placeholder.jpg';
+      const col = rec.collectionId || rec.collectionName || PB_COLLECTION;
+      return `${base}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
+    }
+
+    // Helper to format currency
+    const currency = n => {
+      if (n === null || n === undefined || n === '') return 'POA';
+      const num = typeof n === 'number' ? n : parseFloat(n);
+      if (isNaN(num)) return 'POA';
+      return num.toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
+    };
+
+    // Fetch and display stock
+    fetch(`${PB_BASE}/api/collections/${PB_COLLECTION}/records?perPage=3&sort=-created`, { cache: 'no-store' })
       .then(r => {
-        if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+        if (!r.ok) throw new Error(`PocketBase fetch failed: ${r.status}`);
         return r.json();
       })
-      .then(payload => {
-        console.log('Full PocketBase payload:', payload); // DEBUG: Check your console for this!
-        
-        // Safely get the items array
-        const items = payload.items || [];
-        
-        // Helper to build PocketBase file URL
-        const fileUrl = (record, filename) => {
-            if (!filename || !record?.id || !record?.collectionId) return 'assets/placeholder.jpg';
-            return `${PB_URL}/api/files/${record.collectionId}/${record.id}/${filename}?thumb=800x500`;
-        };
-
-        const currency = n => (n===null||n===undefined||n==='') ? 'POA' : (typeof n==='number'?n:parseFloat(n)).toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
-        
+      .then(data => {
+        const items = data.items || data.records || [];
         const el = document.getElementById('stockPreview');
         if (!el) return;
-        
+
         if (items.length === 0) {
-             el.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">No stock currently available to display.</p>';
-             return;
+          el.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">No stock currently available to display.</p>';
+          return;
         }
 
-        el.innerHTML = items.map(it => `
-          <a href="caravan.html?id=${encodeURIComponent(it.id)}" class="group rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition block">
-            <div class="relative overflow-hidden">
-              <img src="${fileUrl(it, it.thumbnail)}" alt="${it.title || ''}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
-               <div class="absolute top-3 left-3 flex gap-2">
-                ${it.category ? `<span class="px-2 py-1 text-xs font-semibold rounded bg-white/90 text-slate-900 shadow-sm">${it.category === 'new' ? 'New' : 'Used'}</span>` : ''}
-                ${it.sold ? `<span class="px-2 py-1 text-xs font-semibold rounded bg-red-600 text-white shadow-sm">Sold</span>` : ''}
+        el.innerHTML = items.map(rec => {
+          // --- MAPPING LOGIC (Matches your stock.html) ---
+          const hero = rec.Main_image || (Array.isArray(rec.gallery) && rec.gallery[0]);
+          const thumbUrl = pbFileUrl(PB_BASE, rec, hero);
+          const title = rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(' ') || '(Untitled)';
+          const condition = (rec.Condition || '').toLowerCase(); // 'new', 'used', 'demo'
+          const status = (rec.Status || '').toLowerCase();       // 'available', 'sold'
+          const isSold = status === 'sold';
+          const meta = [
+            rec.Size ? `${rec.Size} ft` : '',
+            rec.berths ? `${rec.berths} berth` : '',
+            rec.Axle || rec.axleConfiguration
+          ].filter(Boolean).join(' • ');
+           // -----------------------------------------------
+
+          return `
+            <a href="caravan.html?id=${encodeURIComponent(rec.id)}" class="group rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition block">
+              <div class="relative overflow-hidden">
+                <img src="${thumbUrl}" alt="${title}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
+                <div class="absolute top-3 left-3 flex gap-2">
+                  ${condition ? `<span class="px-2 py-1 text-xs font-semibold rounded bg-white/90 text-slate-900 shadow-sm capitalize">${condition}</span>` : ''}
+                  ${isSold ? `<span class="px-2 py-1 text-xs font-semibold rounded bg-red-600 text-white shadow-sm">Sold</span>` : ''}
+                </div>
               </div>
-            </div>
-            <div class="p-5">
-              <h3 class="font-semibold text-lg group-hover:text-blue-900 transition">${it.title || '(Untitled)'}</h3>
-              <p class="mt-2 text-sm text-slate-600 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 opacity-75"><path d="M6.5 3c-1.051 0-2.093.04-3.125.117A3.25 3.25 0 001 6.25v.5c0 1.61.597 3.092 1.571 4.25H1v1c0 .715.192 1.388.529 1.962.27.458.62.845 1.036 1.148A3.25 3.25 0 005 17h10a3.25 3.25 0 002.435-1.39c.416-.303.766-.69 1.036-1.148.337-.574.529-1.247.529-1.962v-1h-1.571c.974-1.158 1.571-2.64 1.571-4.25v-.5a3.25 3.25 0 00-2.375-3.133A62.735 62.735 0 0013.5 3h-7zM16 13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 13.5v-1a1.5 1.5 0 011.5-1.5h9a1.5 1.5 0 011.5 1.5v1z" /></svg>
-                ${[it.length ? `${it.length}ft` : '', it.sleeps ? `${it.sleeps} berth` : ''].filter(Boolean).join(' • ')}
-              </p>
-              <p class="mt-4 text-xl font-bold text-slate-900">${currency(it.price)}</p>
-            </div>
-          </a>
-        `).join('');
+              <div class="p-5">
+                <h3 class="font-semibold text-lg group-hover:text-blue-900 transition truncate">${title}</h3>
+                <p class="mt-2 text-sm text-slate-600 flex items-center gap-2 truncate">
+                  ${meta}
+                </p>
+                <p class="mt-4 text-xl font-bold text-slate-900">${currency(rec.Price)}</p>
+              </div>
+            </a>
+          `;
+        }).join('');
       })
       .catch(err => {
-          console.error('Failed to fetch stock:', err);
-          const el = document.getElementById('stockPreview');
-          if (el) el.innerHTML = '<p class="text-red-500 col-span-full text-center py-10">Unable to load stock at this time.</p>';
+        console.error('Failed to load stock preview:', err);
+        const el = document.getElementById('stockPreview');
+        if (el) el.innerHTML = '<p class="text-red-500 col-span-full text-center py-4">Temporarily unable to load latest stock.</p>';
       });
   </script>
 </body>
