@@ -505,21 +505,37 @@
       }
     })();
 
-    // Stock preview fetcher
-    fetch('assets/stock.json', { cache: 'no-store' })
+  // Stock preview fetcher (Direct from PocketBase)
+    const PB_URL = 'https://compilation-race-conduct-mud.trycloudflare.com';
+    const PB_COLLECTION = 'stock';
+
+    fetch(`${PB_URL}/api/collections/${PB_COLLECTION}/records?perPage=3&sort=-created`, { cache: 'no-store' })
       .then(r => r.json())
       .then(payload => {
-        const arr = Array.isArray(payload) ? payload : (payload.data || []);
-        const first3 = arr.slice(0, 3);
-        const DIRECTUS_ASSET_BASE = 'https://compilation-race-conduct-mud.trycloudflare.com';
-        const fileUrl = id => id ? `${DIRECTUS_ASSET_BASE}/assets/${id}?width=800&fit=cover` : 'assets/placeholder.jpg';
+        // PocketBase returns records in an 'items' array
+        const items = payload.items || [];
+        
+        // Helper to build PocketBase file URL: /api/files/COLLECTION_ID/RECORD_ID/FILENAME
+        const fileUrl = (record, filename) => {
+            if (!filename || !record?.id || !record?.collectionId) return 'assets/placeholder.jpg';
+            return `${PB_URL}/api/files/${record.collectionId}/${record.id}/${filename}?thumb=800x500`;
+        };
+
         const currency = n => (n===null||n===undefined||n==='') ? 'POA' : (typeof n==='number'?n:parseFloat(n)).toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+        
         const el = document.getElementById('stockPreview');
         if (!el) return;
-        el.innerHTML = first3.map(it => `
+        
+        // If no items, show a message or leave empty
+        if (items.length === 0) {
+             el.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">No stock currently available to display.</p>';
+             return;
+        }
+
+        el.innerHTML = items.map(it => `
           <a href="caravan.html?id=${encodeURIComponent(it.id)}" class="group rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition block">
             <div class="relative overflow-hidden">
-              <img src="${fileUrl(it.thumbnail)}" alt="${it.title || ''}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
+              <img src="${fileUrl(it, it.thumbnail)}" alt="${it.title || ''}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
                <div class="absolute top-3 left-3 flex gap-2">
                 ${it.category ? `<span class="px-2 py-1 text-xs font-semibold rounded bg-white/90 text-slate-900 shadow-sm">${it.category === 'new' ? 'New' : 'Used'}</span>` : ''}
                 ${it.sold ? `<span class="px-2 py-1 text-xs font-semibold rounded bg-red-600 text-white shadow-sm">Sold</span>` : ''}
@@ -535,6 +551,11 @@
             </div>
           </a>
         `).join('');
+      })
+      .catch(err => {
+          console.error('Failed to fetch stock:', err);
+          const el = document.getElementById('stockPreview');
+          if (el) el.innerHTML = '<p class="text-red-500 col-span-full text-center py-10">Currently unable to load stock. Please try again later.</p>';
       });
   </script>
 </body>
