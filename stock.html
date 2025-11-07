@@ -9,10 +9,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html { scroll-behavior: smooth; }
+    /* Ensure dropdown works on hover */
+    .dropdown:hover .dropdown-menu { display: block; }
+    .dropdown:focus-within .dropdown-menu { display: block; }
   </style>
 </head>
-<body class="bg-white text-slate-800">
-  <!-- Top bar -->
+<body class="bg-white text-slate-800 flex flex-col min-h-screen">
   <div class="w-full bg-slate-900 text-white text-sm">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
       <a href="tel:+61363437287" class="hover:underline">Call (03) 6343 7287</a>
@@ -22,15 +24,22 @@
     </div>
   </div>
 
-  <!-- Header / Nav -->
-          <nav class="hidden md:flex items-center space-x-6">
-          <a href="#home" class="hover:text-slate-600">Home</a>
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html#home" class="flex items-center space-x-3">
+          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain"/>
+        </a>
+
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html#home" class="hover:text-slate-600">Home</a>
+          
           <div class="relative dropdown">
             <button class="inline-flex items-center gap-1 hover:text-slate-600">
               Our Caravans
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
             </button>
-            <div class="dropdown-menu absolute left-0 mt-3 w-[760px] bg-white border border-slate-200 shadow-xl rounded-xl p-6 hidden">
+            <div class="dropdown-menu absolute left-0 mt-3 w-[760px] bg-white border border-slate-200 shadow-xl rounded-xl p-6 hidden z-50">
               <div class="grid grid-cols-3 gap-6 text-sm">
                 <div>
                   <h4 class="font-semibold mb-2">New Age Caravans</h4>
@@ -45,7 +54,7 @@
                 <div>
                   <h4 class="font-semibold mb-2">Highclere Caravans</h4>
                   <ul class="space-y-1">
-                     <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
                     <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-hauss-176-ft/" target="_blank" rel="noopener noreferrer">Little Hauss 17'6</a></li>
                     <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-cote-186/" target="_blank" rel="noopener noreferrer">Little Cote 18'6</a></li>
                     <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-palace-186-ft/" target="_blank" rel="noopener noreferrer">Little Palace 18'6</a></li>
@@ -59,19 +68,23 @@
               </div>
             </div>
           </div>
-          <a href="stock.html" class="hover:text-slate-600">Stock</a>
-          <a href="events.html" class="hover:text-slate-600 text-slate-600">Events</a>
-          <a href="#services" class="hover:text-slate-600">Services</a>
-          <a href="#about" class="hover:text-slate-600">About</a>
-          <a href="#contact" class="hover:text-slate-600">Contact</a>
+          
+          <a href="stock.html" class="font-semibold text-slate-900">Stock</a>
+          <a href="events.html" class="hover:text-slate-600">Events</a>
+          <a href="index.html#services" class="hover:text-slate-600">Services</a>
+          <a href="index.html#about" class="hover:text-slate-600">About</a>
+          <a href="index.html#contact" class="hover:text-slate-600">Contact</a>
         </nav>
-        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu" aria-expanded="false">
+
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
- <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+    </div>
+
+    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
       <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
-        <a href="#home" class="py-2">Home</a>
+        <a href="index.html#home" class="py-2">Home</a>
         <details>
           <summary class="cursor-pointer py-2">Our Caravans</summary>
           <div class="pl-4 text-sm space-y-3 mt-2">
@@ -101,16 +114,15 @@
             </div>
           </div>
         </details>
-        <a href="stock.html" class="py-2">Stock</a>
-        <a href="events.html" class="py-2 text-slate-600">Events</a>
-        <a href="#services" class="py-2">Services</a>
-        <a href="#about" class="py-2">About</a>
-        <a href="#contact" class="py-2">Contact</a>
+        <a href="stock.html" class="py-2 font-semibold">Stock</a>
+        <a href="events.html" class="py-2">Events</a>
+        <a href="index.html#services" class="py-2">Services</a>
+        <a href="index.html#about" class="py-2">About</a>
+        <a href="index.html#contact" class="py-2">Contact</a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
   <section class="py-10 bg-slate-50 border-b">
     <div class="max-w-7xl mx-auto px-4">
       <h1 class="text-3xl font-semibold">In-stock caravans</h1>
@@ -118,7 +130,6 @@
     </div>
   </section>
 
-  <!-- Filters -->
   <section class="py-6">
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid gap-3 md:grid-cols-6">
@@ -147,16 +158,14 @@
     </div>
   </section>
 
-  <!-- Grid -->
-  <main class="py-8">
+  <main class="flex-grow py-8">
     <div class="max-w-7xl mx-auto px-4">
       <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       <p id="empty" class="hidden text-slate-500 text-center py-16">No results. Try clearing filters or searching a different term.</p>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-200 mt-10">
+  <footer class="bg-slate-900 text-slate-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
       <div>
         <h4 class="font-semibold">Caravans Tasmania</h4>
@@ -194,9 +203,8 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
     // ===== PocketBase config (your local/self-hosted PB) =====
-    // If you proxy through Vercel, set PB_BASE = "/api/pb"
     const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com";
-    const PB_COLLECTION = "caravans"; // NOTE: capital C matches your collectionName
+    const PB_COLLECTION = "caravans";
 
     // UI refs
     const qEl = document.getElementById('q');
@@ -224,7 +232,7 @@
 
     // Map YOUR schema -> list item shape
     function mapPBToItem(rec){
-      const statusRaw = (rec.Status || "").toString().toLowerCase();     // e.g. "available" / "sold"
+      const statusRaw = (rec.Status || "").toString().toLowerCase();      // e.g. "available" / "sold"
       const conditionRaw = (rec.Condition || "").toString().toLowerCase(); // "new" / "used" / "demo"
       const sold = statusRaw === "sold";
       const length = rec.Size ? `${rec.Size} ft` : "";
@@ -260,7 +268,6 @@
     }
 
     async function fetchCaravansPB(){
-      // If you use PB rules (e.g. Status="Available"), you can add &filter=… here.
       const params = new URLSearchParams({ perPage: "200", sort: "-created" });
       const url = `${PB_BASE}/api/collections/${encodeURIComponent(PB_COLLECTION)}/records?${params.toString()}`;
       const r = await fetch(url, { headers: { "Accept":"application/json" }, cache: "no-store" });
@@ -275,19 +282,19 @@
       const href = 'caravan.html?id=' + encodeURIComponent(it.id);
       const meta = [it.length, it.sleeps ? `${it.sleeps} berth` : '', it.axleConfiguration].filter(Boolean).join(' • ');
       return `
-        <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block">
+        <a href="${href}" class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm block hover:shadow-md transition">
           <div class="relative">
-            <img src="${it.thumbnail}" alt="${it.title||''}" class="w-full h-48 object-cover">
+            <img src="${it.thumbnail}" alt="${it.title||''}" class="w-full h-48 object-cover" loading="lazy">
             <div class="absolute top-2 left-2 flex gap-2">
-              ${it.category ? `<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border">${it.category==='new'?'New':it.category.charAt(0).toUpperCase()+it.category.slice(1)}</span>` : ''}
+              ${it.category ? `<span class="inline-block text-xs px-2 py-1 rounded bg-white/90 border capitalize">${it.category}</span>` : ''}
               ${it.featured ? `<span class="inline-block text-xs px-2 py-1 rounded bg-amber-500 text-white">Featured</span>` : ''}
               ${it.status==='sold' ? `<span class="inline-block text-xs px-2 py-1 rounded bg-red-600 text-white">Sold</span>` : ''}
             </div>
           </div>
           <div class="p-5">
-            <h3 class="font-semibold">${it.title||'(Untitled)'}</h3>
-            <p class="mt-1 text-sm text-slate-600">${meta}</p>
-            <p class="mt-2 font-semibold">${currency(it.price)}</p>
+            <h3 class="font-semibold text-lg truncate">${it.title||'(Untitled)'}</h3>
+            <p class="mt-1 text-sm text-slate-600 truncate">${meta}</p>
+            <p class="mt-2 font-semibold text-lg">${currency(it.price)}</p>
           </div>
         </a>
       `;
@@ -352,19 +359,6 @@
 
     // Bind filters
     [qEl, brandEl, condEl, statusEl, sortEl].forEach(el => el.addEventListener('input', () => render(window.__STOCK||[])));
-    condEl.addEventListener('change', () => render(window.__STOCK||[]));
-    statusEl.addEventListener('change', () => render(window.__STOCK||[]));
-    brandEl.addEventListener('change', () => render(window.__STOCK||[]));
-    sortEl.addEventListener('change', () => render(window.__STOCK||[]));
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
