@@ -168,7 +168,7 @@
   </footer>
 
   <script>
-    // ---------- chrome ----------
+    
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn=document.getElementById('menuBtn'), mobileNav=document.getElementById('mobileNav');
     function toggleNav(open){const isOpen=open??mobileNav.classList.contains('hidden');mobileNav.classList.toggle('hidden',!isOpen);menuBtn?.setAttribute('aria-expanded',String(isOpen));}
@@ -177,7 +177,7 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
     // ---------- PB config ----------
-    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; // TODO: change to your domain/tunnel
+    const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com"; 
     const PB_COLLECTION = "Caravans";
     const id = new URLSearchParams(location.search).get('id');
 
@@ -222,7 +222,7 @@
       return m ? `https://www.youtube.com/embed/${m[1]}` : url;
     }
 
-    // Tabs (top-level)
+    
     document.querySelectorAll('[data-tab]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('tab-active'));
@@ -233,7 +233,7 @@
       });
     });
 
-    // ---------- specs mini-tabs helpers ----------
+ 
     function isArrayOfLabelValue(v){
       return Array.isArray(v) && v.every(x => x && typeof x === 'object' && 'value' in x);
     }
@@ -261,7 +261,7 @@
       if(active) onClick();
     }
 
-    // ---------- load ----------
+   
     if(!id){ titleEl.textContent = "Missing ID"; }
     else loadRecord();
 
@@ -278,7 +278,7 @@
     }
 
     function render(rec){
-      // Title/price/badges
+      
       const title = rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(' ') || '(Untitled)';
       const price = typeof rec.Price==='number' ? rec.Price : parseFloat((rec.Price||'').toString().replace(/[^\d.]/g,'')) || null;
       const condition = (rec.Condition || '').toLowerCase();
@@ -296,14 +296,14 @@
       }
       if(status==='sold') badgeSold.classList.remove('hidden');
 
-      // Meta under price
+    
       metaEl.textContent = [
         rec.Size ? `${rec.Size} ft` : '',
         rec.berths ? `${rec.berths} berth` : '',
         rec.suspension || ''
       ].filter(Boolean).join(' • ');
 
-      // Chips
+     
       const chips = [
         rec.tare_kg ? `Tare ${rec.tare_kg} kg` : '',
         rec.atm_kg ? `ATM ${rec.atm_kg} kg` : '',
@@ -313,10 +313,10 @@
       ].filter(Boolean);
       chipsEl.innerHTML = chips.map(c=>`<span class="text-xs px-3 py-1 rounded-full bg-slate-100 border">${c}</span>`).join('');
 
-      // Description
+     
       descTab.innerHTML = rec.description || '<p class="text-slate-500">No description provided.</p>';
 
-      // Features
+      
       if(Array.isArray(rec.features) && rec.features.length){
         featuresList.innerHTML = rec.features.map(f=>`<li>${f}</li>`).join('');
       }else if(rec.features_text){
@@ -325,7 +325,7 @@
         featuresList.innerHTML = `<li class="text-slate-400">No extra features listed.</li>`;
       }
 
-      // Gallery
+      
       const files = [];
       if(rec.Main_image) files.push(rec.Main_image);
       if(Array.isArray(rec.gallery)) files.push(...rec.gallery);
@@ -346,7 +346,7 @@
         });
       }
 
-      // Video
+      
       const embed = youTubeEmbed(rec.video_url || rec.video);
       if(embed){
         videoWrap.innerHTML = `<iframe src="${embed}" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
@@ -354,7 +354,7 @@
         document.querySelector('[data-tab="videoTab"]').classList.add('hidden');
       }
 
-      // Brochure
+      
       if(rec.brochure){
         const href = fileUrl(rec, rec.brochure, "1600x1000").replace(/\?thumb=.*/,'');
         brochureBtn.href = href;
@@ -362,7 +362,7 @@
         brochureBtn.textContent = 'Download brochure';
       }
 
-      // Enquiry
+      
       const subject = encodeURIComponent(`Caravan Enquiry: ${title}`);
       enquireBtn.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
       mobileEnquire.href = `mailto:reception@caravanstas.com.au?subject=${subject}`;
@@ -371,7 +371,7 @@
       specCats.innerHTML = '';
       specBody.innerHTML = '';
 
-      // Desired order and labels:
+     
       const specOrder = [
         ["specs_chassis","Chassis"],
         ["specs_furniture","Furniture"],
@@ -383,7 +383,7 @@
         ["specs_measurements","Measurements"],
       ];
 
-      // Collect available sections that actually have data
+
       const sections = [];
       for(const [field, label] of specOrder){
         const data = rec[field];
@@ -391,12 +391,12 @@
           sections.push({field,label,items:data});
         }
       }
-      // Floorplan mini-tab (image)
+
       const hasFloorplan = !!rec.floorplan_image;
 
       let firstActivated = false;
 
-      // Build tabs for JSON sections
+      
       for(const sec of sections){
         addMiniTab(sec.label, () => {
           specBody.className = "grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm";
@@ -405,11 +405,11 @@
         if(!firstActivated) firstActivated = true;
       }
 
-      // Floorplan tab if available
+   
       if(hasFloorplan){
         addMiniTab("Floorplan", () => {
           specBody.className = "grid gap-3 text-sm";
-          const img = fileUrl(rec, rec.floorplan_image, "1600x1000").replace(/\?thumb=.*/,'?thumb=1600x1000'); // keep a large preview
+          const img = fileUrl(rec, rec.floorplan_image, "1600x1000").replace(/\?thumb=.*/,'?thumb=1600x1000');
           specBody.innerHTML = `
             <a href="${img}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden border">
               <img src="${img}" alt="Floorplan" class="w-full h-auto object-contain bg-white"/>
@@ -420,7 +420,7 @@
         if(!firstActivated) firstActivated = true;
       }
 
-      // If nothing available, show a friendly note
+      
       if(!firstActivated){
         specCats.innerHTML = `<span class="text-slate-500">No specifications provided.</span>`;
         specBody.innerHTML = '';
