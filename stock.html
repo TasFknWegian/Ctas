@@ -9,7 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html { scroll-behavior: smooth; }
-    /* Ensure dropdown works on hover */
+    /* dropdown hover */
     .dropdown:hover .dropdown-menu { display: block; }
     .dropdown:focus-within .dropdown-menu { display: block; }
   </style>
@@ -202,7 +202,7 @@
     mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleNav(false)));
     document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);});
 
-    // ===== PocketBase config (your local/self-hosted PB) =====
+    // ===== PocketBase config
     const PB_BASE = "https://compilation-race-conduct-mud.trycloudflare.com";
     const PB_COLLECTION = "caravans";
 
@@ -230,7 +230,7 @@
       return `${base}/api/files/${encodeURIComponent(col)}/${encodeURIComponent(rec.id)}/${encodeURIComponent(file)}?thumb=${size}`;
     }
 
-    // Map YOUR schema -> list item shape
+    // schema -> list item shape
     function mapPBToItem(rec){
       const statusRaw = (rec.Status || "").toString().toLowerCase();      // e.g. "available" / "sold"
       const conditionRaw = (rec.Condition || "").toString().toLowerCase(); // "new" / "used" / "demo"
@@ -338,13 +338,13 @@
       emptyEl.classList.toggle('hidden', filtered.length > 0);
     }
 
-    // Populate brand dropdown dynamically
+    
     function populateBrands(items){
       const brands = Array.from(new Set(items.map(i => (i.brand||'').trim()).filter(Boolean))).sort();
       brandEl.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
     }
 
-    // Load data
+    
     fetchCaravansPB()
       .then(items => {
         window.__STOCK = items;
@@ -357,9 +357,10 @@
         emptyEl.textContent = 'Could not load stock.';
       });
 
-    // Bind filters
+   
     [qEl, brandEl, condEl, statusEl, sortEl].forEach(el => el.addEventListener('input', () => render(window.__STOCK||[])));
   </script>
 </body>
 </html>
+
 
