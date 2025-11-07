@@ -23,7 +23,6 @@
     .nav-backdrop { backdrop-filter: saturate(180%) blur(8px); -webkit-backdrop-filter: saturate(180%) blur(8px); }
     .dropdown:hover .dropdown-menu { display: block; }
     .dropdown:focus-within .dropdown-menu { display: block; }
-    /* Added simple style for the benefits list */
     .benefits-list li { margin-top: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
   </style>
 </head>
@@ -420,7 +419,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Cross-fade hero
+  
     (function () {
       const root = document.getElementById('homeFade');
       if (!root) return;
@@ -436,7 +435,7 @@
       }, 5000);
     })();
 
-    // Mobile nav
+  
     const menuBtn = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
     function toggleNav(open) {
@@ -507,7 +506,7 @@
 
     // --- PocketBase Config ---
     const PB_BASE = 'https://compilation-race-conduct-mud.trycloudflare.com';
-    const PB_COLLECTION = 'caravans'; // Matches your stock page config
+    const PB_COLLECTION = 'caravans'; 
 
     // Helper to build PocketBase file URL
     function pbFileUrl(base, rec, file, size = '800x500') {
@@ -541,7 +540,7 @@
         }
 
         el.innerHTML = items.map(rec => {
-          // --- MAPPING LOGIC (Matches your stock.html) ---
+
           const hero = rec.Main_image || (Array.isArray(rec.gallery) && rec.gallery[0]);
           const thumbUrl = pbFileUrl(PB_BASE, rec, hero);
           const title = rec.Title || [rec.Brand, rec.Model].filter(Boolean).join(' ') || '(Untitled)';
