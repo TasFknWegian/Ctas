@@ -175,16 +175,16 @@
   </footer>
 
   <script>
-    // Basic page setup
+    
     document.getElementById('year').textContent = new Date().getFullYear();
     const menuBtn = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
     function toggleNav() { mobileNav.classList.toggle('hidden'); }
     menuBtn?.addEventListener('click', toggleNav);
 
-    // --- EVENTS FETCHING LOGIC ---
+    // --- PB Connection ---
     const PB_BASE = 'https://compilation-race-conduct-mud.trycloudflare.com';
-    const PB_COLLECTION = 'Events'; // Matches your new collection name
+    const PB_COLLECTION = 'Events'; 
 
     function getFileUrl(record, filename) {
       if (!filename) return null;
@@ -203,7 +203,7 @@
     function createEventCard(event) {
       const imageUrl = getFileUrl(event, event.banner);
       const startFormatted = formatDate(event.start_date);
-      // Optional: Format end date if it exists
+      
       const endFormatted = event.end_date ? ` – ${formatDate(event.end_date)}` : '';
 
       return `
@@ -234,14 +234,14 @@
       `;
     }
 
-    // Fetch events
+    
     fetch(`${PB_BASE}/api/collections/${PB_COLLECTION}/records?sort=start_date`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         const events = data.items || [];
         const now = new Date();
         const upcoming = events.filter(e => new Date(e.start_date) >= now || (e.end_date && new Date(e.end_date) >= now));
-        const past = events.filter(e => !upcoming.includes(e)).reverse(); // Most recent past first
+        const past = events.filter(e => !upcoming.includes(e)).reverse(); 
 
         const container = document.getElementById('events-container');
         const pastContainer = document.getElementById('past-events-container');
@@ -259,7 +259,7 @@
           container.innerHTML = upcoming.map(createEventCard).join('');
         }
 
-        // Handle past events
+        
         if (past.length > 0) {
           pastSection.classList.remove('hidden');
           pastContainer.innerHTML = past.map(createEventCard).join('');
