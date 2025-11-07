@@ -23,33 +23,89 @@
   </div>
 
   <!-- Header / Nav -->
-  <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex items-center justify-between h-16">
-        <a href="index.html#home" class="flex items-center space-x-3">
-          <img src="assets/ct_logo_email_600_white.png" alt="Caravans Tasmania" class="h-12 md:h-14 w-auto object-contain"/>
-        </a>
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="index.html#home">Home</a>
-          <a href="stock.html" class="py-2 text-slate-900">Stock</a>
-          <a href="events.html" class="py-2 text-slate-600">Events</a>
-          <a href="index.html#services">Services</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#contact">Contact</a>
+          <nav class="hidden md:flex items-center space-x-6">
+          <a href="#home" class="hover:text-slate-600">Home</a>
+          <div class="relative dropdown">
+            <button class="inline-flex items-center gap-1 hover:text-slate-600">
+              Our Caravans
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+            </button>
+            <div class="dropdown-menu absolute left-0 mt-3 w-[760px] bg-white border border-slate-200 shadow-xl rounded-xl p-6 hidden">
+              <div class="grid grid-cols-3 gap-6 text-sm">
+                <div>
+                  <h4 class="font-semibold mb-2">New Age Caravans</h4>
+                  <ul class="space-y-1">
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/escape-my25-5/" target="_blank" rel="noopener noreferrer">Escape</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/expedition/" target="_blank" rel="noopener noreferrer">Expedition</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/embark/" target="_blank" rel="noopener noreferrer">Manta Ray</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/desert-rose/" target="_blank" rel="noopener noreferrer">Desert Rose</a></li>
+                    <li><a class="hover:underline" href="https://newagecaravans.com.au/caravans/oz-classic/" target="_blank" rel="noopener noreferrer">Oz Classic</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-2">Highclere Caravans</h4>
+                  <ul class="space-y-1">
+                     <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-hauss-176-ft/" target="_blank" rel="noopener noreferrer">Little Hauss 17'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-cote-186/" target="_blank" rel="noopener noreferrer">Little Cote 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-palace-186-ft/" target="_blank" rel="noopener noreferrer">Little Palace 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/little-villa-186-ft/" target="_blank" rel="noopener noreferrer">Little Villa 18'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/classic-196-ft/" target="_blank" rel="noopener noreferrer">Classic 19'6</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/royal/" target="_blank" rel="noopener noreferrer">Royal 22FT</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/arundel/" target="_blank" rel="noopener noreferrer">ARUNDEL 22'6"-FT</a></li>
+                    <li><a class="hover:underline" href="https://www.highclerecaravans.com.au/oasis-216-ft/" target="_blank" rel="noopener noreferrer">OASIS 21'6"-FT</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="stock.html" class="hover:text-slate-600">Stock</a>
+          <a href="events.html" class="hover:text-slate-600 text-slate-600">Events</a>
+          <a href="#services" class="hover:text-slate-600">Services</a>
+          <a href="#about" class="hover:text-slate-600">About</a>
+          <a href="#contact" class="hover:text-slate-600">Contact</a>
         </nav>
-        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu">
+        <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-slate-100" aria-label="Open Menu" aria-expanded="false">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
-    </div>
-    <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
+ <div id="mobileNav" class="md:hidden hidden border-t border-slate-200 bg-white">
       <nav class="max-w-7xl mx-auto px-4 py-4 grid gap-3">
-        <a href="index.html#home" class="py-2">Home</a>
+        <a href="#home" class="py-2">Home</a>
+        <details>
+          <summary class="cursor-pointer py-2">Our Caravans</summary>
+          <div class="pl-4 text-sm space-y-3 mt-2">
+            <div>
+              <p class="font-semibold">New Age Caravans</p>
+              <ul class="pl-3 mt-1 space-y-1">
+                <li><a href="https://newagecaravans.com.au/caravans/escape-my25-5/" target="_blank" rel="noopener noreferrer">Escape</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/expedition/" target="_blank" rel="noopener noreferrer">Expedition</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/embark/" target="_blank" rel="noopener noreferrer">Manta Ray</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/desert-rose/" target="_blank" rel="noopener noreferrer">Desert Rose</a></li>
+                <li><a href="https://newagecaravans.com.au/caravans/oz-classic/" target="_blank" rel="noopener noreferrer">Oz Classic</a></li>
+              </ul>
+            </div>
+            <div>
+              <p class="font-semibold">Highclere Caravans</p>
+              <ul class="pl-3 mt-1 space-y-1">
+                 <li><a href="https://www.highclerecaravans.com.au/the-runaway-156-ft/" target="_blank" rel="noopener noreferrer">Runaway 15'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-hauss-176-ft/" target="_blank" rel="noopener noreferrer">Little Hauss 17'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-cote-186/" target="_blank" rel="noopener noreferrer">Little Cote 18'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-palace-186-ft/" target="_blank" rel="noopener noreferrer">Little Palace 18'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/little-villa-186-ft/" target="_blank" rel="noopener noreferrer">Little Villa 18'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/classic-196-ft/" target="_blank" rel="noopener noreferrer">Classic 19'6</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/royal/" target="_blank" rel="noopener noreferrer">Royal 22FT</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/arundel/" target="_blank" rel="noopener noreferrer">ARUNDEL 22'6"-FT</a></li>
+                <li><a href="https://www.highclerecaravans.com.au/oasis-216-ft/" target="_blank" rel="noopener noreferrer">OASIS 21'6"-FT</a></li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a href="stock.html" class="py-2">Stock</a>
-                <a href="events.html" class="py-2 text-slate-600">Events</a>
-        <a href="index.html#services" class="py-2">Services</a>
-        <a href="index.html#about" class="py-2">About</a>
-        <a href="index.html#contact" class="py-2">Contact</a>
+        <a href="events.html" class="py-2 text-slate-600">Events</a>
+        <a href="#services" class="py-2">Services</a>
+        <a href="#about" class="py-2">About</a>
+        <a href="#contact" class="py-2">Contact</a>
       </nav>
     </div>
   </header>
@@ -303,6 +359,7 @@
   </script>
 </body>
 </html>
+
 
 
 
